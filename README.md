@@ -50,6 +50,54 @@ street empties again.
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
 | `media/` | The preview GIFs and source captures shown above. |
 
+## Install it
+
+Paste this into an agent that can run shell commands. It asks where to put the
+folder, downloads the whole repository (playbook, templates, QA harness and both
+worked examples), reads them, and reports what it learned before it builds
+anything. `SKILL.md` carries skill frontmatter (`name`, `description`, `version`),
+so an agent with a skills directory can load it by name later.
+
+```text
+Install the Diorama playbook into this environment, then use it to build scenes.
+
+Repository: https://github.com/sloemo01/diorama
+
+1. Ask me for the target directory before downloading anything, and wait for my
+   answer. Propose ~/skills/diorama as the default. Do not pick a path silently.
+2. Download the whole repository, not just SKILL.md:
+     git clone https://github.com/sloemo01/diorama.git "<target>"
+   If git is not available:
+     curl -L https://github.com/sloemo01/diorama/archive/refs/heads/main.tar.gz | tar xz
+   then move diorama-main to "<target>".
+3. Prove the install before describing it: SKILL.md, README.md, templates/,
+   verify/ and LICENSE present at the root, and print the commit hash
+   (git -C "<target>" rev-parse --short HEAD) or the archive date. If the
+   download failed or a file is missing, say so and stop. Never describe this
+   playbook from memory or from this prompt alone.
+4. If you have a skills directory or plugin folder, install it there so you can
+   load it by name in later sessions; otherwise treat "<target>" as the folder.
+5. Read before you build: all of SKILL.md, then templates/DESIGN.md,
+   templates/qa/README.md, the header comment of every file in templates/, and
+   both worked examples under verify/. SKILL.md is the source of truth; the
+   README is only a summary.
+6. Report back in this order: install path and commit, the Look Contract in one
+   paragraph, the Pipeline as ordered steps, the QA scripts and what each one
+   checks, and three rules from SKILL.md with the section each came from.
+7. Then ask me what the first diorama should be. Do not ask me to fill the design
+   sheet. When I give you a subject, fill DESIGN.md from the defaults, copy the
+   modules you need into my project instead of editing the installed copy, build
+   through the Pipeline, and run the QA scripts before you show me anything. Give
+   me the paths of the frames you kept and what each one proves.
+
+If two parts of SKILL.md contradict each other, list the contradictions before
+you build. A successful clone is not an install: steps 5 and 6 are the install.
+```
+
+Needs `git`, or `curl` and `tar` for the fallback. The QA scripts need Node with
+`three`, `esbuild` and `playwright-core`. The `media/` previews are about 18 MB
+and can be deleted after the clone.
+
 ## Start a diorama
 
 1. Read `SKILL.md`: `One Prompt, One Build`, `The Look Contract`, `The Detail Bar`,
@@ -78,13 +126,6 @@ window.__dioramaReady = true;
 screenshot that may show a different frame than you asked for is not evidence.
 
 `verify/water/` and `verify/climb/` show the full loop end to end.
-
-## Using it as a skill
-
-`SKILL.md` carries skill frontmatter (`name`, `description`, `version`), so a
-skill-capable coding agent can load it as-is. It is self-contained: no external
-reference documents, everything needed to build a diorama is in the file plus
-`templates/`.
 
 ## Licence
 
