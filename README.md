@@ -72,9 +72,10 @@ Repository: https://github.com/sloemo01/diorama
    then move diorama-main to "<target>".
 3. Prove the install before describing it: SKILL.md, README.md, templates/,
    verify/ and LICENSE present at the root, and print the commit hash
-   (git -C "<target>" rev-parse --short HEAD) or the archive date. If the
-   download failed or a file is missing, say so and stop. Never describe this
-   playbook from memory or from this prompt alone.
+   (git -C "<target>" rev-parse --short HEAD) or the archive date. If you have no
+   shell or no network, say so and stop. If the download failed or a file is
+   missing, say so and stop. Never describe this playbook from memory or from
+   this prompt alone.
 4. If you have a skills directory or plugin folder, install it there so you can
    load it by name in later sessions; otherwise treat "<target>" as the folder.
 5. Read before you build: all of SKILL.md, then templates/DESIGN.md,
