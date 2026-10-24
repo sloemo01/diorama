@@ -166,7 +166,21 @@ for (const name of names) {
       const prev = { pos: cam.position.clone(), quat: cam.quaternion.clone(), zoom: cam.zoom, fov: cam.fov };
       let rect = null;
       if (view === 'portrait') {
-        const c = box.getCenter(new T.Vector3());
+        // Centre on the mean of the sampled poses, not the union centre: one
+        // outlier frame (a leap, a spin) drags the union box and pushes the actor
+        // out of its own portrait. Skinned bounds are bind-pose approximations,
+        // so pad generously too.
+        const c = new T.Vector3();
+        let samples = 0;
+        for (let i = 0; i < n; i++) {
+          const t = from + ((to - from) * i) / Math.max(1, n - 1);
+          (d.freeze || d.draw)(t);
+          tmp.setFromObject(window.__entityRegistry[name]);
+          if (!isFinite(tmp.min.x)) continue;
+          c.add(tmp.getCenter(new T.Vector3()));
+          samples++;
+        }
+        if (samples) c.multiplyScalar(1 / samples);
         const size = box.getSize(new T.Vector3());
         const dir = new T.Vector3(0.62, 0.52, 0.86).normalize();
         cam.position.copy(c).addScaledVector(dir, 6);
@@ -174,13 +188,14 @@ for (const name of names) {
         if (cam.isPerspectiveCamera) {
           cam.fov = 32;
           // Fit the subject, not its diagonal: height and width each get their
-          // own distance, take the larger, then 15% of paper. Fitting the
-          // diagonal is what leaves a character at a third of the frame.
+          // own distance, take the larger, then 30% of paper. Fitting the
+          // diagonal is what leaves a character at a third of the frame, and a
+          // tight fit clips a spin or a leap that the sampled boxes missed.
           const aspect = Math.max(0.2, window.innerWidth / window.innerHeight);
           const tan = Math.tan((cam.fov * Math.PI) / 360);
           const dv = (size.y * 0.5) / tan;
           const dh = (size.x * 0.5) / (tan * aspect);
-          const dist = Math.max(0.6, Math.max(dv, dh) * 1.15);
+          const dist = Math.max(0.6, Math.max(dv, dh) * 1.6);
           cam.position.copy(c).addScaledVector(dir, dist);
           cam.lookAt(c);
         } else {
