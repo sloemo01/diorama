@@ -4,16 +4,23 @@
 
 **A playbook and code kit for building small pixel-art dioramas in Three.js.**
 
-<a href="media/pikachu-vs-charizard.mp4"><img src="media/pikachu-vs-charizard.gif" width="620" alt="Pikachu vs Charizard, a 45 second battle diorama, looping"></a>
-
-<sub><b>Pikachu vs Charizard</b>, 45 s &nbsp;·&nbsp; a send-out, a full exchange of attacks, a knockout and a recall</sub>
-
 [![Stars](https://img.shields.io/github/stars/sloemo01/diorama?style=flat-square&color=1d1d1f&logo=github&label=stars)](https://github.com/sloemo01/diorama/stargazers)
 [![Forks](https://img.shields.io/github/forks/sloemo01/diorama?style=flat-square&color=1d1d1f&label=forks)](https://github.com/sloemo01/diorama/forks)
 [![Watchers](https://img.shields.io/github/watchers/sloemo01/diorama?style=flat-square&color=1d1d1f&label=watchers)](https://github.com/sloemo01/diorama/watchers)
 [![License](https://img.shields.io/github/license/sloemo01/diorama?style=flat-square&color=1d1d1f)](LICENSE)
-[![Skill](https://img.shields.io/badge/skill-v3.7.0-1d1d1f?style=flat-square)](SKILL.md)
+[![Skill](https://img.shields.io/badge/skill-v3.8.0-1d1d1f?style=flat-square)](SKILL.md)
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
+
+<p>
+<a href="media/pikachu-vs-charizard.mp4"><img src="media/pikachu-vs-charizard.gif" width="24%" alt="Pikachu vs Charizard battle diorama, looping"></a>
+<a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="24%" alt="Dust Kings arena show diorama, looping"></a>
+<a href="media/pool.mp4"><img src="media/pool.gif" width="24%" alt="Swimming pool diorama, looping"></a>
+<a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="24%" alt="Bank job diorama, looping"></a>
+</p>
+
+<sub><b>Pikachu vs Charizard</b>, 45 s &nbsp;·&nbsp; <b>Dust Kings</b>, 38 s &nbsp;·&nbsp; <b>Pool</b>, 26 s &nbsp;·&nbsp; <b>Bank job</b>, 48 s</sub>
+
+<sub>Four scenes built with this playbook. Click any tile for the full capture.</sub>
 
 </div>
 
@@ -31,22 +38,11 @@ capture.
 and animation bars, the pipeline, the recipes, the QA harness and the pitfalls,
 in one self-contained file. Everything else here is copy-in code that supports it.
 
-## Preview
+## The scenes
 
-Four scenes built with this playbook. Each tile loops in place; click one to open
-the full capture.
-
-<p>
-<a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="31%" alt="Dust Kings, a Saturday-night arena show diorama, looping"></a>
-<a href="media/pool.mp4"><img src="media/pool.gif" width="31%" alt="Swimming pool diorama, swimmers crossing the water, looping"></a>
-<a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="31%" alt="Bank job diorama, police cars arriving on the street, looping"></a>
-</p>
-
-<sub><b>Dust Kings</b>, 38 s &nbsp;·&nbsp; <b>Pool</b>, 26 s &nbsp;·&nbsp; <b>Bank job</b>, 48 s &nbsp;·&nbsp; <b>Pikachu vs Charizard</b>, 45 s</sub>
-
-**Pikachu vs Charizard** is the fight scene at the top of this page: Leon throws a
-ball, Charizard bursts out of it and the ball comes back to his hand, four attacks
-trade across the arena with their own wind-up and hit reactions, Pikachu takes a
+**Pikachu vs Charizard** is the fight at the top of this page: Leon throws a ball,
+Charizard bursts out of it and the ball comes back to his hand, four attacks trade
+across the arena with their own wind-up and hit reactions, Pikachu takes a
 knockdown, and the red recall beam only appears once Charizard is beaten.
 
 **Dust Kings** follows one night's billing: cars on the arena floor, the billboard
