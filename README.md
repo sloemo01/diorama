@@ -11,6 +11,15 @@ presentation stay.
 Everything is deterministic. The scene is a pure function of `t`, so any frame can
 be frozen, screenshotted and compared.
 
+## Preview
+
+[![Dust Kings, a Saturday-night arena show diorama, looping](media/preview.gif)](media/dust-kings.mp4)
+
+Dust Kings, a Saturday-night arena show: cars working the floor in front of the
+grandstand, a billboard cycling through the night's billing, and a fire that gets
+away from them. The GIF is the whole loop at 640 px; click it for the original
+capture (2160 × 2160, 38 s).
+
 ## What is in here
 
 | Path | What it is |
@@ -21,6 +30,7 @@ be frozen, screenshotted and compared.
 | `templates/qa/` | Seven verification scripts that check a build against frozen frames and printed numbers. |
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
+| `media/` | The preview GIF and the source capture shown above. |
 
 ## Start a diorama
 
