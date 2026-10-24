@@ -13,12 +13,25 @@ be frozen, screenshotted and compared.
 
 ## Preview
 
-[![Dust Kings, a Saturday-night arena show diorama, looping](media/preview.gif)](media/dust-kings.mp4)
+Three scenes built with this playbook. Each tile loops in place; click one to open
+the full capture.
 
-Dust Kings, a Saturday-night arena show: cars working the floor in front of the
-grandstand, a billboard cycling through the night's billing, and a fire that gets
-away from them. The GIF is the whole loop at 640 px; click it for the original
-capture (2160 × 2160, 38 s).
+<table>
+  <tr>
+    <td align="center"><a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="260" alt="Dust Kings, a Saturday-night arena show diorama, looping"></a></td>
+    <td align="center"><a href="media/pool.mp4"><img src="media/pool.gif" width="260" alt="Swimming pool diorama, swimmers crossing the water, looping"></a></td>
+    <td align="center"><a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="260" alt="Bank job diorama, police cars arriving on the street, looping"></a></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Dust Kings</b><br>arena show, 38 s</sub></td>
+    <td align="center"><sub><b>Pool</b><br>laps and a diving board, 26 s</sub></td>
+    <td align="center"><sub><b>Bank job</b><br>police on the street, 48 s</sub></td>
+  </tr>
+</table>
+
+The Dust Kings loop follows one night's billing: cars on the arena floor, the
+billboard running through LIVE, NEW RECORD and THANK YOU, and a fire that gets
+away from them.
 
 ## What is in here
 
@@ -30,7 +43,7 @@ capture (2160 × 2160, 38 s).
 | `templates/qa/` | Seven verification scripts that check a build against frozen frames and printed numbers. |
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
-| `media/` | The preview GIF and the source capture shown above. |
+| `media/` | The preview GIFs and source captures shown above. |
 
 ## Start a diorama
 
