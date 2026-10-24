@@ -22,11 +22,21 @@ the full capture.
 <a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="31%" alt="Bank job diorama, police cars arriving on the street, looping"></a>
 </p>
 
-<sub><b>Dust Kings</b>, arena show, 38 s &nbsp;·&nbsp; <b>Pool</b>, laps and a diving board, 26 s &nbsp;·&nbsp; <b>Bank job</b>, police on the street, 48 s</sub>
+<sub><b>Dust Kings</b>, 38 s &nbsp;·&nbsp; <b>Pool</b>, 26 s &nbsp;·&nbsp; <b>Bank job</b>, 48 s</sub>
 
 The Dust Kings loop follows one night's billing: cars on the arena floor, the
 billboard running through LIVE, NEW RECORD and THANK YOU, and a fire that gets
 away from them.
+
+The pool loop is a slow afternoon: one swimmer working laps with a wake trailing
+behind, one standing waist-deep by the ladder, one folding into a dive beside the
+board, a lifebuoy and a ball left floating, a lifeguard pacing the far edge, and a
+sunbather who does not move from the towel.
+
+The bank job loop runs in daylight: a sedan noses into the curb, a group in dark
+clothes climbs the bank steps and the windows go red behind them, the sedan pulls
+away, two cruisers arrive and officers fan out across the street, and then the
+street empties again.
 
 ## What is in here
 
