@@ -1,6 +1,6 @@
 # QA harness
 
-Seven scripts and no framework. The point is that every claim about the build is
+Eight scripts and no framework. The point is that every claim about the build is
 checked against a frozen frame, a printed number or a scene-graph rule, never
 against a memory of what the code should do.
 
@@ -27,7 +27,7 @@ npm i -D playwright-core
 python3 -m http.server 4180 &          # serve the project root
 ```
 
-## The seven checks
+## The eight checks
 
 | Script | Answers | Fails when |
 | --- | --- | --- |
@@ -35,6 +35,7 @@ python3 -m http.server 4180 &          # serve the project root
 | `audit.mjs` | are the seams, scale, halos, exits and emitters honest? | flat glow quad, whole-object fade, camera/render-scale mismatch, early hide, teleport, idle/orphan emitter, paper-margin leak |
 | `portrait.mjs` | is the rig sound up close? | joint gap, floating part, knee bending forward, oversized head |
 | `strip.mjs` + `tile.py` | does the motion read over six frames? | a phase pop, a skate, a body through a door, or every frame identical |
+| `frames.mjs` | does *each* entity animate, stay in frame, and avoid snapping? | `FROZEN`, `TELEPORT`, `EMPTY`, `NOT-IN-WINDOW` or `OFFSCREEN` on any entity |
 | `probe.py` | what colour is on screen, and how thick is that band? | a stray palette entry, a band that should not exist |
 | `sweep.mjs` | are two actors jammed, or did one teleport? | the same pair under 0.6 m for two consecutive samples, or a jump over `MAX_STEP` |
 | `verify/` | does an effect reproduce after a clock jump? | two identical freezes differ because the effect integrates `dt` |
@@ -151,3 +152,32 @@ pixels, against 334 before the reset was added.
 | `IDLE_EMITTER` | continuous smoke while parked | gate emission by an event window; add a fade tail |
 | `ORPHAN_EMITTER` | plume starts at engine centre/cab roof | source at the real exhaust tip/nozzle |
 | `MARGIN_LEAK` | read-through FX or geometry past the slab | taper/fade before the edge, or clip the solid |
+
+## Per-entity frames
+
+`strip.mjs` samples the *scene*. `frames.mjs` samples one *entity* at a time, which
+is the only way to catch the third character in a shot whose neighbours are
+moving, or a prop that drifts while the camera follows an actor.
+
+```bash
+ENTITIES='({ hero: d.cast[0].model, guard: d.cast[1].model })' \
+FROM=4 TO=9 FPS=12 OUT=qa/frames STATIC=guard \
+  node templates/qa/frames.mjs
+```
+
+- `ENTITIES` is a JS expression evaluated in the page, returning `{name: Object3D}`.
+  The build should expose `window.__diorama.entities` so the default works.
+- `VIEW=portrait` (default) fits one camera to the entity's swept bounds, so the
+  whole move stays in frame and fills it. `VIEW=scene` keeps the locked camera and
+  crops to the entity instead.
+- `ISOLATE=scene` hides every mesh that is not on the entity's branch, so the
+  motion signature is about that actor alone. `siblings` hides only the other
+  registry entries.
+- `STATIC=name,name` exempts actors that are supposed to hold still from `FROZEN`
+  (they still get the teleport and offscreen checks).
+
+Each entity gets `qa/frames/<name>/f###.png`, a contact sheet, and a row in
+`report.json` with `empty`, `energy`, `maxStep` and a verdict. The script exits 1
+on any flag, so a build can gate on it. Read the sheets; the numbers only say
+which sheet to open first.
+

@@ -1,7 +1,7 @@
 ---
 name: diorama
 description: Use when building a pixel diorama in Three.js — one-prompt autonomous builds with staged systems, detailed props, real animation, and social/service choreography.
-version: 3.6.0
+version: 3.8.0
 author: Nehal Kanak (sloemo)
 license: MIT
 platforms: [linux, macos, windows]
@@ -19,8 +19,8 @@ change.
 everything needed to build a diorama is here, plus copy-in modules and a design
 sheet template in `templates/`.
 
-Read `One Prompt, One Build`, `The Look Contract`, `The Detail Bar`,
-`The Animation Bar` and `Pipeline` first. Then read the sections for the systems
+Read `Research Before You Model`, `One Prompt, One Build`, `The Look Contract`,
+`The Detail Bar`, `The Animation Bar` and `Pipeline` first. Then read the sections for the systems
 you are actually building; the rest is reference. Do not spend the first pass
 reading every vehicle or water note for a kitchen scene.
 
@@ -30,6 +30,7 @@ reading every vehicle or water note for a kitchen scene.
 | --- | --- |
 | market, food truck, bakery, cafe, shop, laundromat | Cast → Clothed Cast: Heads, Layers, Hands → Service And Queue → Machine Grammar → Carrying, Loading And Mounting → Verification |
 | heist, defence, combat | Detail Bar → Tool/Tower recipes → System And Combat Animation → Combat Readability → Verification |
+| creature battle, game scene, anime/movie fight | Research Before You Model → Field Notes: Two-Creature Combat → Creature Anatomy → System And Combat Animation → Combat Readability → Verification |
 | aquarium, pool, harbour | Cast → base rig → Water templates → Vehicles (boat) → Effects → Verification |
 | station, airport, hotel, transit | Service And Queue → Vehicles → Crowd Variation → Verification |
 | stage, festival, parade | Cast → Secondary Motion → Crowd Variation → System Grammar → Verification |
@@ -56,6 +57,191 @@ consequence. The fast path only decides which reference notes to read first.
 Don't use for full-resolution product renders, photoreal scenes, or anything
 that needs free orbit controls.
 
+## Research Before You Model
+
+Four lookups come before the first mesh: the subject by frames, the asset
+libraries, the motion itself, and the capture loop. Skipping them is how a build
+ends up with a plausible silhouette that matches nothing and animation that reads
+as generic. Budget for them, they are usually faster than the modelling they save.
+
+| Question the research answers | Where it lands |
+| --- | --- |
+| what does it look like, exactly | `refs/<subject>/*.png` contact sheets |
+| what does it do, in what order, how fast | `refs/SOURCES.md` + the beat table |
+| does a rig or clip already exist | `CREDITS.md` + `assets/` |
+| is it actually right on screen | `qa/` captures, compared to the sheets |
+
+### 1. The subject, by frames
+
+Find the real thing moving, not stills. For games, anime, sport or machinery the
+footage *is* the specification: it settles what the shape is, where the motion
+starts, how long each stage lasts and what colour it is at each step.
+
+```bash
+yt-dlp --flat-playlist --print "%(id)s | %(title)s | %(duration)s" "ytsearch6:<subject> animation"
+yt-dlp --extractor-args "youtube:player_client=ios,android" -f 18 -o "refs/clip.%(ext)s" <id>
+ffmpeg -i refs/clip.mp4 -vf "fps=8,scale=300:-1,tile=6x4" refs/sheet-%02d.png
+```
+
+Read the contact sheets with vision, then write the grammar down in words before
+touching geometry: *ball leaves the hand on an arc, opens with a white burst, the
+creature springs out at full size, the ball snaps shut and returns*. A paragraph
+like that is the acceptance test for the effect you are about to build.
+
+Rules that come out of doing this repeatedly:
+
+- Prefer **game footage** over fan animation for game subjects; the game is the
+  canonical grammar, and fan cuts are already an interpretation.
+- Prefer **one clean clip sampled densely** over ten clips sampled sparsely.
+  Twelve frames a second on a 4 second send-out shows the whole sequence.
+- Keep the sheets in `refs/<subject>/` next to the build so the next person can
+  see what you were matching, and so QA has an image to compare against.
+
+### 2. Model sourcing: check the libraries before you build
+
+Hand-building a creature from primitives is the *last* option, not the first. A
+rigged download with real deformation and usable clips beats four hundred lines
+of spheres the moment the camera comes within a metre. Search first, and keep a
+record of what you searched.
+
+**The ladder. Every hero asset walks down it in order.**
+
+1. **Already on disk.** The user's folder often ships a `tools/`, `assets/` or
+   `model/` directory with GLBs in it. List it before anything else.
+2. **A CC0 pack covers it.** Import it. No attribution, no negotiation.
+3. **A CC-BY model covers it** and the page can carry a credit line. Import it,
+   credit it, done.
+4. **Nothing fits the silhouette** and the shape has to be exact. Hand-build it
+   against the reference frames, and say in the log that you searched.
+5. **Never:** ripped game assets, Models Resource / Spriters Resource downloads
+   used as geometry, "editorial use only", NC, ND, or anything with no stated
+   licence. Those are hard stops; ask the user instead of guessing.
+
+**Creatures, characters and rigs**
+
+| Source | Licence | What is actually there | How to search |
+| --- | --- | --- | --- |
+| [Quaternius](https://quaternius.com) | CC0 | hundreds of low-poly creatures, characters, nature, buildings; the Universal Animation Library is 120+ clips | browse `quaternius.com/packs`, grab the pack GLB |
+| [KayKit / Kay Lousberg](https://kaylousberg.itch.io) | CC0 | adventurers, skeletons, dungeon and RPG packs, rigged and animated | itch page, per-pack zip |
+| [Poly Pizza](https://poly.pizza) | CC0 or CC-BY | 10,000+ low-poly props, creatures, vehicles; GLB/OBJ, no login | search by noun, read the badge on each card |
+| [Kenney](https://kenney.nl/assets) | CC0 | kits for props, vehicles, characters, UI, audio | category browse |
+| [Sketchfab](https://sketchfab.com/3d-models) | per model | the long tail: specific machines, animals, buildings | filter **Downloadable** + **CC0**/**CC-BY** before looking at anything |
+| [Smithsonian 3D](https://3d.si.edu) | CC0 | scanned real objects, fossils, artefacts, vehicles | search, check the licence note under the download |
+| [NASA 3D Resources](https://nasa3d.arc.nasa.gov) | public domain | spacecraft, rovers, terrain, helmets | browse by category |
+| [glTF Sample Assets](https://github.com/KhronosGroup/glTF-Sample-Assets) | per model, mostly CC-BY 4.0 | canonical rigged test models (CesiumMan, Fox, BrainStem) | read `LICENSES/` before use |
+| [Objaverse](https://objaverse.allenai.org) | mixed, per object | 800k research objects, good for odd props | verify the per-object licence, most are not clean |
+| [Meshy](https://meshy.ai), [Tripo](https://www.tripo3d.ai), user-supplied | user owns the output | anything the pack libraries do not have, generated from the reference | export GLB, keep the prompt in `CREDITS.md` |
+
+**Animation clips** (motion is usually harder to hand-key than shape is to model)
+
+| Source | Licence | Notes |
+| --- | --- | --- |
+| Quaternius Universal Animation Library | CC0 | 120+ humanoid clips, retargetable, best first stop |
+| [Mixamo](https://www.mixamo.com) | free with an Adobe account | thousands of humanoid clips + characters; check current Adobe terms, retarget in Blender or three.js |
+| [Rokoko Motion Library](https://rokoko.com/products/motion-library) | 150 free clips, paid beyond | mocap quality, good for weight and follow-through |
+| CMU Graphics Lab Motion Capture | free for research and commercial use with credit | raw BVH, huge, needs cleanup |
+| Sketchfab animated models | per model | often ships with an idle/walk/attack set |
+| [Godot4 Open Animation Libraries](https://github.com/catprisbrey/Godot4-OpenAnimationLibraries) | CC0 | Mixamo clips rebaked as Godot `.bin`/GLB banks, already retargeted; `jwelchgames/Godot4-MixamoLibraries` is the other mirror |
+
+**Props, environments, textures, light**
+
+| Source | Licence | Notes |
+| --- | --- | --- |
+| [Poly Haven](https://polyhaven.com) | CC0 | HDRIs, textures, models; the HDRI set is the fastest way to fix flat lighting |
+| [ambientCG](https://ambientcg.com) | CC0 | tiling PBR materials, HDRIs, some models |
+| [OpenGameArt](https://opengameart.org) | mixed | filter to CC0 / CC-BY; 3D section is thin but has good odd props |
+| [madjin/awesome-cc0](https://github.com/madjin/awesome-cc0) | index | a maintained list of CC0 sources when the usual four fail |
+
+**Searching them without a browser.** Three of the libraries have open APIs, so a
+build can check them in a single command and read the licence back:
+
+```bash
+# Sketchfab: downloadable + CC0 only, name and page printed for each hit
+curl -s "https://api.sketchfab.com/v3/search?type=models&downloadable=true&license=cc0&q=dragon&count=24" \
+  | python3 -c "import json,sys;[print(r['name'],'|','https://sketchfab.com/models/'+r['uid']) for r in json.load(sys.stdin)['results']]"
+
+# Poly Haven: models, HDRIs, textures (filter by category)
+curl -s "https://api.polyhaven.com/assets?t=models"
+curl -s "https://api.polyhaven.com/assets?t=hdris&c=studio"
+
+# ambientCG: materials and HDRIs by keyword
+curl -s "https://ambientcg.com/api/v2/full_json?type=Material&limit=20&q=concrete" \
+  | python3 -c "import json,sys;print([a['assetId'] for a in json.load(sys.stdin)['foundAssets']])"
+```
+
+Poly Pizza, Quaternius, KayKit and Kenney are browsed by search on their own
+pages; query them with the noun plus the style (`low poly dragon`, `kaykit
+skeleton`), not with a sentence.
+
+**Reference only, never geometry:** The Spriters Resource, The Models Resource,
+sakugabooru, game rip archives, Pinterest. Use them to learn the shape and the
+timing, then build or buy the actual asset.
+
+### 3. Animation research: how the thing moves
+
+Shape is half the job; the other half is the motion, and it is researched the same
+way. Search the *verb*, not the noun.
+
+```bash
+# the motion itself, canonical first
+web_search: "<subject> <move> animation"      # a game doing it
+web_search: "<subject> <move> slow motion"    # real footage, for weight
+web_search: "<subject> sprite sheet"          # frame-by-frame timing
+yt-dlp "ytsearch6:<subject> <move> animation"
+ffmpeg -i clip.mp4 -vf "fps=12,scale=320:-1,tile=6x4" refs/move-%02d.png
+```
+
+Read the sheet, then **count frames and convert**: `seconds = frames / fps`, and
+scale to the loop length you are building. That is how a 0.42 s anticipation and a
+0.18 s contact become the beat table instead of a guess.
+
+Write four lines per action before animating it:
+
+```
+wind-up   0.00 -> 0.42   weight back, head down, tail still
+contact   0.42 -> 0.55   fastest frames, one pose held for two frames
+follow    0.55 -> 0.90   overshoot, then settle
+recover   0.90 -> 1.30   back to idle
+```
+
+Every attack in the beat sheet needs all four. Missing anticipation is why an
+effect reads as "it just happens", and missing follow-through is why it reads as
+"it snaps back".
+
+For rigs, cross-check the reference against a real clip: if the library has a
+punch, a swipe or a jump that is close, retarget it and offset the acting, rather
+than keying a pose from scratch.
+
+### 4. The research log
+
+Every build writes `refs/SOURCES.md`. It is the proof the searches happened and
+the reason the next person does not repeat them.
+
+```md
+| Question | Searched | Found | Decision |
+| --- | --- | --- | --- |
+| what does the send-out look like | yt: "sword shield send out slow motion" | RoUJ_TWvB3g, orb + white burst | matched, timings below |
+| hero creature rig | poly.pizza "dragon", quaternius characters | nothing matching the silhouette | hand-built from refs/sendout |
+| hit reaction weight | yt: "pokemon take damage animation" | 0.9 s flinch, 1.7 s stagger | HURTS table |
+```
+
+A build with no `SOURCES.md` has not finished its research step, even if the
+scene looks right.
+
+### 5. Prove it with shots
+
+Every beat gets frozen, captured and compared against the reference sheet before
+the next beat is built. The contact sheet of those captures is the review
+artifact, not a paragraph describing them.
+
+- Freeze the loop at the beats the reference showed: `?t=<second>` in the page,
+  `freeze(t)` through the debug hook, screenshot the frame element.
+- Put the captures in a grid next to the reference frames and read them with
+  vision. Anything that needs a caption to explain is not finished.
+- Keep numerical checks alongside the pictures: facing dot products, NaN scans
+  over every geometry, console errors, effect bounding boxes. They catch the
+  failures the eye forgives at 300 px.
+
 ## One Prompt, One Build
 
 When the user gives a subject in one line, treat it as a **commission**, not a
@@ -65,6 +251,20 @@ sheet and wait for approval.
 
 The only reasons to ask are credentials, a destructive action, or a path that
 would overwrite the user's work. Everything else is a default.
+
+### Step 0, before the assumption line
+
+Run the three lookups in `Research Before You Model` first:
+
+1. Step the real subject into frames and write down its motion grammar.
+2. Walk the sourcing ladder for every hero asset (disk, CC0, CC-BY, hand-build),
+   with a `CREDITS.md` line per import and the search in `refs/SOURCES.md`.
+3. Stand up the capture loop (`qa/shoot.mjs`, a frozen `?t=` frame, a contact
+   sheet) so every beat can be reviewed as a picture.
+
+For an invented subject, spend the same time on reference density instead: find
+three images that agree on what the place looks like, list the props they share,
+and build those before any invented detail.
 
 ### The default commission
 
@@ -93,6 +293,28 @@ State the assumption in one line before coding:
 That line is the contract. State it, then continue in the same turn; do not wait
 for approval. It gives the user a chance to redirect after seeing the assumption,
 without blocking the build.
+
+### Long builds and context
+
+A scene like this runs for hours of agent time and thousands of messages: render
+loops, one screenshot per beat, one probe per bug. The session will need to
+compress its context, more than once, and compaction is lossy. Build so that a
+compact does not cost you the work:
+
+- **State lives in files, not in the chat.** `DESIGN.md`, `refs/SOURCES.md`,
+  `CREDITS.md`, `qa/report.json` and the beat table in `stage.js` must carry every
+  decision. If a fact only exists in a message, it is already gone.
+- **Write the rule down when you learn it.** A fix found at 3 a.m. is worthless if
+  it only exists in the transcript; put it in the skill or a comment next to the
+  code, with the reason.
+- **Name the shots.** `qa/frames/<entity>/sheet.png` and `shots/t-12.40.png` are
+  stable handles a post-compact agent can re-read without rerunning anything.
+- **Re-derive, do not remember.** After a compact, re-run `frames.mjs` and
+  `shoot.mjs` rather than trusting your summary of what the last frame looked
+  like: the numbers are cheap, and a confident memory of an old build is the
+  most expensive thing in the session.
+- **Keep one open task list** in the repo (a `TODO.md` or an issue) so the thread
+  that survives compaction is the plan, not the chat.
 
 ### Reading the prompt
 
@@ -2021,6 +2243,24 @@ window.__diorama = { THREE, scene, camera, renderer, post, director, cast,
 `?t=12.4` is the whole QA surface: every screenshot and every diagnosis is a
 frozen frame, so a screenshot never depends on timing luck.
 
+### The research gate, at ship time
+
+A build is not finished until these exist. Check them before the summary:
+
+- [ ] `refs/<subject>/` has at least one contact sheet stepped from real footage.
+- [ ] `refs/SOURCES.md` answers the four questions (shape, motion, asset, proof)
+      with the queries actually run. "Nothing found" is a valid answer only with
+      the query written down next to it.
+- [ ] `CREDITS.md` has a row per imported asset, and every licence is CC0, CC-BY,
+      public domain, or owned by the user.
+- [ ] Every hero asset walked the ladder: disk, CC0, CC-BY, then hand-built. If it
+      was hand-built, the row says so.
+- [ ] The captures for each beat exist, and each one was compared against the
+      reference frame for that beat.
+
+A missing `SOURCES.md` means the research step was skipped, and the scene is
+probably wearing the generic version of its genre.
+
 ## Surface, Motion And Event FX
 
 These are the failures that survive a good first render: a finished-looking set
@@ -2123,6 +2363,57 @@ system, on every subject.
 - When a prop never appears, print its world position rather than trusting
   `visible`. `getWorldPosition` on a merge-eaten object returns local coordinates
   because the original was unparented; that is the signature of the merge pass.
+
+### Per-entity frame recording
+
+A still cannot prove a jump. A six-frame strip cannot prove that the third
+character in the scene is animating, because the other two are moving in the
+same picture. `qa/frames.mjs` records **one dense series per entity**, and prints
+a verdict for each, so a dead actor cannot hide behind a live neighbour.
+
+```bash
+BASE_URL=http://127.0.0.1:4180/index.html \
+ENTITIES='({ hero: d.cast[0].model, guard: d.cast[1].model })' \
+FROM=4 TO=9 FPS=12 OUT=qa/frames STATIC=guard \
+  node templates/qa/frames.mjs
+```
+
+What it does per entity:
+
+- **Isolates it.** `ISOLATE=scene` (default) hides every mesh not on that
+  entity's branch, so the signature is really about this actor; `siblings` hides
+  the other registry entries only. Restored afterwards.
+- **Fits one camera to the swept bounds** and keeps it for the whole window, so
+  travel stays visible. A camera that follows the actor hides exactly the drift
+  you are looking for.
+- **Samples at `FPS`** (12 by default) across `FROM..TO`, and for each frame logs
+  the world bounds centre in NDC, plus a 32x32 luminance signature.
+- **Scores four ways.** `empty` counts frames where the entity is not on screen,
+  `energy` is the largest mean luminance delta between consecutive on-screen
+  frames (a flat line means the actor is not animating), `step` is the largest
+  NDC jump (a teleport), and `OFFSCREEN` counts frames outside the frustum.
+- **Writes a contact sheet** per entity, `qa/frames/<name>/sheet.png`, and the
+  numbers to `report.json`. Exit code 1 when anything is flagged, so CI can gate.
+
+Reading it:
+
+| Verdict | Means | What to do |
+| --- | --- | --- |
+| `ok` | moved, stayed inside, no jump | still read the sheet for pose quality |
+| `FROZEN` | energy under `MIN_ENERGY` | the pose blend is not reaching this actor |
+| `TELEPORT` | an NDC jump over `MAX_STEP` | a state boundary is snapping, not blending |
+| `EMPTY n/N` | not rendered for over half the window | wrong window, or it spawns later than you think |
+| `NOT-IN-WINDOW` | never rendered in the window | the entity name is wrong, or it is invisible |
+| `OFFSCREEN` | left the frustum | staging, camera fit, or a run that goes too far |
+
+Two rules for the numbers. A blank frame beside a full one must never be allowed
+to supply the energy for a window, so only consecutive on-screen pairs are
+compared. And an entity that is meant to hold still (a seated figure, a guard at
+a post) goes in `STATIC=`, or you will get a `FROZEN` that means nothing.
+
+Run it for every hero actor, and for each scripted beat that involves them:
+send-out, attack, hit, death, exit. The sheet is the evidence; the verdict only
+tells you which sheet to open first.
 
 ### Detail And Animation Audit
 
@@ -2250,6 +2541,9 @@ same timestamp.
 
 ```
 DESIGN.md              filled design sheet: premise, cast, systems, beats, budget
+CREDITS.md             every imported model: URL, author, licence (CC0/CC-BY/owned)
+refs/                  reference frames: contact sheets stepped from the source clip
+refs/SOURCES.md        research log: query -> found -> decision, per question
 src/
   config.js            scene constants + clamp/lerp/smooth/pulse/hash
   main.js              renderer, scene, clip planes, resize, rAF, ?t= freeze
@@ -2270,6 +2564,7 @@ src/
 build.mjs              esbuild bundle, index.html, standalone HTML
 qa/
   shoot.mjs            viewports + console errors + named timestamps
+  probe-*.mjs          one-off numeric probes (facing, anchors, NaN, spawn pose)
   audit.mjs            scene lint: halos, fades, camera/render scale, exits, FX
   portrait.mjs         isolated figure/framing shots through a debug camera
   strip.mjs            N-frame motion strips (fails on a frozen loop)
@@ -2313,8 +2608,11 @@ the climb, stand spots, facing), `track.js` (arc-length paths with lane offsets
 and smoothed ground height), `stage.js` (beat table, `keysAt`, `place`, the
 actor loop, a car state machine). Props and systems: `detail.js` for prop
 assemblies (including `haloPlane`/`softDiscTexture` for soft light cards),
-`combat.js` for deterministic timing and death grammar. Effects:
-`water.js`, `wake.js`, `splash.js`. Sheets: `DESIGN.md`.
+`combat.js` for deterministic timing and death grammar, `creature.js` for a
+fight between two rigged actors (stage-local `aimYaw`, bone-space `headAnchor`,
+`uprightQuat`, the `makeHurtModel` severity table and `sendOut` throw-and-return
+geometry). Effects: `water.js`, `wake.js`, `splash.js`. Sheets: `DESIGN.md`,
+`CREDITS.md`, `SOURCES.md` (the research log, filled before the first mesh).
 
 `stage.js` ships as a **skeleton with one worked actor chain**: a figure leaves a
 car, walks a route, comes back and climbs in. It is deliberately not a story. The
@@ -2399,8 +2697,130 @@ TEST:   qa/audit.mjs IDLE_EMITTER / ORPHAN_EMITTER; event frame present,
         event + 1.5 s absent
 ```
 
+## Field Notes: Two-Creature Combat
+
+From a Pikachu vs Charizard battle diorama built against Sword/Shield and anime
+footage. The rig, the effects and the send-out all broke in the same three ways,
+and the fixes generalise to any fight between two rigged actors.
+
+### Aiming is a local-space problem
+
+Both rigs look down their own `+Z`, and both sit under a stage root that is
+rotated (here 90°). Reading a world-space bearing to the opponent and writing it
+to a local `rotation.y` aims the two *past* each other, toward the lens. Compute
+the yaw inside the stage's own frame:
+
+```js
+const camLocal = cameraDirection.clone().applyAxisAngle(UP, -STAGE_ROT);
+const aimYaw = (a, b, cheat) => {
+  const dx = b.x - a.x, dz = b.z - a.z;
+  return Math.atan2(dx, dz) + camLocal.x * cheat;   // local, not world
+};
+```
+
+Then prove it numerically, every half second, through the whole loop: forward
+vector versus vector-to-opponent should sit at 0.97+, and it may only dip during
+a deliberate spin. Eyeballing this at 300 px hides a 20° miss.
+
+### Effects belong in bone space, not world space
+
+Flames leaving a mouth must be anchored to the head joint, or they slide off the
+jaw whenever the head turns. Convert the parent's forward and up into the target
+bone's local space once at build time and keep the emitted point there:
+
+```js
+const localFwd = bone.worldToLocal(pivotPoint.clone().add(forward)).normalize();
+```
+
+Same idea for the aim of a projectile: take the muzzle from the bone matrix, not
+from a hardcoded offset.
+
+### Flat effects need an upright basis
+
+`quaternion.setFromUnitVectors(+Z, viewDir)` picks an arbitrary roll, which is
+why a kanji-shaped blast can arrive upside down or rotated 40°. Build the basis
+from the lens explicitly:
+
+```js
+const right = new THREE.Vector3().crossVectors(worldUp, viewDir).normalize();
+const up = new THREE.Vector3().crossVectors(viewDir, right).normalize();
+mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, up, viewDir));
+```
+
+### Explosion vocabulary
+
+A hit burst is a hot core with ten short sparks radiating out of it, plus a ring
+on the ground. That is the whole recipe; it reads at any size.
+
+- No cone petals, no triangle fans, no straight bars, no scaffolding around the
+  blast. Every one of those reads as geometry, not energy.
+- Layered silhouettes beat layered spheres: a body colour, a hot mid, a core,
+  each scaled *individually* (`m.scale.set(k,1,1)` per layer) — sharing one
+  geometry between layers makes the layers invisible.
+- A continuous stream is **one** mesh with overlapping segments. Separate quads
+  with per-segment jitter make a ladder with seams.
+- Nested cones hide their own core: nudge the inner layers toward the lens and
+  lift them so the hot tip clears the outer silhouette.
+
+### Pin the effect to where the hit landed
+
+An eruption anchored to `actor.position` every frame crawls across the slab while
+the actor slides out of it, which is exactly the "something feels off, it moves a
+bit" report. Latch the anchor once, at the moment of impact, and animate from
+that fixed point. Same for the projectile's target: aim at the latched point, not
+at the live chest position.
+
+### Send-out and recall are different verbs
+
+- Send-out: the trainer throws. The ball leaves the hand on an arc, spins, lands
+  on the mark, the lid opens with a white burst — flash, smoke puff, sparks, a
+  ground ring — and the creature springs out *at full size*, covered by the flash.
+  The ball then snaps shut and returns to the trainer's hand.
+- Do **not** replace that with a slow orb the creature materialises inside; that
+  is the legendary-encounter variant, and it reads as a bubble.
+- The red beam belongs to a recall or a knockout, never a send-out. If the ball
+  glows red before release, it reads as a second, wrong beam — keep the release
+  white.
+- If the trainer holds a second ball while the thrown one is in the air, hide the
+  held prop for the duration or the throw doubles.
+
+`templates/creature.js` ships these five as runnable functions: `aimYaw`,
+`headAnchor`, `uprightQuat`, `makeHurtModel`, `sendOut`.
+
+### Hit reactions scale with the attack
+
+One hit model, four severities: a light flinch (0.9 s, a tip back), a knocked-back
+stagger (1.7 s, air time), a spin-out (1.3 s), and a full collapse (3.5 s, falls,
+lies down, gets up). Rotate about the axis of the blow (`[dz, 0, -dx]`), pivot at
+mid-body so the actor rocks rather than hinging at the feet, and add a small
+vertical arc so the feet leave the ground.
+
 ## Changelog
 
+- **3.8.0** — `qa/frames.mjs`: a per-entity frame recorder. Samples one dense
+  series per entity across a window, isolates it (branch, siblings or full
+  scene), fits one camera to its swept bounds so travel stays visible, and scores
+  every entity: `energy` (flat means frozen), `step` (NDC jump means teleport),
+  `empty` frames, `OFFSCREEN`, with `STATIC=` for actors meant to hold still. Each
+  entity gets a contact sheet plus a row in `report.json`, and the script exits
+  non-zero on any flag. New `Per-entity frame recording` section in Verification.
+  New `Long builds and context` section: compaction is lossy, so state lives in
+  `DESIGN.md`, `SOURCES.md`, `CREDITS.md`, `report.json` and the beat table, and a
+  post-compact agent re-runs the harness instead of trusting its summary.
+- **3.7.0** — Research-first release, from the Pikachu vs Charizard battle
+  diorama. New `Research Before You Model` section: step the source footage into
+  contact sheets and write the motion grammar down before modelling, prefer
+  game footage over fan cuts, and check free commercial-use libraries (Poly
+  Pizza, Sketchfab CC0/CC-BY, Quaternius, Kenney, user-supplied AI meshes) before
+  hand-modelling a creature; `CREDITS.md` + licence gate + `fitModel` pipeline +
+  forward-axis probing; shots-as-acceptance-test. New `Field Notes: Two-Creature
+  Combat` section: stage-local aiming with a numeric facing sweep, bone-space
+  effect anchors, upright billboard basis, explosion vocabulary (no cones/bars/
+  scaffolding, per-layer scaling, one continuous stream), latching effect anchors
+  to the impact point, send-out vs recall grammar (throw → arc → open → burst →
+  full-size exit → ball returns; red beam only on recall), and severity-scaled
+  hit reactions about the blow axis. Project layout gains `refs/` and
+  `CREDITS.md`.
 - **3.6.0** — Renamed to Diorama throughout: the playbook, templates and QA docs
   now call the artifact a diorama. No code behaviour changed.
 - **3.5.1** — Camera-scale rule made explicit: `subjectScale` is a post-fit
