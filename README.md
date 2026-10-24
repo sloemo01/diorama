@@ -59,22 +59,6 @@ climbs the bank steps and the windows go red behind them, the sedan pulls away, 
 cruisers arrive and officers fan out across the street, then the street empties
 again.
 
-## What is in here
-
-| Path | What it is |
-| --- | --- |
-| `SKILL.md` | The whole playbook: research gate, look contract, detail and animation bars, pipeline, recipes, QA, pitfalls. Start here. |
-| `templates/` | Copy-in modules: palette, post pass, camera, lighting, geometry, props, rig, poses, vehicle transfer, paths, combat, creature, water, effects, build script. |
-| `templates/DESIGN.md` | The design sheet you fill before modelling. |
-| `templates/SOURCES.md` | The research log you fill before modelling: query, what was found, decision. |
-| `templates/CREDITS.md` | The licence ledger for every imported model, clip or texture. |
-| `templates/creature.js` | Rigged-actor combat: stage-local aiming, bone-space effect anchors, upright billboards, hit severities, send-out geometry. |
-| `templates/qa/` | Eight verification scripts that check a build against frozen frames and printed numbers, including a per-entity frame recorder. |
-| `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
-| `verify/climb/` | A unit test for the vehicle transfer maths. |
-| `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
-| `media/` | The preview GIFs and source captures shown above. |
-
 ## Install it
 
 Paste this into an agent that can run shell commands. It asks where to put the
@@ -130,6 +114,22 @@ you build. A successful clone is not an install: 5 and 6 are it.
 Needs `git`, or `curl` and `tar` for the fallback. The QA scripts need Node with
 `three`, `esbuild` and `playwright-core`. The `media/` previews are about 20 MB
 and can be deleted after the clone.
+
+## What is in here
+
+| Path | What it is |
+| --- | --- |
+| `SKILL.md` | The whole playbook: research gate, look contract, detail and animation bars, pipeline, recipes, QA, pitfalls. Start here. |
+| `templates/` | Copy-in modules: palette, post pass, camera, lighting, geometry, props, rig, poses, vehicle transfer, paths, combat, creature, water, effects, build script. |
+| `templates/DESIGN.md` | The design sheet you fill before modelling. |
+| `templates/SOURCES.md` | The research log you fill before modelling: query, what was found, decision. |
+| `templates/CREDITS.md` | The licence ledger for every imported model, clip or texture. |
+| `templates/creature.js` | Rigged-actor combat: stage-local aiming, bone-space effect anchors, upright billboards, hit severities, send-out geometry. |
+| `templates/qa/` | Eight verification scripts that check a build against frozen frames and printed numbers, including a per-entity frame recorder. |
+| `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
+| `verify/climb/` | A unit test for the vehicle transfer maths. |
+| `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
+| `media/` | The preview GIFs and source captures shown above. |
 
 ## Start a diorama
 
