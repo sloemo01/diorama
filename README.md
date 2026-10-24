@@ -22,6 +22,8 @@
 
 <sub>Four scenes built with this playbook. Click any tile for the full capture.</sub>
 
+[**Install it in one prompt**](#install-it) &nbsp;·&nbsp; [What is in here](#what-is-in-here) &nbsp;·&nbsp; [Start a diorama](#start-a-diorama) &nbsp;·&nbsp; [Verification](#verification)
+
 </div>
 
 A diorama here is a tiny staged scene on a slab: a locked three-quarter camera, a
