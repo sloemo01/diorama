@@ -16,18 +16,13 @@ be frozen, screenshotted and compared.
 Three scenes built with this playbook. Each tile loops in place; click one to open
 the full capture.
 
-<table>
-  <tr>
-    <td align="center"><a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="260" alt="Dust Kings, a Saturday-night arena show diorama, looping"></a></td>
-    <td align="center"><a href="media/pool.mp4"><img src="media/pool.gif" width="260" alt="Swimming pool diorama, swimmers crossing the water, looping"></a></td>
-    <td align="center"><a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="260" alt="Bank job diorama, police cars arriving on the street, looping"></a></td>
-  </tr>
-  <tr>
-    <td align="center"><sub><b>Dust Kings</b><br>arena show, 38 s</sub></td>
-    <td align="center"><sub><b>Pool</b><br>laps and a diving board, 26 s</sub></td>
-    <td align="center"><sub><b>Bank job</b><br>police on the street, 48 s</sub></td>
-  </tr>
-</table>
+<p>
+<a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="31%" alt="Dust Kings, a Saturday-night arena show diorama, looping"></a>
+<a href="media/pool.mp4"><img src="media/pool.gif" width="31%" alt="Swimming pool diorama, swimmers crossing the water, looping"></a>
+<a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="31%" alt="Bank job diorama, police cars arriving on the street, looping"></a>
+</p>
+
+<sub><b>Dust Kings</b>, arena show, 38 s &nbsp;·&nbsp; <b>Pool</b>, laps and a diving board, 26 s &nbsp;·&nbsp; <b>Bank job</b>, police on the street, 48 s</sub>
 
 The Dust Kings loop follows one night's billing: cars on the arena floor, the
 billboard running through LIVE, NEW RECORD and THANK YOU, and a fire that gets
