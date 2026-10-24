@@ -239,6 +239,12 @@ reference documents, everything needed to build a diorama is in the file plus
 If you just want to read it, start at `Research Before You Model`, then
 `One Prompt, One Build` and `The Look Contract`.
 
+Long builds will eventually compact the agent's context, and compaction is lossy.
+`SKILL.md` has a `Long builds and context` section for that: state lives in
+`DESIGN.md`, `SOURCES.md`, `CREDITS.md`, `report.json` and the beat table rather
+than in the chat, and after a compact the agent re-runs `frames.mjs` and
+`shoot.mjs` instead of trusting its own summary of the last frame.
+
 ## Licence
 
 MIT. See `LICENSE`. three.js is MIT as well.
