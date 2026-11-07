@@ -32,14 +32,12 @@ inked contour, and toy-scale people with real joint animation. The subject chang
 (pool, night market, bank job, arena battle); the slab, the cast and the
 presentation stay for the default pixel preset.
 
-**Three looks:** classic pixel (default), stroked toon (fine contours, four-step
-shading, bevelled parts) and pixel + stroke. The agent asks once per project and
-builds in the answer; silence means pixel, and every preset keeps free orbit.
+**Looks:** pixel (default), stroked toon, or pixel + stroke. The agent asks once and
+builds in the answer; silence means pixel.
 
-**Sourcing:** the second question covers models: hybrid (default; use fitting licensed
-assets, build the gaps), internet throughout, or agent-modelled. Assets must permit
-commercial use, modification and redistribution, with decisions and licence evidence
-in `refs/SOURCES.md` and `CREDITS.md`.
+**Sourcing:** hybrid is the default: licensed assets, hand-built gaps. Also internet
+throughout or agent-modelled. Assets must allow commercial use and redistribution,
+with evidence in `refs/SOURCES.md` and `CREDITS.md`.
 
 Everything is deterministic. The scene is a pure function of `t`, so any frame can
 be frozen, screenshotted and compared. A screenshot is evidence, not a lucky
