@@ -1,0 +1,50 @@
+{
+  "sourceURL": "",
+  "downloadURL": "",
+  "title": "",
+  "creator": "",
+  "retrievedAt": "",
+  "license": {
+    "spdx": "",
+    "url": "",
+    "evidenceURL": "",
+    "reviewed": null,
+    "costUSD": null,
+    "commercial": null,
+    "modify": null,
+    "redistribute": null,
+    "embed": null,
+    "restrictions": []
+  },
+  "attribution": {
+    "text": "",
+    "licenseURL": "",
+    "changes": [],
+    "retainedNotices": null
+  },
+  "files": [],
+  "dependencies": [],
+  "accuracy": {
+    "referenceURL": "",
+    "identityMatches": null,
+    "dimensionsChecked": null,
+    "unitsAndScaleChecked": null,
+    "criticalGeometryChecked": null
+  },
+  "structure": {
+    "partsMapped": null,
+    "pivotsValidated": null,
+    "interfacesValidated": null
+  },
+  "import": {
+    "tested": null,
+    "finiteGeometry": null,
+    "complete": null,
+    "styleMatched": null
+  },
+  "role": "teaching",
+  "distribution": {
+    "dependenciesEmbedded": null
+  },
+  "evidenceNotes": "Fill only from reviewed source terms, actual file hashes and executed import/geometry tests. This blank template deliberately does not pass. Group files belonging to one copyright work; list differently licensed works as dependencies."
+}

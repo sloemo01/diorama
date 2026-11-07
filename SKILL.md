@@ -1,7 +1,7 @@
 ---
 name: diorama
-description: Use when building a pixel diorama in Three.js — one-prompt autonomous builds with staged systems, detailed props, real animation, and social/service choreography.
-version: 3.8.0
+description: "Full long-form guide for detailed rotatable Three.js dioramas. Narrative scenes are scene-first with no educational UI unless requested. Classic pixel, stroked-toon and pixel+stroke are rendering choices, not educational modes. Explanatory commissions use the separate educational contract. Includes composition, cast, animation, craft, sourcing and construction."
+version: 5.7.0
 author: Nehal Kanak (sloemo)
 license: MIT
 platforms: [linux, macos, windows]
@@ -9,25 +9,138 @@ platforms: [linux, macos, windows]
 
 # Diorama
 
-A diorama is a tiny staged scene on a slab: a locked three-quarter camera, a
-flat cut-out against white, a palette-snapped pixel grid with an ink contour, and
-toy-scale people with real joint animation. Any subject works (pool, market,
-kitchen, bank job, launch pad, aquarium). The slab and the cast stay; the props
-change.
+## Current intake contract (5.7.0 — authoritative)
 
-**This file is the whole guide.** It carries no external reference documents:
-everything needed to build a diorama is here, plus copy-in modules and a design
-sheet template in `templates/`.
+For a new commission, ask **look first, model sourcing second**, using the two gates below. These gates override older three-preset lists, automatic internet-first instructions and one-prompt assumptions elsewhere in this long guide and its references. Do not ask setup questions when merely editing the skill. Explicit answers in the brief skip the corresponding question; existing-project repairs retain recorded choices. An unanswered question is pending, not consent. Rendering and sourcing are independent of narrative/educational purpose.
 
-Read `Research Before You Model`, `One Prompt, One Build`, `The Look Contract`,
-`The Detail Bar`, `The Animation Bar` and `Pipeline` first. Then read the sections for the systems
-you are actually building; the rest is reference. Do not spend the first pass
-reading every vehicle or water note for a kitchen scene.
+Three looks are available: `pixel` (Classic Pixel Art; recommended), `stroked-toon`, `pixel-stroke`. Generic “pixel art”, “classic”, “old pixel style” and explicit delegation (“you choose”) resolve to `pixel`. All looks preserve free orbit. An unanswered style gate waits.
+
+Three sourcing modes are available: `internet-full`, `hybrid` (recommended), `authored-only`. Generic “use internet models” resolves to `hybrid` unless the user requests downloaded models throughout. Older `internet-first` records map to `hybrid` on repairs. Sourcing requirements below apply only to modes that acquire external assets; authored-only skips model acquisition, not subject research, quality or geometry/contact checks.
+
+## Profile boundary and retained additions (5.0 — read first)
+
+This is the **restored full-length guide**, not the compact 4.x replacement. Keep its detailed composition, subject recipes, scene furniture, cast, animation, service/queue, vehicle, effects, framing and craft guidance. The following profile/sourcing updates override older wording only where explicitly stated.
+
+### Scene purpose is independent of rendering
+
+**Default `sceneProfile: narrative`.** A place, landscape, amusement park, town, fantasy scene or interactive scene is not an educational mechanism. Pixel, stroked-toon and pixel+stroke choose the renderer, NOT the profile. Asset choice, a working ride or click interactions do not make a scene educational. Choose `educational` when the user asks to explain/teach how something works, its anatomy or causal sequence. If intent is genuinely mixed, ask once; otherwise infer and record it without another forced setup question.
+
+**Narrative has no educational UI by default.** Do not import or instantiate `education-v8.css`, `education-dock.mjs`, an Explore/How it works panel, lesson steps, part picker, explanatory dashboard, floating callout labels or scattered teaching text for an ordinary diorama. This exclusion applies in ALL three render presets. Leave the scene/page visually clean. Free orbit and discreet functional pause/reset/accessibility controls remain permitted; diegetic park signs and shop names are scene geometry, not a teaching overlay. Optional title/readout furniture mentioned later is opt-in, not a toon/hybrid default. No debug panel in delivery.
+
+**Educational only:** canonical V8 right card/mobile dock, causal lessons, part inspection and connected explanatory callouts apply to explanatory commissions, not to all scenes. Explicit UI-free requests still override the panel default: explanation can be delivered through the requested scene behavior and accompanying prose. Narrative scenes with explicitly requested ride/part inspection get the requested scoped interaction, not an automatic lesson dashboard. Explicit requested informational labels are allowed, but do not add unrelated teaching surfaces. Record `uiMode: none | minimal-controls | requested-inspection | educational` and why; never satisfy a UI test by adding unwanted UI.
+
+Regression examples: “amusement park in pixel + stroked toon” → narrative + pixel-stroke + no education UI. “Interactive amusement park” → narrative; interaction alone adds no lessons. “Explain a roller coaster's operation” → educational, chosen style independently. “Amusement park with inspectable rides” → narrative + requested inspection only. A scene with no educational intent must not fail QA for lacking V8, lessons, labels or a card column.
+
+### Default occupied-space pass: actions, seating and scenery
+
+Prevent intersections before adding detail or spawning copies, for people, animals, imported rigs, buildings, props and rides in BOTH profiles/all presets. Use `references/action-clearance.md`, `templates/action-clearance.mjs` and `templates/pose-bounds.mjs` with the actual production evaluator; this adds no educational UI.
+
+1. **Reserve full space, not origins:** building/awning/door parcels, open access paths, actor swept widths and reach, tails/wings/horns, carried items and neighbouring actors. Reuse fitted rigs/clips from internet assets, but reject an asset/clip that cannot fit the required seat/action without distortion. Split accessible structures into actual wall/door/roof pieces; an enclosing hollow-building AABB is only a broad-phase candidate, not solid occupancy. Use deterministic lanes, queue slots, crossing priorities and seat reservations, not random nudges after overlap.
+2. **Solve real contact/action frames:** approach → align → bend/lower → supported sit → stand/exit; pelvis, knees, feet and hands follow real seat/ground/handle frames. Don't sit by dropping a standing model through the chair. Ride occupants inherit the seat's moving frame once. Permit only exact named intended body↔support/joint contacts, with action window and bounded depth; never exempt an entire actor, chair, species or same-owner subtree. Check support gaps separately—an allowed collision contact does not prove the person isn't floating.
+3. **Check the live pose across the whole action:** refresh skeleton/morph vertices and world frames, then use measured conservative body-region capsules/boxes plus structural pieces. Bind-pose bounds/root-point distances miss moving limbs; undersized colliders and omitted tails/carry props are failures. Broad-screen nearby pairs; refine loose bounds instead of deleting objects to lower candidate counts. Production audits supply independently specified `requiredIds`; missing actors/proxies or unverified coverage cannot pass. Test nonadjacent self-parts too, while explicitly declaring valid anatomical/structural joints. Proxy overlap is not automatically actual mesh penetration.
+4. **Test critical times and fixes:** sample full cycles, loop seam, approach/contact/departure, largest reach, sitting/standing, crossings and door swing. Include exact events and refine using relative tip motion/clearance, not only endpoints or an attractive frame. `sampledOnly:true` is bounded sampled evidence, not continuous collision freedom. Move a real wrist/tail/knee into an obstacle, overlap building parcels and synchronize a crossing; the SAME production predicate must flag the fault and pass after repair. Review worst-contact side/back/top crops plus an action strip. Never hide bodies, shrink proxies, fade through walls or freeze the requested action to claim a pass. One source-driven QA runner, cached static obstacles, nearby-pair broad phase and worst-few reporting keep this practical.
+
+### Default asset workflow: search, acquire and USE fitting models
+
+Ask the Model Sourcing Gate after the look is resolved, for BOTH profiles. Follow the recorded `internet-full`, `hybrid` or `authored-only` choice; do not silently impose internet-first. In the first two modes, reuse valid local assets but still search for missing major roles. The acquisition requirements in this section apply to those two modes; authored-only intentionally builds geometry and does not need a failed model search to justify it.
+
+**A search is not the deliverable.** Before detailed hand-modelling, find candidates for the hero and major supporting roles, review the actual per-asset terms and appearance, download the chosen permitted model/dependencies, inspect an actual import, and USE it in the scene when it fits. A fitting, licensed asset must not be ignored in favour of primitive-only reconstruction merely because hand-building is familiar. Nor does importing one token tree satisfy sourcing a park's otherwise hand-built rides/buildings/cast. Record decisions for the main roles in the existing SOURCES/CREDITS/design ledger.
+
+**Fit means diorama-quality, not merely downloadable:** correct subject/representation and silhouette, coherent kit/palette/proportions, adequate construction detail, usable parts/rig/clips for the requested motion or inspection, viable triangle/draw-call/texture budget, and compatibility with the chosen pixel/toon/hybrid rendering. Judge the real model from more than a thumbnail. Normalize scale/axes/origin, adapt colours/materials without losing important markings, preserve rigs/part identity, fit to the scene and review a rendered close-up. A realistic/PBR asset is not automatically disallowed if it can be adapted well; an unrelated low-poly substitute is not automatically suitable. Follow the original long-form craft, composition and motion standards after importing.
+
+**Rights remain mandatory:** prefer FREE assets whose explicit terms permit commercial use, modifications and redistribution/embedding in the delivered scene. Read original asset/license evidence; retain credits/license/change notices where required. NC, ND, editorial, personal/educational-only and missing rights do not pass. Custom/ShareAlike/other terms require compatibility review, not a fake CC0 label. No purchases, subscriptions or paid downloads without explicit user approval. Check separately licensed dependencies. Commercial permission is not scientific accuracy or trademark/other-rights clearance.
+
+**Source order:** use the user's Polyfork-first sweep for narrative kits/props, then the relevant original-author/model-library sources in this guide; if Polyfork misses, continue to appropriate alternatives rather than declare that the internet has none. Educational subjects use their bounded exact-subject search and extra accuracy/structure gate. Reuse a compatible kit for coherence. Do not crawl every provider indiscriminately or repeatedly search the same noun. Actual search/download/import evidence stays on disk; never fabricate searches, licenses or successful loads.
+
+**Hand-model only the justified gap:** necessary missing/custom geometry, unsuitable candidates after source/fit checks, or interfaces/animation adaptations not supplied by an imported model. Selection or movement alone is NOT a reason to reject an asset: use real part/pivot wrappers where feasible. Retain an all-authored approach when the user explicitly asks for it. If browsing/downloads are unavailable, disclose the limitation and fallback; never say the search found nothing when it never ran. A quality mismatch, unclear license or lack of useful motion is a documented reason to reject, not a reason to force a bad download.
+
+**Proof before completion:** for each major role record search/source, chosen asset or rejection/fallback reason, license evidence, actual downloaded file/path/hash and import/style/motion result. A compliant matching candidate found → acquired and used; no suitable candidate → honest specific fallback. Verify the chosen asset actually exists in the final scene, not just in assets/. Offline/standalone delivery packages every permitted dependency and is tested without network; a warm cache or CDN loader is not self-contained. Sourcing adds NO education panels, callouts or other UI to narrative scenes.
+
+### Preserve the approved 4.x additions without shortening this guide
+
+- **Representation:** actual subject by default, not a classroom surrogate. Follow `references/representation.md`: Earth means a planet, not a globe on a stand. Ask real subject / physical teaching model / explanatory abstraction / you choose only if materially ambiguous; preserve explicit choices. Keep representation, render preset, purpose, scene/object context and Inside independent. Natural subjects do not acquire invented platforms, frames or machinery merely because this guide contains mechanical examples.
+- **Narrative sourcing:** preserve the user's Polyfork-first catalogue sweep, kits/matching, source decisions and scale/palette integration in `references/external-models.md`. This extends the older model-library section; do not fall back to primitive-only scenery without checking suitable assets.
+- **Educational sourcing:** the named teaching object/parts may be verified external geometry. Use the bounded candidate search and accuracy/import wrapper in `references/educational-models.md`, not a narrative full-catalogue crawl. Add authored semantic IDs, interfaces, pivots and explanation where needed.
+- **Rights:** all downloaded assets must permit commercial use, modification and redistribution in the delivered scene. Free download is not permission. Use `templates/educational-asset-gate.mjs` with reviewed evidence/credits and actual file hashes; CC0/CC-BY can pass, unknown/custom terms require review, NC/ND/editorial/incompatible terms do not pass. Verify dependencies and offline bundling; a remote CDN load is not an offline standalone artifact. This rights gate overrides older library summaries, including casually accepted restrictive licenses.
+- **Construction:** retain `templates/construction-kit.js` and `templates/interface-checks.js`; reserve working pockets, derive contact stacks from shared datums, check actual geometry and repeats. Keep the original detailed construction/selection chapters. Material/selection/annotation checks apply only to implemented/requested features; no forced annotation system to satisfy QA. AABB overlap is a candidate, not certified penetration. Use scoped real mutations, not bespoke injected-object detectors. Available helpers are supplemental, not proof of a whole scene.
+- **Maintenance:** do not mutate the installed skill after each scene automatically. An explicit maintenance request and filesystem approval are required. Preserve original/current backups. Historical changelogs document prior versions; they do not override this release.
+
+A diorama is a tiny staged scene with a resettable three-quarter hero camera and
+free user orbit. The default pixel preset uses a white cut-out, palette-snapped
+pixel grid and ink contour; the other presets follow their own presentation
+contracts. Narrative scenes retain the slab and toy-scale animated cast;
+educational scenes use the exception below.
+
+Classic Pixel Art is the recommended new-project look. **Stroked toon / illustrated miniature**
+(`stroked-toon`) and the **pixel + stroke hybrid** (`pixel-stroke`) are optional
+rendering presets for any subject, not a coffee-machine genre. **Ask which of the
+three to build in at the start of every project** — see `Render Preset Gate` —
+because the look changes presentation only, never the subject, story, research
+requirements, choreography or construction standard, and nobody should have it
+chosen silently on their behalf.
+
+**Profile precedence (read first):** For an educational explanation, read
+`Educational Mechanism Profile` before the narrative defaults. One mechanism and
+one causal sequence replace ALL mandatory cast/ritual/multiple-system/story-prop
+quotas throughout this guide. Clean off-white and the single V8 right card/mobile dock replace empty
+paper or decorative figure UI (explicit placement requests remain supported). Construction and mechanical correctness are never
+waived. For EVERY preset, free user orbit is mandatory; fixed/hero views below
+refer to deterministic QA/reset poses, not a locked interaction camera.
+
+**This file restores the full guide.** The supplemental references named in the 5.0 additions carry later approved sourcing/representation rules; copy-in modules and the detailed design sheet remain in `templates/`.
+
+**Execution index — do not read every genre recipe first.** Resolve the preset
+and profile, then use the fast-path table. Read `Research Before You Model` and
+`The Detail Bar` (including whole-object completeness) for every build. Narrative
+builds additionally use `One Prompt, One Build`, `The Animation Bar` and their
+chosen rendering recipe; educational builds go directly to the canonical UI/
+inspection and construction contracts. `The Look Contract` is pixel-only.
+
+| Before advancing | One source of truth / required evidence |
+| --- | --- |
+| First mesh | Filled `templates/DESIGN.md`: complete object, essential parts, source provenance and shared mating frames |
+| Repeated assembly | `Construction regression gates`: every instance, actual axes/bores and end-plane separation; not one good sample |
+| Requested selection | `Canonical educational UI and inspection contract`: reuse selection behavior only as requested; no narrative education card/lessons/labels. Verify visible emphasis, keyboard equivalent and exact restoration |
+| Claimed pass | `Verification`: nonempty actual geometry, expected counts, negative injections and fresh build hash tied to the report |
+
+This table indexes existing acceptance rules; detailed tests live only in the
+sections named here. Read other subject recipes only when the build uses them.
+
+## Render Preset Gate (ask once, every project)
+
+Before the first mesh or presentation work, ask using the structured-choice tool when available. Keep labels and one-sentence consequences visible:
+
+> **Which look should I build this in?**
+>
+> 1. **Classic Pixel Art (Recommended)** — The original finer palette-snapped miniature look with ink contours and ordered dither.
+> 2. **Stroked Toon / Illustrated Miniature** — Smooth bevelled parts, stepped shading and fine charcoal outlines.
+> 3. **Pixel + Stroke** — Toon shading and outlines on a low-resolution pixel grid.
+
+Map answers respectively to `pixel`, `stroked-toon`, `pixel-stroke`. Generic “pixel art”, explicit classic and explicit delegation select `pixel`; silence waits. A reference image alone does not settle a materially ambiguous request. Do not repeat the question per material or repair. Record the answer verbatim in DESIGN, including the preset ID and renderer implementation. Every preset supports free orbit and deterministic hero reset; no second orbit question. After the look answer, ask the sourcing question next unless already answered. While either is pending, inspect local files and research the subject, but do not start detailed geometry, model downloads or a presentation implementation that commits the unanswered choice.
+
+## Model Sourcing Gate (ask next, once per project)
+
+> **How should I create the models?**
+>
+> 1. **Hybrid — source + custom-build (Recommended)** — Search for commercially usable models, download and use the ones that fit, then model missing or scene-specific pieces myself.
+> 2. **Internet models throughout** — Search for and use commercially usable downloaded models for all major roles; focus my work on assembly, styling, rigging and animation.
+> 3. **Fully agent-modeled** — Build all scene geometry myself for a unified custom look, without downloading third-party models.
+
+This is a separate question after style, not a hidden assumption or a confused “pixel hybrid” choice. Use stable question ID `asset-strategy`, single-select, and map answers to `hybrid`, `internet-full`, `authored-only`. Record exact user wording. Explicit delegation selects hybrid; silence waits. Explicit requests for original/procedural geometry answer authored-only; an offline deliverable alone does NOT mean authored-only (permitted assets can be packaged locally).
+
+- **Hybrid:** actually search for every missing major role and use fitting licensed candidates; fill documented gaps with authored geometry. A token imported prop does not satisfy sourcing the hero/cast/buildings. Do not search and then hand-build suitable assets out of habit.
+- **Internet models throughout:** source the hero and all major supporting roles. Scale/material changes, pivots, adapters, collision proxies and simple joining/support geometry are allowed; quietly hand-building a missing hero is not. If no fitting licensed major asset exists, report the specific gap and offer a subject substitute or permission to switch that role to hybrid. Do not guarantee a full matching library before searching, and do not force an unsuitable model just to fill a quota.
+- **Fully agent-modeled:** author all visible model geometry, including hero and supporting roles. Subject/photo/motion references and coding/rendering libraries remain allowed; this choice does not mean “no internet research”. Do not download model packs, use an imported model as a hidden starting point, or downgrade the detail/animation/contact bar. User-provided models require an explicit exception if this mode is selected.
+- **Commercially usable, not merely commercially available:** in BOTH internet modes verify the actual per-asset license permits commercial use, modification and redistribution/embedding in the delivered scene. Prefer free CC0/compatible CC-BY; preserve required credits, modifications and license notices, check dependencies and package offline. Unknown rights, NC, ND, editorial/personal-only and incompatible licenses fail. Availability for sale is not a rights check. No purchases or subscriptions without separate explicit approval. Explain this briefly with the question; do not overwhelm it with legal boilerplate.
+- **Honest exceptions:** unavailable search/download access is not “nothing suitable found”. Disclose the limitation and ask before changing a selected sourcing mode. New choices do not waive subject accuracy or mandatory verification and add no educational UI.
+
+**Pre-build decision receipt:** after both answers, state one short line such as “Classic Pixel Art · hybrid sourcing · narrative · minimal controls”, then record the choices in DESIGN. Before delivery reconcile each major role against its chosen source mode and record native render dimensions, scaling and style crops. Missing answers, unsupported render-preset claims or unapproved sourcing switches cannot pass QA.
 
 ### Fast path by scene
 
 | If the commission is... | Read next, in this order |
 | --- | --- |
+| explicit explanation / guided how-it-works (not a machine or cutaway view alone) | Educational Mechanism Profile → Universal Inspection Controls → chosen render preset → Machine Grammar → Verification (profile-aware) |
 | market, food truck, bakery, cafe, shop, laundromat | Cast → Clothed Cast: Heads, Layers, Hands → Service And Queue → Machine Grammar → Carrying, Loading And Mounting → Verification |
 | heist, defence, combat | Detail Bar → Tool/Tower recipes → System And Combat Animation → Combat Readability → Verification |
 | creature battle, game scene, anime/movie fight | Research Before You Model → Field Notes: Two-Creature Combat → Creature Anatomy → System And Combat Animation → Combat Readability → Verification |
@@ -36,16 +149,20 @@ reading every vehicle or water note for a kitchen scene.
 | stage, festival, parade | Cast → Secondary Motion → Crowd Variation → System Grammar → Verification |
 | farm, garden, nature | Creature Anatomy → Ambient Loops → Effects → Verification |
 
-The universal shape still applies: place + repeated ritual + interruption +
-consequence. The fast path only decides which reference notes to read first.
+The narrative shape is place + repeated ritual + interruption + consequence.
+Educational scenes instead use mechanism + causal sequence + observable result;
+do not add a fictional interruption or cast. The fast path selects the relevant
+reference notes, not extra narrative requirements.
 
 ## When to Use
 
+- Educational "how does this work?" mechanisms, cutaways and step-through
+  causal explanations; use the Educational Mechanism Profile, not cast quotas.
 - "Make a small diorama / miniature scene / pixel scene of X"
 - A clip or still shows a flat cut-out scene with chunky pixels and little
   people, and the ask is to match that look
 - An existing 3D scene needs the pixel-art presentation (palette, dither, ink,
-  locked angle) rather than a smooth render
+  reset hero angle plus orbit) rather than a smooth render
 - The figures need believable motion: walking, climbing into a car, sitting,
   swimming, diving, and it has to survive close inspection
 - The ask is for a *staged diorama*, not a model: several systems, a cast, a goal or boss,
@@ -54,8 +171,8 @@ consequence. The fast path only decides which reference notes to read first.
   siege"); this skill is designed to turn that into a complete commission
   without an interview
 
-Don't use for full-resolution product renders, photoreal scenes, or anything
-that needs free orbit controls.
+Don't use for photoreal scenes or full-resolution photographic product renders.
+Every scene MUST support free user orbit by default, including pixel, stroked-toon and pixel-stroke. No separate orbit consent exists. Keep a deterministic hero angle for QA/reset, never auto-spin.
 
 ## Research Before You Model
 
@@ -99,7 +216,7 @@ Rules that come out of doing this repeatedly:
 
 ### 2. Model sourcing: check the libraries before you build
 
-Hand-building a creature from primitives is the *last* option, not the first. A
+Internet-first sourcing applies to ALL major scene roles, not only creatures. Acquire and use fitting commercially licensed models by default; hand-build only a documented gap or explicit original-geometry request. Hand-building a creature from primitives is the *last* option, not the first. A
 rigged download with real deformation and usable clips beats four hundred lines
 of spheres the moment the camera comes within a metre. Search first, and keep a
 record of what you searched.
@@ -249,12 +366,15 @@ questionnaire. Make the creative decisions, state them in one short assumption
 line, and build the whole diorama. Do not stop at a plan, a blockout or a design
 sheet and wait for approval.
 
-The only reasons to ask are credentials, a destructive action, or a path that
-would overwrite the user's work. Everything else is a default.
+The only reasons to ask are credentials, a destructive action, a path that
+would overwrite the user's work, **or the `Render Preset Gate`**. That gate is a
+deliberate exception to autonomous assumptions: one question, once per project,
+before the first mesh. Everything else is a default.
 
 ### Step 0, before the assumption line
 
-Run the three lookups in `Research Before You Model` first:
+Ask the `Render Preset Gate` question first, then run the three lookups in
+`Research Before You Model`:
 
 1. Step the real subject into frames and write down its motion grammar.
 2. Walk the sourcing ladder for every hero asset (disk, CC0, CC-BY, hand-build),
@@ -411,8 +531,7 @@ blockout towers with one fire animation.
 
 - **One project, one build loop.** Scaffold once, then build, shoot and fix in
   place. Do not rewrite the entry file for a detail that lives in a prop module.
-- **Build only what the locked camera sees.** Spend the polygon and part budget
-  on the +Z face and the top; simplify the back.
+- **Build for orbit inspection.** Prioritise the hero view, but construct every exposed back, support, cavity and joint coherently.
 - **Cut systems before detail.** A tight build with two rich towers and five
   animation layers reads better than six thin towers with one recoil.
 - **Use the templates.** Camera, post, palette, lighting, the cast rig and the
@@ -456,7 +575,7 @@ do not ask the user to complete it.
    has no visible consequence, cut it.
 4. Pick five beats and five QA timestamps. A beat without a timestamp is not
    staged.
-5. Block out in grey at the locked camera and shoot the five beats at 1:1.
+5. Block out in grey at the reset hero camera and shoot the five beats at 1:1.
    This is a staging check, not a production pass: no palette, no post, no
    materials. Redesign staging before committing to it.
 6. Once the blockout reads, run the production pipeline below. Palette is the
@@ -465,13 +584,437 @@ do not ask the user to complete it.
 
 The rest of this file is the recipe for each pass.
 
+## Educational Mechanism Profile (first-class exception)
+
+**UI and inspection authority:** `Canonical educational UI and inspection contract`
+below owns placement, controls, lessons, selection, focus and restoration. Follow
+it rather than inferring defaults from older screenshots. The render preset gate
+and free orbit apply unchanged.
+
+Choose `sceneProfile: educational` for explicit explanations, guided technical cutaways and how-it-works teaching requests—not a machine subject, rotation or a cutaway view alone. This profile takes precedence over ALL narrative quotas below: no mandatory cast, disruption, ritual, landmark, three systems, ambient loops, five actor layers or decorative story props. One accurately constructed mechanism and one clear causal sequence is sufficient. Do not invent a crowd or combat to satisfy the router. Research and construction accuracy remain mandatory; simple UI never means missing mechanical parts.
+
+- **UI, selection and lessons:** when enabled/requested, use the canonical contract below; explicit UI-free briefs omit panels/lesson controls. No second toolbar, competing material cache or explanatory clock.
+- **Component manifest is a hard delivery artifact:** record each essential part's ID, assembly/parent, function, supporting joint/bearing/fastener, input/output connection, motion law, units, source and tolerance, mesh/group mapping, selectable anchor and proof frame. Include otherwise obscured shafts, cams, rods, links, valve gear, ports, supports and housings when functionally relevant. Explicitly state omissions and symbolic simplifications before acceptance; never substitute a label for missing construction.
+- **Mechanics are coupled, not independently looped:** derive all driven transforms from a shared phase/driver. Write and test actual ratios, directions, phase offsets, link lengths, kinematic equations, contact/clearance and event timing. For an engine, for example, verify crank:cam 2:1 over a 720° four-stroke cycle, connecting-rod length and piston stroke, valve lift/seat contact and opening order; do not copy these ratios into unrelated mechanisms. Check contacts across motion, not only at the hero frame.
+- **Nothing passes through another solid:** this is a hard acceptance rule for EVERY profile and preset, including educational scenes. Test non-contact pairs over the complete motion range and at contact transitions, not just one still. Declare intended joints/contact surfaces and numeric tolerances; all other swept bodies must keep positive clearance. Include complete geometry (tips, tails, bevels, fasteners and attachment arms), not only centres/anchors. In an engine, test actual piston-crown/valve-head/spark-plug bounds and actual cam/follower surfaces at dense phase samples. Do not move independent parts with unrelated sine waves, hide a collision with a cutaway, turn off depth testing, or use transparency/labels to pretend it is fixed. First solve the constraint or alter the geometry. Every shaft, piston, rod or sliding member that crosses a fixed wall/flange needs a REAL bored hole, slot or cutaway opening with measured swept clearance; a solid shelf with a dark circle painted on it is a failure. Test the moving body against the actual structural mesh at the crossing plane, including the lowest/full-travel pose. Ignition flames, gas arrows and pressure indicators must also stay in the moving free volume: their full tips/tails/width must not cross the piston, liner, valves or plug. Keep depth testing on; an explicit x-ray teaching mode must be separately selected and clearly identified, never the default. Capture before/contact/after frames from at least two useful orbit angles. A failed or unrun penetration check blocks acceptance.
+- **Hard acceptance, not promises about agents:** reject delivery until the manifest has no unexplained missing essentials; numeric invariant tests pass at boundaries and dense cycle samples; repeated `freeze(t)` yields identical state; desktop/phone hero frames and front/back/high orbit crops are reviewed; a motion strip proves causal order, contact and no interpenetration; controls, pointer-drag vs click, keyboard selection/focus and reset are tested. Store actual commands/results and tolerances in `qa/report.json`. An unrun check is UNVERIFIED, never a pass. These gates make omissions detectable; no skill can guarantee every future agent complies.
+- **Profile-aware QA:** retain finite geometry, console, deterministic time, contact and motion checks for every preset. Pixel uses palette/dither checks; toon uses native contour/material checks; hybrid checks low-res target + nearest upscale + only one outline pipeline. Educational off-white (and the canonical single UI surface only when enabled) replace white-empty-paper/cast/ritual quotas explicitly; do not silence unrelated failures. Fixed-camera assertions apply only after `orbit.reset()`, never during user inspection.
+
+## Canonical educational UI and inspection contract
+
+This is the single authority for educational UI, selection and lesson behavior. **EDUCATIONAL / EXPLICITLY REQUESTED FEATURES ONLY: ordinary narrative scenes skip this chapter and its UI tests. Requested narrative inspection may reuse only its selection behavior; do not add the card, lessons or teaching labels.**
+The exact V8 tokens/hierarchy below remain the 3.16 visual contract.
+
+**Use code, not an interpretation of “shadcn-style”.** For new educational scenes WITH the educational UI enabled (not an explicit UI-free brief), copy `templates/education-v8.css` and build the DOM hierarchy below. UI-free educational scenes skip this chapter's DOM and UI tests; narrative scenes do not inherit it.
+This is the canonical visual contract extracted from the V8 explorer, independent
+of the chosen 3D render preset. Default to its ONE right card / mobile bottom dock;
+do not substitute the older bottom/center examples as new-build defaults.
+An explicitly requested bottom/center dock may change placement only, retaining
+these tokens, controls and hierarchy. Existing repairs preserve requested placement.
+The older `education-dock.css` is a minimal helper, NOT the V8 visual reference;
+do not use it as the visual starting point for new educational builds.
+
+Evidence: the grandfather-clock drift used beige/brass UI, a separate top-left
+title, translucent blurred panel and fixed top-to-bottom height. None follows
+from a clock subject. Brass belongs on the clock, not on its application chrome.
+
+### Exact visual values (copy the CSS; do not restyle per subject)
+
+- Page `#f7f7f5`, opaque card `#fff`, ink `#18181b`, muted `#71717a`,
+  border `#e4e4e7`, secondary `#f4f4f5`, focus/accent `#2563eb`.
+- System sans, base 14px/1.5. Desktop heading 21px/1.35, weight 650,
+  letter spacing -0.6px; mobile 19px. Supporting copy and buttons 12px.
+- Desktop `.viewer`: grid `minmax(0,1fr) 360px`, right padding 24px,
+  height 100dvh, vertically centered card. Stage is the first grid cell, NOT
+  a fullscreen canvas underneath an overlay. Card is content-height, max
+  `calc(100dvh - 48px)`, 22px padding, 18px gap, 14px radius, 1px border,
+  shadow `0 1px 3px #18181b08, 0 8px 32px #18181b03`.
+- Below/equal 880px: one column, rows `minmax(0,1fr) auto`; dock max-height
+  48dvh, full width, top corners 14px, padding 16px 18px plus safe-area bottom.
+  Measure the actual remaining stage for camera fit and renderer sizing.
+- Two segmented tabs: secondary background, 4px inset, 9px outer radius;
+  selected tab white with subtle shadow. Primary playback is dark ink/white,
+  not subject-coloured. Controls 36px desktop / 40px mobile; maintain adequate
+  touch targets (44px hit regions where needed without crowding the row).
+- No beige/brown UI substitutions, serif/display fonts, uppercase eyebrow,
+  translucent glass, backdrop blur, heavy shadow, detached title, always-open
+  technical sections, extra dashboards or full-height panel. Do not grow a short
+  card to fill its max-height. Subject geometry/materials remain subject-specific.
+
+### DOM skeleton and state adapter
+
+```html
+<main class="viewer">
+  <div class="stage-wrap">
+    <canvas id="stage" tabindex="0" aria-label="Interactive mechanism; drag to orbit"></canvas>
+    <p class="gesture">Drag to orbit · scroll to zoom · click a part</p>
+  </div>
+  <aside class="panel" aria-label="Mechanism controls and explanation">
+    <div class="panel-top">
+      <header class="panel-head">
+        <div class="title-row"><h1>Subject name</h1><span class="badge">Interactive</span></div>
+        <p class="lede">Short input → change → output summary.</p>
+      </header>
+      <div class="tabs" role="tablist" aria-label="Mode">
+        <button id="tab-explore" role="tab" aria-selected="true" aria-controls="explore-panel">Explore</button>
+        <button id="tab-learn" role="tab" aria-selected="false" aria-controls="learn-panel" tabindex="-1">How it works</button>
+      </div>
+      <div class="controls" role="group" aria-label="Playback">
+        <button class="btn primary" id="play">Pause</button>
+        <button class="btn icon" id="prev" aria-label="Previous step">‹</button>
+        <button class="btn icon" id="next" aria-label="Next step">›</button>
+        <button class="btn icon" id="home" aria-label="Reset view">↺</button>
+        <button class="btn toggle" id="xray" aria-pressed="false">Inside</button>
+      </div>
+    </div>
+    <section id="learn-panel" role="tabpanel" aria-labelledby="tab-learn" hidden>
+      <p class="section-note">One short instruction.</p>
+      <div class="lesson-steps" role="group" aria-label="Causal steps"><!-- subject steps --></div>
+    </section>
+    <div class="readout">
+      <p class="phase-title" id="phaseTitle"></p>
+      <p class="phase-meta" id="phaseMeta"></p>
+      <p class="explain" id="explainText"></p>
+    </div>
+    <button class="link" id="clearPart" hidden>← Back to cycle</button>
+    <section id="explore-panel" role="tabpanel" aria-labelledby="tab-explore">
+      <label class="label" for="parts">Inspect a part</label>
+      <select id="parts"><option value="">Choose a part…</option></select>
+    </section>
+    <details class="disclosure help"><summary>About this model</summary>
+      <p class="section-note">Simplifications and keyboard help.</p>
+    </details>
+    <p class="sr-only" role="status" aria-live="polite" id="announcer"></p>
+  </aside>
+</main>
+```
+
+Adapt subject names, number of lesson steps, part IDs, explanatory text and
+physical units only. Omit Inside for a mechanism with no enclosing shell; never
+add a fake x-ray toggle. Optional scrubber/Back lives in this same surface, not a
+second toolbar. Use line SVG icons matching the supplied CSS in production.
+Implement tab click plus ArrowLeft/Right/Home/End roving tabindex, hidden panel
+state, and semantic buttons/select/range. Bind controls to the actual evaluator:
+`play/pause`, `freeze(step.phase)`, `orbit.reset`, reversible `inside`,
+`selectPart(id)` and `clearSelection`. A lesson change freezes synchronously and
+updates explanation from that state; it must not trigger automatic camera motion.
+The skeleton/CSS is not a functioning controller; do not ship inert controls.
+
+### Three regression gates
+
+1. **Computed-style/structure:** at 1280×800 assert one card, one h1 INSIDE it,
+   360px card column, opaque white card, exact neutral tokens, no backdrop filter,
+   content-height card, closed About and Explore selected initially. At 390×844
+   and 320×640 assert one bottom dock, no horizontal overflow and an uncovered
+   nonzero stage. Inject beige tokens, detached title and full-height panel; each
+   must fail the check. Record measured values, not just “V8-like”.
+2. **Rendered evidence:** review desktop, phone and 200% zoom screenshots plus
+   selected/restored states. Check actual background pixels against the authored
+   paper (not merely body CSS), tiny-part readability, stage/card separation and
+   front/back/high camera fits. For V8 matching use `#f7f7f5` consistently in CSS,
+   renderer clear/scene and ground composition; user-requested white overrides all
+   those together. A screenshot is not mechanical clearance proof.
+3. **Interaction:** keyboard-only tabs/steps/picker/reset, paused orbit, drag vs
+   selection, Inside lifecycle and shared-material restoration must pass existing
+   per-scene gates. Store commands, values and proof paths in `qa/report.json`;
+   missing browser/computed-style/visual checks remain UNVERIFIED.
+
+### Selection, focus and lesson adapter
+
+Raycast actual visible geometry: nearest eligible hit wins, respecting nearer
+opaque occluders. Map the hit mesh to both its assembly ID and its actual piece
+ID; assembly selection and clicked-mesh selection are distinct scopes. The
+single labelled keyboard piece picker must expose the same pieces/actions,
+including hidden pieces; never silently broaden a click to an entire assembly.
+Show one short explanation in the card. An optional single label uses a live
+geometry-local anchor and hides behind camera, offscreen or when occluded.
+
+A deliberate canvas/picker Inspect selection may make one short useful camera
+AND OrbitControls-target transition to live selected bounds. Avoid end-on shafts
+and blocking housings; use an authored reveal/cutaway for hidden pieces and
+report remaining occlusion honestly. Save the prior view for Back; Reset restores
+the hero. User orbit/pointer/keyboard navigation cancels the tween immediately.
+Reduced motion uses an immediate useful view. Never auto-spin, chase moving parts
+or restart focus per frame. Lesson step selection instead pauses and synchronously
+freezes the real evaluator, highlights its part and updates phase/text/readout
+without moving the camera; only an explicit Inspect action focuses. Scrubbing
+updates the lesson from evaluated state, not an independent clock. Announce
+intentional changes politely, not each frame.
+
+Use semantic buttons/select/range, visible focus and non-colour part-name cues;
+canvas arrows orbit and R resets. Tabs implement roving focus and keyboard
+navigation; no focus trap. Drag/multitouch is orbit, not click (use the movement
+threshold/cancel handling in `templates/orbit.js`); UI gestures never bubble into
+the stage. Paused and reduced-motion modes retain inspection.
+
+### Soft glow and holographic inspection — implementation recipe
+
+This is an **inspection overlay**, not a new render preset, bloom pass or a way to hide modelling errors. Use the same mechanism for a selected gear, valve, pump impeller, drawer slide or anatomical structure. The V8 selection implementation is the calibration evidence: restrained warm material lift, dimmed context, transparent outer castings and selective gold feature edges. Do not interpret “glow” as a white emissive blob.
+
+**1. Preserve and derive, never mutate the shared originals.** Build a registry once from the actual selectable meshes, BEFORE adding overlays. Store each exact original material reference, including arrays of material slots; a mesh's slot array itself must also be restored by identity. Derive cached variants from each source UUID plus mode. Clone `userData` and `outlineParameters` before changing outline alpha, since nested objects may otherwise be shared. Keep toon ramps, texture maps, roughness and existing supported preset properties. Restore the originals before applying each new selection/X-ray state, not by attempting to reverse colour arithmetic.
+
+Use `templates/inspection.js` rather than duplicating a second material controller.
+Its API is `createInspection(THREE, {parts, contextMeshes, resolveVisibility,
+onChange, style})`, with `select({partId, mesh})`, `clear()`, `refresh()`,
+`dispose()` and `piecePickerEntries(partId, {visibleOnly:false})` (includes hidden
+pieces for keyboard inspection). Validate actual mesh membership before selection.
+The helper supports rigid meshes only; reject skinned/instanced/morph assumptions.
+`resolveVisibility` returns named `hiddenPartIds`/`hiddenMeshes` plus `description`
+for an authored cover removal. Hiding requires `shell:true`, or an explicit
+`inspectionOccluder:true` part plus an active selection and nonempty cutaway
+description; that latter exception may remove an upper gear/bridge to expose a
+lower part, never hide construction failures. Optional `ghostPartIds`/`ghostMeshes`
+are accepted only for `shell:true`. Selected assemblies/pieces remain visible;
+context meshes (floor/stand/UI) cannot hide, ghost or dim.
+Unknown parts, duplicate ownership, empty geometry and unsupported material or
+deformation paths fail explicitly. Never request a whole-mechanism ghost. The host owns
+camera focus, picking and V8 DOM; the helper owns emphasis/restoration, not UI or
+mechanical certification. Cached variants derive per original material and mode; never
+from the currently displayed variant. Lift colour gently; write emissive values
+only where the original material supports them. Dim context as opaque solids.
+Only the explicit housing reveal below may change transparency/depth-write.
+
+**2. Reveal only manifest-authorized occluders; ghosting is shell-only. Never defeat depth on the selected part.** Declare `internalPartIds` and `occludingShellIds` per subject in the component manifest. For an internal selection, remove authored covers or optionally ghost only declared outer housings that obscure it; keep the selected part solid, retain non-selected internals as dim solids, and leave floor/stand/UI alone. A global Inside toggle applies that same named reveal plan without dimming all internals. A selected housing stays highlighted rather than ghosting itself. Unlisted opaque solids must still occlude correctly: `renderOrder` does not override the depth buffer. For an internal blocker, author an explained selection-only `inspectionOccluder:true` removal plan; the independent Inside toggle still affects shells only. Hidden siblings need a piece-level plan and cannot remove the selected scope. Do not set `depthTest=false`, use additive whole-body overlays, or fade all solids to pretend a mechanism is correctly constructed. Picker rays ignore generated edges and ghost-shell hits, but respect remaining opaque foreground objects; click and picker share the same selection action.
+
+**3. Make the hologram from feature edges, attached to the live part.** Do not use `wireframe:true`: that exposes triangle diagonals. Use `EdgesGeometry(source.geometry, 32)` and a restrained `LineBasicMaterial` (`color:0xffc35c`, `opacity:0.5`, `transparent:true`, `depthTest:true`, `depthWrite:false`, `toneMapped:false`). Normal blending, no bloom. Exclude slivers, ring grooves, gaskets and tiny bolts when edges become noise; the V8 thresholds were minimum dimension 0.018 units and, for cast housings, volume 0.006 units³. Those are **model-scale-dependent starting values**, not universal dimensions. Use one physical edge overlay on the selected component only, not a second full-scene OutlineEffect/Sobel pipeline. Its surface outline may need suppression to avoid doubled contours. WebGL line width is generally one device pixel: do not promise a controllable CSS-pixel width through `linewidth`.
+
+Attach each owned edge overlay as an identity-transform child of its live source
+mesh; mark it as an inspection overlay and exclude it from raycasting. On change,
+remove and dispose owned overlays, never source geometry or shared maps.
+
+This child pattern follows moving rigid geometry without copying a stale pose. If an overlay must be a sibling/world-space object, synchronise its transform from the source every evaluation; copying position/quaternion once is insufficient when the source mesh moves. `EdgesGeometry` does **not** automatically follow vertex deformation or per-instance transforms: skinned/morphed/instanced subjects need a deformation-aware shader/overlay or a clearly declared unsupported path. Never claim those supported because a rigid V8 example works. Do not dispose the source geometry, shared source maps, shared toon ramps or original materials; dispose only owned variants/edge geometries and owned overlay materials. Keep overlay generation bounded to selection changes, never create/dispose hundreds of edge objects every frame.
+
+**State and restoration contract.** One selection controller owns this effect. Resolve in order: restore exact originals → remove previous edges → compute selected/internal/Inside state → ghost selected occluding housings → highlight selected meshes → dim remaining mechanism meshes → attach selected edges. Re-apply from originals when Inside changes. Leaving How it works restores its earlier Inside state and removes its tutorial tint; clearing selection retains an independently enabled Inside toggle. Picker, canvas, keyboard and lesson adapters must not compete by writing materials from separate uncoordinated caches. Clear/reset/teardown restores material references, opacity/depth/blending/outline state, selection/readout and authored camera state; only teardown disposes long-lived caches. Respect reduced motion; avoid automatic pulsing, scanlines or flashing. Keep the part name and keyboard focus as non-colour cues.
+
+**Historical evidence (not project dependencies):** `quartz-watch/shots/highlights/dialPost1.png`,
+`quartz-watch/shots/highlights/dialPost2.png`, `quartz-watch/shots/highlights/dialPost3.png`,
+`quartz-watch/shots/highlights/dialPost4.png`, `quartz-watch/shots/highlights/individual-piece.png`,
+`quartz-watch/shots/highlights/rotor.png`, `quartz-watch/shots/highlights/reduction.png`,
+`quartz-watch/qa/highlights-report.json` and `quartz-watch/qa/construction-report.json`.
+These record this repair, not files future users must have. Twenty-six assembly
+glow states had numerical tests/captures; only a subset received visual review.
+Do not present that as universal contrast certification.
+
+**Evidence and test — selection contract (3.18).** Quartz-watch selection was
+almost invisible, posts were end-on/occluded, and adding emitter properties to
+MeshBasicMaterial caused a `shader.value` error. Use `templates/inspection.js`,
+with `templates/qa/inspection.test.mjs` and
+`templates/qa/inspection-browser.mjs`; use the API above. Assert assembly versus actual clicked-piece identity,
+keyboard equivalence, nearest opaque occlusion, and obvious visible glow with
+retained shape/colour (never a white blob) in desktop/phone crops. Test shared
+and array materials, Basic/toon, two frozen phases, moving/orbiting, rapid changes,
+Inside/clear/Back/Reset/lesson exit, interrupted focus and reduced motion. Restore
+exact original material AND slot-array identities, shadow flags and `visible`
+state, plus original material properties; test source immutability and owned-only
+disposal with stable overlay/material counts. Basic materials must never gain
+`emissive` or `emissiveIntensity`, even temporarily; feature-test capability before
+writing, and assert absent properties remain absent. Verify shader compilation
+and no console errors in the fresh browser build. Scalar/material tests alone do
+not establish visible contrast, depth correctness or useful focus.
+
+## Repair acceptance: enclosure, fit and reference UI (3.15)
+
+Use this short checklist for existing educational scenes before re-reading narrative
+recipes. Evidence: the LEAP-1B repair was requested because its permanent section
+exposed the core, its fit cropped the model, its beige background and crowded panel
+did not match the requested V8 reference. These checks supplement mechanical QA;
+passing enclosure rays or a screenshot does not certify a complete mechanism.
+
+1. **Closed first, explicit Inside.** Unless a permanent section is commissioned,
+   cold load and hero Reset show the complete opaque housing, no tutorial tint,
+   Inside off. Build the missing casing as real connected wall geometry while
+   preserving inlet/outlet openings; a toggle cannot repair absent geometry.
+   Inside is a named semantic button in the single surface. Internal picker or
+   lesson selection may explicitly activate it, but must update its pressed state;
+   leaving the lesson restores the preceding Inside state. Clearing selection
+   preserves an independently enabled Inside state. **Test:** load → Inside on/off
+   → internal selection → clear → lesson exit → Reset; check visible ancestors,
+   nearest opaque ray hits, exact material restoration and open-mouth rays.
+2. **Fit the assembly in the space actually available.** Measure canvas layout
+   after the dock/panel; use actual complete assembly bounds including covers,
+   supports and swept extrema, not a default slab. Fit the safe rectangle with
+   padding; if UI overlays the canvas, solve its offset as well as distance.
+   With direction target→camera, depth is `distance - along`, so each fit bound
+   contributes `abs(transverse)/tanHalf + along` (not minus along). Do not clamp
+   distance below the solved fit or distort portrait aspect. Re-measure on layout,
+   disclosure, resize/orientation and zoom changes without hijacking user orbit.
+   **Test:** project covered/exposed swept bounds at desktop, tablet, 390×844,
+   320×640 and 200% zoom, with lesson/disclosure open; front/back/high captures;
+   fail an injected protrusion and verify near-plane/focus fits separately.
+3. **UI repair:** compare the supplied reference before changing placement;
+   apply `Canonical educational UI and inspection contract`, including rendered
+   background, accessible lesson state and desktop/phone/200% zoom gates. Do not
+   copy the reference subject or introduce a second surface.
+
+## Construction regression gates
+
+These construction rules apply across subjects and all render presets; they supplement, not replace, the style gate and profile-aware verification above. They make known failures testable, not impossible.
+
+1. **Specify the mating interface before decorating the part.** Extend the component manifest with units, parent-local frame, shaft/bore/slide axes, shared joint/port anchor IDs, mating surfaces, nominal dimensions and radial/axial tolerances. Derive both mating meshes and their motion from those anchors, not repeated guessed offsets. A bearing eye needs a real through-bore; its beam, cap, bolt and bevel must stop outside that bore. Budget bevel/fillet intrusion in the actual construction method (inward bevels reduce usable bore), axial lane widths, spacers, end float and end stops. Check coaxial alignment and anchor residual after parent transforms. Model the load path through real bearings, brackets, fasteners and a base; route each functional port through an actual connected opening to its destination, not a hose ending inside a solid. Document symbolic/omitted internals. **Evidence:** V8 running-gear repair found a centred rod beam cutting its crankpin despite an annular eye, bank stagger applied to only one mating member, and fillets facing the wrong local axis. **Test:** local-axis/anchor tests, measured bore plus bevel allowance and axial stack tests, section crops from two orbit directions, and traced port/support connections. Record geometry revision and proof frames in the manifest. Copy `templates/mechanism-contract.mjs` and fill the interface and connection sheets in `templates/DESIGN.md`; the helper validates scalar budgets, not arbitrary mesh bores or load strength.
+
+2. **Audit the complete swept assembly, with narrowly scoped intended contact.** Derive every driven pose from one driver and test the actual transformed meshes or documented conservative collision proxies, including beams, caps, fasteners, webs, fillets and supports. Broad-phase boxes alone neither detect holes correctly nor prove clearance. Enumerate potentially interacting pairs and coverage; whitelist only a named pair of mating surfaces with phase window, normal-gap/penetration tolerance and rationale (bearing/journal, meshing teeth, valve/seat), never an entire assembly or all pairs of a part type. All other pairs need the declared positive clearance. Check full travel, extrema, cycle seam, contact transitions and close-approach intervals with refinement; include ports/FX containment. Report method, sample spacing, tolerance, worst phase/pair, exclusions and unresolved regions. Dense sampled vertex/triangle tests are bounded evidence, not continuous exact collision proof: use analytic bounds or conservative continuous checks where available, otherwise retain that limitation explicitly and block unsupported clearance claims. **Evidence:** the V8 12/12 invariant report omitted rod/crank interference; the later rod probe added bore triangle samples, axial lanes, journal vertices, anchor residual and fillet axes. **Test:** intentionally inject a beam-through-bore, wrong-axis fillet, too-wide lane, out-of-window contact and a non-whitelisted overlap; each must fail. Run full-cycle probes plus before/contact/after crops from two angles. `templates/qa/mechanism-contract.test.mjs` tests budget/contact-policy failure detection only; per-scene geometry/sweep checks remain mandatory and UNVERIFIED until run.
+
+3. **Repeated interfaces share anchors and axes (3.18 evidence + test).**
+   Generate ALL repeated mating members from one anchor/axis table, not just the
+   first working example. Quartz-watch pads at radius 12.6 missed posts at 13;
+   rotating a native CylinderGeometry about Y did not redirect its native Y axis.
+   The seconds shaft opposed its hand and the model lacked a physical 60:1 stage.
+   Coplanar shaft-cap fans z-fought. Use transformed local axes (quaternion maps
+   native Y to the declared axis), common anchors, real through-bores and a single
+   end surface or measured axial separation; never hide coplanar caps with depth
+   overrides. Derive ratio/direction from the actual connected transmission, not
+   only a display hand formula. **Test:** with `templates/mechanism-contract.mjs`
+   shared anchors/checkRepeatedInterfaces/checkEndPlanes, enumerate every pad,
+   post, bore, cap and shaft; assert count, transformed axis/anchor residual,
+   radial/axial clearance and physical ratio/direction across the full cycle.
+   The repaired watch measured zero residual at all four pad anchors and 0.08
+   board-bore radial clearance; those are historical measurements, not defaults.
+   Inject one displaced repeat, wrong native axis, sealed bore, reversed shaft,
+   missing reduction and coplanar cap; each relevant check must fail. Review
+   section/end-on and oblique crops; scalars cannot prove real mesh openings.
+   Evidence: the historical construction report and highlight shots above.
+
+Lesson/UI behavior and its tests are defined once in `Canonical educational UI
+and inspection contract`. `templates/education-dock.mjs` remains a dependency-free
+state helper with `templates/qa/education-dock.test.mjs`; its older CSS is not the
+V8 visual authority.
+
+## Universal Inspection Controls
+
+Copy `templates/orbit.js` for EVERY scene and preset. Create it after camera fit with the fitted target; keep animation evaluation independent of camera interaction. Render on control change even when paused. Expose `orbit.reset()` and have the QA freeze wrapper reset it before capture (`freeze(t)` evaluates time synchronously). User pause/freeze UI need not reset their chosen inspection angle. Fit zoom/polar limits to real subject bounds without preventing back/high inspection. No auto-rotation, no camera motion driven by the animation clock. Keep reset + a brief drag/keyboard hint accessible; educational controls and selection follow `Canonical educational UI and inspection contract`.
+
+## Optional Pixel + Stroke Hybrid
+
+`pixel-stroke` is a third style, not the pixel default, and it is selected through the single `Render Preset Gate` question — never inferred, never switched to later without a new answer. Record the answer and do not offer it again during the build. Rotation is mandatory regardless of the answer.
+
+Copy `templates/pixel-stroke.js` plus `templates/stroked-toon.js`. Create WebGLRenderer with antialias false, alpha true. Use `createPixelStroke(renderer, {width:320,height:200})`, its `toon`/`flat` material factories and `render(scene,camera)`. Resize the low-resolution target explicitly with `look.setSize(bufferW,bufferH)` while sizing the renderer to the display aspect; keep target aspect aligned to viewport/camera. Toon lighting/materials plus selective geometry OutlineEffect render into that target, then ONE nearest-neighbour fullscreen upscale. Do not run PixelPost, Sobel ink, a second outline pass or CSS blur over it. Native-resolution DOM UI is outside the target and must remain crisp.
+
+OutlineEffect thickness is a projected effect parameter, NOT a CSS-pixel width. Rasterisation happens at the low-resolution target: a one-target-pixel contour becomes approximately `displayWidth / targetWidth` CSS pixels after upscale (analogous vertically). A thinner subpixel outline can disappear or flicker; measure target and screen crops at desktop/phone, adjust target resolution and selective material stroke together. Disable outlines for inward cavity surfaces, liquids, films, transparent glass, vapour and contact patches; do not double edges. For native toon, measure the native-DPR render instead. Free orbit, construction, manifest and QA requirements are unchanged.
+
+## Optional Stroked-Toon Preset
+
+### 1. Chosen through the gate; preserve the default
+
+Use **stroked toon / illustrated miniature** (`stroked-toon`) only as resolved by
+`Render Preset Gate`; retain its recorded answer during repairs. The gate owns
+consent/default/recording rules—do not ask a second style question here. This
+preset changes presentation, not the subject or choreography; never import
+coffee props or workshop colours into an unrelated scene. Record paper/frame
+and camera choices alongside the preset in `DESIGN.md`.
+
+**Precedence when approved:** the recipe below replaces the pixel-only camera,
+white/no-plinth, palette-snap, edge-shader, Bayer, empty-paper and buffer rules
+where they conflict. Do not combine both post pipelines by default. A thin
+bevelled slab edge and a restrained optional figure frame/title/hint/readout are
+allowed. Locked animation framing, deterministic time, clipping/containment,
+contacts, silhouette readability, detail and animation QA still apply. Orbit is mandatory for all presets; it needs no separate approval. Character
+proportions remain subject-appropriate; don't force toy people into every scene.
+
+### 2. Render solid illustrated parts, not a pixel filter
+
+Copy `templates/stroked-toon.js` into the project. It exports an opt-in Three.js
+helper; it has no dependency on Anatomy CSS, SVG, fonts or the coffee rig.
+
+- **Native crisp rendering:** antialias on; device pixel ratio capped at 2;
+  sRGB output, `NoToneMapping`. Disable PixelPost, palette quantisation, dither,
+  Sobel ink and CSS `image-rendering: pixelated`. Keep a small authored colour
+  family, not a requirement that every final shaded pixel equal a palette entry.
+- **Four-step surface shading:** `MeshToonMaterial` with a 4×1 RedFormat ramp,
+  bytes `[68, 122, 184, 246]`, nearest filters, no mipmaps. These are starting
+  values, not physical light calibration. Give materials distinct local colours:
+  warm/cool off-white, desaturated object hues, dark structure, metal or timber,
+  one restrained accent. Adapt to the setting; warm cream is optional.
+- **Selective fine contours:** Three.js `OutlineEffect`, warm charcoal rather
+  than pure black. Start thickness 0.0024–0.0038 (effect units, not world units
+  or pixels). At the final viewport, aim for a roughly 1–2 CSS-pixel hero contour
+  with finer subordinate edges; tune by screenshots at desktop and phone sizes.
+  Broad silhouettes can be heavier, tiny fasteners lighter. Do not add wireframe
+  or stroke every triangulation. Flat decals, liquid films, transparent glass,
+  steam, contact patches and inward cavity surfaces normally have no outline.
+- **Light for volume:** one warm upper-side key with shadows, a broad hemisphere
+  and weaker cool fill. The helper starts key 2.55, hemi 1.55, fill 0.72; measure
+  and tune for the scene, especially night/water. Tight shadow bounds, 2048 map,
+  PCFSoft shadows, low bias, no acne. Combine cast shadows with small radial-alpha
+  contact patches only where needed; no overlapping dark discs or false rings.
+- **Model the edge:** modest bevels on casing, slab, rails and props; profile
+  lathes for vessels; cylinders with enough segments to read round. Avoid a
+  melted soft-plastic scene or polygonal mugs. Separate outer silhouette from
+  cavity shading: real wall thickness and a bottom, one-sided inward surface,
+  no expanded backface stroke through the interior. Glass must reveal contents;
+  liquid stays inside the wall through the whole fill range. Paper/grain and
+  lighting gradients are allowed; they must not obscure part boundaries.
+- **Compose and inspect:** a long-lens three-quarter view (start fov 26,
+  azimuth 38°, elevation 27.5°), fit to full animated bounds, room for the tallest
+  object and controls. These are a starting point, not a mandatory angle for all
+  subjects. Free user orbit is mandatory in every preset: use OrbitControls,
+  bounded zoom/polar angles, reset view and no pan; detail all exposed sides. No auto-spin.
+  Keep explicitly requested UI outside the subject, subtle, readable and keyboard-accessible. Narrative builds have no title/readout/card/teaching overlays by default; only discreet necessary controls. A title, hint or live state is opt-in figure furniture, not a requirement of toon rendering and not an excuse to import educational or Anatomy CSS.
+
+Minimal integration after user confirmation:
+
+```js
+import * as THREE from 'three';
+import { createStrokedToon } from './core/stroked-toon.js';
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const look = createStrokedToon(renderer);
+renderer.setSize(width, height, false);
+const shell = look.toon(0xc4cbb4);
+const inner = look.toon(0xb8bfaa, { outline: false });
+// Add subject-specific lighting and objects; do not also call PixelPost.render.
+look.render(scene, camera);
+// On resize: renderer.setSize(width, height, false); update camera projection.
+```
+
+### 3. Match the craft and detail, not just the shader
+
+Use the Detail Bar's silhouette → construction → story passes, plus this close-up
+acceptance bar. Detail is structural, not a quota of randomly scattered meshes.
+Visual calibration references are `media/stroked-toon-reference.jpg` (overall
+framing/material hierarchy) and `media/stroked-toon-service-reference.jpg`
+(assembly detail). Read them when reproducing this look, but translate their
+craft to the requested subject rather than copying their props or palette.
+The coffee-rig repair is the evidence: a floating lever needed a pedestal;
+interior parts needed supports and connected runs; a ring under the scale read
+as a detached base; outlined cavities and oversized liquid surfaces looked broken.
+
+| Pass | Any-scene requirement | Translate to the subject |
+| --- | --- | --- |
+| Structure | Primary mass, supporting assembly, secondary panels/members | trunk/roots/branches; hull/ribs/deck; torso/joints/gear; wall/roof/trim |
+| Attachments | Every small part has a visible or explainable seat, joint or support | leaf stem, rope knot, hinge pin, bracket, cuff, axle, strap, fastener |
+| Functional detail | Inputs, outputs and working parts connect; contents fit containers | rooted irrigation, connected hoses, docked lines, harness to buckle, wheels to hubs |
+| Surface hierarchy | Large readable forms, medium assemblies, sparse microdetails | seams, fittings, latches, bark scars, stitches, labels, scales; not uniform noise |
+| Nearby life | 3–6 supporting props in purposeful clusters when space/brief permits | campsite kit; cargo/lifebuoys; books/blanket; tools/materials; tracks/nests |
+| Story | At least one specific used/changed detail per hero | wear at contact, repair, folded cloth, spilled contents, missing tile, footprint |
+
+Start with 8–15 meaningful pieces for a small supporting prop and 30–60 for a
+hero; a complex cutaway may need 100–250+ small pieces across its subsystems.
+These are planning ranges, not mesh-count acceptance tests. Reuse geometry and
+materials, merge static siblings only after visibility/animation ownership is
+settled, measure draw calls/fps and reduce invisible detail before construction.
+Preserve clear working paths and negative space. "Feels empty" calls for a few
+related clusters at varied heights, not filling every inch of deck.
+
+**Proof before delivery:** one whole-scene desktop and phone frame; a 1:1 hero
+crop; a cavity/contact crop if relevant; an action strip at known times. Always inspect front, service/back and high angles. Check outline
+width and tiny-part legibility; no floating supports, disconnected endpoints,
+false residue hoops, filled-in hollows, liquid clipping, or outlines on vapour.
+Scan finite vertices, contacts/clearances and moving bounds; check the actual
+readout against the frozen time. Keep `freeze(t)` and reduced-motion support.
+Do not call a symbolic cutaway a verified engineering design. Use the existing
+QA harness for shared checks, but disable or replace its pixel-palette/dither,
+empty-white-paper and fixed-angle assertions for this preset explicitly; do not
+silence unrelated failures. Record the preset and which checks apply.
+
 ## The Look Contract
 
-Ten rules. Break one and it stops reading as a diorama.
+The ten rules below define the **default pixel preset**, not the optional
+stroked-toon preset. Approved stroked-toon builds use the explicit overrides
+above; the remaining scene/animation requirements still hold.
 
-1. **Locked angle.** One three-quarter view, no drift, no orbit. Azimuth 45,
-   elevation 33, fov 20.5, target just under the slab centre. When the user says
-   "this angle", it means this one, for the whole loop.
+1. **Resettable hero angle + free orbit.** Start azimuth 45, elevation 33, fov
+   20.5, target just under slab centre. User orbit is enabled in EVERY preset.
+   No auto-spin or timeline camera drift. Reset to this pose before frozen QA.
 2. **Flat cut-out.** A slab with no plinth, no soil sides, background null, page
    white. Everything below the deck plane hides in the overhang at 33 degrees.
 3. **Palette snap.** Every pixel resolves to one entry of a fixed palette. No
@@ -489,7 +1032,7 @@ Ten rules. Break one and it stops reading as a diorama.
    boundary. Nothing ever floats on the white page outside the block.
 9. **Everything is a pure function of `t`.** No integration that carries state
    between frames, no `Math.random`, no drift across the loop.
-10. **Empty paper.** The white page carries no DOM title, caption, HUD or
+10. **Empty paper (narrative profile only; educational dock and universal orbit controls are exceptions).** The white page carries no DOM title, caption, HUD or
    instructions. Put copy on a modelled sign/screen or in the browser title; a
    label floating on the paper breaks the cut-out.
 
@@ -507,6 +1050,62 @@ diorama is **three passes**, and every hero object has to survive all three.
    a trophy skull, a repair strap, a spare bolt, a rag, a tally mark, a spent
    shell. If the detail could be removed without changing the read, it is
    greeble, not story.
+
+### Whole-object completeness gates (3.17)
+
+Apply these three gates to every hero object in every profile and render preset,
+including educational cutaways. They extend the existing Detail Bar and component
+manifest; they do not add cast, story-prop or mesh-count quotas to educational scenes.
+Evidence is the user's report of a quartz watch missing its straps and back; no
+independent inspection or root-cause diagnosis of that model is claimed here.
+
+1. **Approve the whole-object silhouette, not only the teaching core.** Before
+   detail, record whether the commissioned subject is a complete object, a detached
+   mechanism or an explicit permanent section; default to the complete named object.
+   Reference the entire object and its proportions, not just its most interesting
+   subsystem. A complete wristwatch needs its case and both strap/bracelet sides,
+   not merely a dial or quartz movement. Simplify small surface detail before
+   deleting identity-defining masses. **Evidence:** the reported watch lacked
+   straps despite its watch subject. **Test:** compare grey whole-object front,
+   side and rear views against recorded references, then review desktop/phone
+   delivery frames with the entire silhouette uncropped. Temporarily hide an
+   essential silhouette assembly (for the watch, either strap side); the review
+   must reject it. A close crop of the core cannot pass this gate.
+
+2. **Construct exterior, rear and attachment chains as real assemblies.** An
+   educational explanation of internals does not waive the casing, rear closure,
+   mounting or wearable attachments. Inventory every orbit-exposed side and trace
+   attachments into their seats/joints. For a strapped watch this includes caseback,
+   lugs/spring-bar connections, both strap halves and the reference-appropriate
+   buckle/keeper or clasp; do not impose those exact fittings on a different design.
+   Keep required construction in the model when an explicit Inside mode reveals
+   internals; a label, dark disc or transparency is not a replacement for absent
+   geometry. Honour a commissioned permanent section and document its boundaries.
+   **Evidence:** the same report named the missing back as well as straps.
+   **Test:** review opaque front/rear/side/high orbit crops and attachment-seat
+   close-ups; inspect mesh/group mappings and actual contact/clearance at joints.
+   Exercise cold load → Inside on/off (if present) → Reset to check restoration.
+   Hide the rear closure or disconnect an attachment in a test copy; the matching
+   presence/connection check and visual review must reject it. Existing motion and
+   non-penetration tests still apply; presence alone does not prove sound mechanics.
+
+3. **Close an explicit completeness matrix before claiming completion.** Fill
+   the matching DESIGN sheet before modelling and reconcile it against the built
+   scene before delivery. Give each expected silhouette, exterior/rear, attachment
+   and functional/internal assembly a stable ID, reference or stated assumption,
+   required/simplified/omitted status with scope rationale, mesh/group mapping,
+   connection and proof view plus actual test result. An omission note alone cannot
+   waive an essential part of the commissioned whole object; build it or obtain an
+   explicit scope change. **Evidence:** the reported missing straps/back show why
+   subsystem detail cannot stand in for whole-object coverage. **Test:** reconcile
+   every expected row with nonempty live geometry and reviewed proof; check that
+   the inventory itself covers the whole reference, not just existing meshes.
+   Deliberately remove a required row's mesh, leave its proof blank, and add an
+   unexplained omission in test copies; each must fail the audit. Store commands,
+   results and proof paths in `qa/report.json`. Missing evidence is UNVERIFIED,
+   a missing required assembly is FAIL, and either blocks a completeness pass.
+   This matrix makes omissions reviewable; it is not automatic certification or
+   a guarantee that future agents will comply.
 
 The numbers below are **reference density** from The Hollow Toll, a 21 x 14 m
 slab with four towers, two gate guns, five species, 42 units, one boss, 527
@@ -541,9 +1140,10 @@ will read as a rock, a blob or a placeholder at 30 to 45 px.
 turns into noise after the palette snap; fewer turns into a silhouette cut-out.
 Use value contrast for construction and hue for story.
 
-**Detail lives on the camera-facing surfaces.** At the locked angle, model the
-front and the top; simplify the back. A perfect back is wasted geometry. Do not
-add detail under about 1.5 screen pixels: it aliases into speckle, not craft.
+**Detail lives on every orbit-exposed surface.** All presets need coherent backs,
+construction, attachments and cavities; a fixed hero shot is not permission to
+omit parts. Hidden internals may be simplified only if outside the mechanism manifest. Do not add detail
+under about 1.5 screen pixels at the delivery view: it aliases into speckle, not craft.
 
 **Every prop must touch the ground.** Feet, wheels, a base, a contact shadow, a
 stain. A prop hovering by two centimetres is the single most common "it looks
@@ -615,8 +1215,9 @@ geometry.
 The table mixes two different kinds of number, and treating them alike is how a
 new subject comes out wrong.
 
-**Invariants.** Come from the look itself and hold on every subject: azimuth 45,
-elevation 33, fov 20.5; one locked camera for the whole loop; palette discipline
+**Pixel-preset invariants.** The camera/palette/post values here belong to the
+pixel look, not approved stroked-toon builds. They hold on every pixel subject: azimuth 45,
+elevation 33, fov 20.5; one deterministic reset hero pose for QA plus user orbit; palette discipline
 (every material samples a palette entry, the shader array length equals the
 palette length); gated dither, ink at 0.13/0.34 mixed 0.62, the palette tie-break;
 the rig's proportions and joint signs; 2048 shadow map with a frustum tight to
@@ -637,7 +1238,12 @@ reader trusts it.
 
 ## Pipeline
 
-Each step ends in something you can look at.
+Each step ends in something you can look at. Settle the render preset through the
+`Render Preset Gate` before step 1 — one question at project start, not a mid-build
+decision. In a confirmed `stroked-toon` or `pixel-stroke` build, steps 1–4 use the
+authored colour family, fitted long-lens camera, toon lighting and
+`templates/stroked-toon.js` recipe instead of pixel snap/dither/Sobel post. Steps
+5–10 still apply; use preset-aware QA.
 
 1. **Palette first.** The palette array in `palette.js` plus a named `C` map.
    Every material samples a palette hex, nothing else. Done when a grep for
@@ -653,8 +1259,11 @@ Each step ends in something you can look at.
 4. **Post pass.** `templates/post.js`: gamma, grade, ink, gated dither, palette
    snap, rim dither. Done when a 1:1 crop shows square pixels and a dark contour,
    and flat pavement shows no speckle.
-5. **Props.** Flat-colour boxes and lathes, no textures, coarse detail. Done when
-   the 1:1 crop reads the object's silhouette without colour.
+5. **Props.** Start with flat-colour boxes and lathes, coarse detail and no
+   textures hiding weak geometry. This is the initial silhouette pass, not the
+   finished detail target. Done when the 1:1 crop reads the object without colour;
+   step 7 adds construction and story. Approved toon may then add restrained
+   decals or grain as described in its recipe.
 6. **Cast.** `templates/peopleModel.js` (base) or `templates/peopleModel-street.js`
    (clothed) rig, one entry per figure with a base pose. Done when isolated portraits show no gaps, no floating parts, knees
    bending the right way.
@@ -719,7 +1328,7 @@ Rules that keep a new subject from becoming a blockout:
   output, first consequence, goal/handoff contact, final residue. A social diorama
   may use establish, ritual, disruption, handoff, residue. Every object earns its
   place by serving one of those five.
-- **Stage for the locked camera.** Put the threshold and the hero action on the
+- **Stage for the hero camera.** Put the threshold and the hero action on the
   +Z face; put tall landmarks at the back but offset in screen x so they do not
   stack. Put one foreground prop at the near corner for depth and one mid-ground
   prop to lead the eye.
@@ -1941,7 +2550,7 @@ Staging rules that came out of real reports:
 - **One window per actor, staggered 0.2 s or more.** A shared window climbs two
   men into a seat on the same frame, which reads as choreography, and at 0.1 s
   they climb through each other.
-- **Separate a pair in screen space, not in world space.** At a locked 45/33
+- **Separate a pair in screen space, not in world space.** At the reset hero 45/33
   view, moving a figure further out along the camera axis barely changes where it
   lands on screen: it stays stacked over the car's flank and still reads as one
   blob, which is why pushing the stand spot from 1.6 m to 2.0 m did not cure a
@@ -2019,7 +2628,7 @@ near one.
   frozen splash shows whatever the last played frame left behind. Both templates
   expose `reset()`; the harness calls it and re-simulates in fixed steps from
   zero, which took a two-frame diff from 334 differing pixels to 18.
-- **Smoke**: camera-derived billboards. The camera is locked, so copy its
+- **Smoke**: camera-derived billboards. The camera can orbit, so update from its current
   quaternion once and every puff is a plane facing the lens.
 - **Debris with history**: loose notes or paper use a solved arc, a drag term, a
   spin about a random-but-deterministic axis, then slerp to flat and lie there for
@@ -2078,7 +2687,7 @@ punishes sub-pixel tricks:
 ## Combat Readability (towers, bosses, deaths)
 
 A diorama is judged on whether the **cause and the consequence are both
-visible at the locked camera**. Geometry that is correct in world space can
+visible at the reset hero camera**. Geometry that is correct in world space can
 still read as a bug on screen. Run these gates before calling a combat beat
 finished.
 
@@ -2312,6 +2921,160 @@ system, on every subject.
   scan. `templates/qa/audit.mjs` runs the mechanical ones; the 1:1 crops remain
   human evidence.
 
+## Motion Graphics Primitives (arrows, flames, flow)
+
+Animated arrows and flames are how a mechanism explains cause. They fail
+silently: the build passes, one still looks plausible, and the graphic points
+backwards or sits inside a solid. Treat every primitive as a tiny part with its
+own convention test, in every preset.
+
+- **Declare and test the local forward axis.** A cone built with
+  `CylinderGeometry(radiusTop, radiusBottom, ...)` points along the *top* end.
+  Swapping those two numbers makes every arrow flow backwards while still
+  looking like an arrow. Build the tip at local `+Z`, store `tipLocal` and
+  `tailLocal` in `userData`, and assert: cone base wide and behind, tip a point
+  ahead, and the placement transform maps `+Z` onto the requested tangent.
+- **Never place an arrow on the centreline of an opaque body.** An arrow inside
+  a cast runner is invisible with honest depth testing; the usual "fix" is
+  `depthTest:false`, which turns the scene into x-ray. Two honest options only:
+  cut a real window/section that exposes the gas volume, or place arrows solely
+  in the genuinely open region (port mouth, chamber, outlet). Keep depth test and
+  depth write on; assert `depthTest === true` for effect materials.
+- **A spline through an open cutaway is not a flow route.** An intake path that
+  looked correct in the port still speared the valve disc, because the gas turns
+  around the open valve, not through it. Derive each effect from the *current
+  free volume* (crown to the live valve underside) instead of a fixed centreline,
+  and use one bold arrow per stroke rather than a stream spawned along a curve.
+- **Fit the whole cone, not its centre.** The vertical extent of a
+  cylinder-capped cone depends on its direction: `|dy|·half + flat·head`. For a
+  vertical arrow that is its half length, so clamping only the centre lets the
+  head pierce the crown or the valve. Compute the extent, reduce the scale until
+  the band and the bore both fit, then clamp the centre. Judge "bold" by rendered
+  length (`length × scale`), not by the scale ratio: a long authored arrow in a
+  short band is legitimately scaled down and still reads.
+- **Anchor to a real surface, and normalize the authored length.** Put the intake
+  tail and the exhaust tip `0.008` under the valve head underside
+  (`seat − 0.061 − lift`), span at most `92%` of the band, give a compression
+  chevron its tail on the rising crown (`crown + 0.02`) so it touches the charge
+  it describes, and start a force arrow `0.015` *inside* the flame tip. Author the arrow at its maximum length so `scale ≤ 1`; otherwise a
+  non-normalized `1.14` arrow makes the minimum-scale gate and every sizing test
+  meaningless.
+- **Never stack two rows of the same arrow.** Two overlapping compression rows
+  read as double-headed spikes. Two side-by-side chevrons, or one arrow, not two
+  rows at the same x/z.
+- **Couple the effect to its source.** A pressure arrow that outlives the flame
+  becomes an orphan arrow pointing at nothing. Fade the arrow with the flame
+  kernel and hide both on the same frame.
+- **Every Y constant shares one space.** A group lifted off the plate (here
+  `+0.024`) silently shifts every "absolute" ceiling. Measure the *scene* in the
+  same local space the constants were written in; mixing world and local turned a
+  correct flame into a phantom 24 mm head violation.
+- **A flash must not saturate the frame.** Halo opacity `0.40`, halo scale `0.42`
+  and point-light intensity `2.2` are already generous at diorama scale; the
+  earlier `0.95 / 1.14 / 9.0` blew the whole head to white, and `0.55 / 0.62`
+  still washed the crown orange for two frames. Judge the ignition frame itself,
+  not the frame after it.
+- **A flame may not die as a bead.** The kernel must span the fixed clearance
+  recess at TDC (`0.125` here) and be hidden below `0.12` height. A flame that
+  fades to a two-pixel dot on the valve seat is the flame equivalent of an arrow
+  speck, and a mid-stroke still will not show it.
+- **Audit every 15°, not four hero stills.** Render the full 720° at a tight
+  chamber camera, build one contact sheet per stroke, and read every cell. The
+  spear-through-valve, the double-headed chevrons and the ignition white-out were
+  all invisible in the four "representative" screenshots.
+- **Bound the change between adjacent degrees.** A per-degree delta test on
+  position and scale catches pops that a mid-stroke still hides. Scale a fade so
+  it cannot drop by more than about `0.06` per degree, and hide only when the
+  final scaled size is below the legible threshold.
+- **No effect speck.** A primitive that fades by scale must become invisible
+  before it becomes a 2 px nub. Drive `visible` from the *final scaled size*, not
+  from the envelope alone, and hide below a legible threshold (about 0.3 of the
+  authored arrow length at a normal educational-camera distance; 0.22 is only for
+  very large arrows). Test the fade boundary as well as mid-stroke; a nub reads
+  as a rendering bug.
+- **Size against the real free volume, and check the sign.** Measure the moving
+  ceiling (valve faces, piston crown, lid) each frame, not the closed deck or a
+  cached constant. An inverted subtraction (`floor - tip` instead of
+  `tip - floor`) silently hides every arrow while all numbers stay finite. Assert
+  the available band is positive wherever a primitive is visible, and fit the
+  full tip/tail/width inside it.
+- **A flame is a kernel, not a balloon.** Anchor it at the igniter/plug and let it
+  grow only into the volume the mover releases, except that the kernel always
+  spans the fixed clearance recess at TDC where the released gap is almost zero.
+  A chamber-sized flame hides the pressure graphic, touches the piston and reads
+  as a balloon. Keep it compact, put the force arrow in the free band *below* the
+  flame, and prove the flame bounds against the crown and the head across the
+  whole event.
+- **One idea per primitive.** Three short arrows sharing an origin merge into an
+  unreadable trident; one bold arrow reads instantly. If a fan is genuinely
+  needed, separate tails and heads by at least one head-width and verify it in a
+  1:1 crop.
+- **No ink outline on tiny FX.** An outline sized for castings swallows a thin
+  shaft and turns coloured arrows into black sticks. Effect materials stay flat
+  and un-outlined; check `outlineParameters.visible === false` and the rendered
+  colour in a crop.
+- **Lifetime is phase-bound and deterministic.** Each group has an explicit
+  window and no history dependence: visible mid-stroke, zero in every other
+  stroke, identical for the same phase in any order. Test mid-stroke counts and
+  a sweep of outside phases.
+- **A hollow outlet is one connected solid.** No floating torus as a rim and no
+  flat cap closing the bore. Lathe one continuous sleeve + rolled lip, overlap
+  the pipe, and prove with a centre-ray (passes through the opening) and an
+  annulus-ray (hits material).
+- **Every crossed fixed wall needs a real opening.** A piston, rod or shaft that
+  passes a flange needs a bored hole/slot with measured swept clearance, not a
+  shelf with a dark circle painted on it. Test the actual structural mesh against
+  every moving surface vertex at the crossing plane, at the lowest/full-travel
+  pose.
+- **Selection:** follow `Canonical educational UI and inspection contract`;
+  an explicit Inspect focus is distinct from a camera-stationary lesson step.
+- **Use the copy-in helper, not a fresh guess:** `templates/flow-primitives.js`
+  carries the +Z convention, the band fitter and the legibility gate.
+- **Regression checks for this section:** forward-axis unit test, tangent
+  alignment, per-stroke visible counts plus zero leakage, minimum legible scale,
+  a 720° vertex sweep against crown/bore/head/valve-disc/stem/plug with the live
+  lift, an adjacent-degree no-teleport bound, flame-kernel and crown bounds,
+  open-outlet and flange rays, a 48-frame contact sheet per stroke, and a
+  screenshot strip of all four strokes from two orbit angles. A missing check is
+  not a pass.
+
+### Recorded failure modes (four-stroke engine, v3.12.0)
+
+These were all present in one finished-looking scene; check for each by name:
+
+1. Reversed cone (`radiusTop`/`radiusBottom`) — arrows flowed backwards.
+2. Arrows on the centreline of solid intake/exhaust runners — invisible, then
+   faked with `depthTest:false`.
+3. Fade boundary left coloured specks (scale 0.016) visible.
+4. Arrow ceiling taken from the deck instead of the valve faces, and inverted
+   downward-room sign — pressure arrows vanished entirely.
+5. Chamber-sized ignition flame hid the pressure arrows and touched the crown.
+6. Three short pressure arrows merged into one trident.
+7. Ink outlines turned small flow arrows into black sticks.
+8. Detached torus "rim" floating off the exhaust pipe; solid cap in the bore.
+9. Solid cylinder-base flange slicing the piston and rod at the bottom of the
+   stroke — the exact "it passes through" report.
+10. Part selection changed colour but did not dim the rest or move the camera.
+11. Intake/exhaust arrows followed a spline through the valve disc — a visible
+    spear through the head. Fix: free-volume arrows, never a port centreline.
+12. Only the arrow *centre* was clamped, so heads poked through the crown and the
+    valve underside. Fix: fit the direction-dependent full extent.
+13. Two stacked compression rows overlapped into double-headed spikes. Fix: one
+    chevron per side.
+14. Arrow scales ran past `1.14` because the authored length was shorter than
+    the desired length, defeating the legibility gate. Fix: normalize length.
+15. The pressure arrow outlived the flame and pointed at nothing. Fix: shared
+    fade with the flame kernel.
+16. World-space tests applied to engine-local constants reported a phantom
+    flame-above-head violation (`+0.024` root lift). Fix: one declared space.
+17. Ignition flash at `opacity 0.95`, `scale 1.14`, `intensity 9.0` blew the
+    whole head to white for the ignition frame. Fix: capped flash.
+18. The flame faded to a two-pixel bead on the valve seat for 20° of crank
+    rotation. Fix: span the clearance recess and hide below a legible height.
+19. Four hero stills missed all of the above; the 15°-step contact sheet and a
+    6°-step video found them. Fix: the frame-by-frame audit is the acceptance
+    gate.
+
 ## Verification
 
 - **Build first, then shoot, then prove the edit landed.** A failed bundle leaves
@@ -2319,6 +3082,21 @@ system, on every subject.
   untouched, so in both cases every screenshot shows the old app and the fix
   looks like it did not land. Read the build's own output line, grep for a
   sentinel string from the change, and only then judge the frame.
+- **Non-vacuous, fresh proof (3.18 evidence + test).** Quartz-watch's rounded
+  box reported runtime `type: BoxGeometry`; a type-name filter produced zero
+  magnet samples and `magnetRadius: 0`, falsely passing clearance. Assert expected
+  object counts, nonempty finite sample sets, positive applicable radii and actual
+  geometry attributes/topology before measuring; never trust a constructor label
+  as shape proof. `templates/mechanism-contract.mjs` assertCoverage and
+  `templates/qa/mechanism-contract.test.mjs` cover helper failure detection;
+  scene probes must additionally inject an empty/type-mismatched sample set,
+  zero radius and a known actual-geometry overlap and reject each. Record fresh
+  source/build hash, successful build command, loaded artifact identity, probe
+  method, counts, tolerances, worst pair/phase and evidence paths in the report.
+  Failures or missing browser/visual/sweep coverage remain FAIL/UNVERIFIED.
+  Never infer full mechanical certification from scalar budgets, 26 numerical
+  highlight states, screenshots alone or a stale successful report. Evidence:
+  historical `quartz-watch/qa/construction-report.json`; no workspace dependency.
 - **Judge orientation from the transform, not the pixels.** At diorama scale a
   back and a front read the same: a 4x-downscaled strip once made a
   correctly-facing figure look like he was climbing in backwards, and the
@@ -2328,7 +3106,7 @@ system, on every subject.
 - Screenshot 1280x800, 1388x950 (iPad landscape) and 390x844 (phone). Zero page
   errors in all three, and the framing holds at each aspect.
 - Two shots 1.5 s apart differ (the loop is alive) and the camera position is
-  identical (the angle is locked).
+  identical after resetting the hero pose.
 - A 1:1 crop shows square pixels, a dark contour, no speckle on flat deck.
 - **Pairwise distance sweep** across every multi-actor beat: freeze in 0.3 s
   steps, log x/z and the pairs under 0.6 m. Held for two samples means jammed.
@@ -2347,7 +3125,7 @@ system, on every subject.
   base and seat. No boot passes through the bars/seat/body, both soles reach the
   boards, and the rider root follows the seat after departure.
 - **Scale check.** The 30%-smaller request is a camera move; assert
-  `actualDistance / fitDistance ≈ subjectScale`, the projected slab width fell
+  `actualDistance / fitDistance ≈ 1 / subjectScale`, the projected slab width fell
   by the same factor, `post.size ≈ CSS size × renderScale` (capped), the
   slab/world clip/shadow camera and CSS frame are unchanged, and the standalone
   still frames on the page.
@@ -2549,9 +3327,14 @@ src/
   main.js              renderer, scene, clip planes, resize, rAF, ?t= freeze
   core/
     palette.js         N entries + named C map
-    post.js            PixelPost: gamma, grade, ink, dither, snap, rim
+    post.js            PixelPost: gamma, grade, ink, dither, snap, rim (pixel only)
+    stroked-toon.js    optional approved OutlineEffect + four-step toon materials
     materials.js       every material, palette-validated
     geometry.js        roundedBox, addBox, lathe helpers
+    mechanism-contract.mjs  shared anchors, coverage/end-plane budgets + scoped contact policy
+    inspection.js      rigid assembly/piece emphasis, reveal authorization, exact restoration
+  ui/
+    education-dock.mjs education-dock.css  dependency-free single lesson surface
     merge.js           mergeSiblingMeshes: one draw per material per group
   scene/
     camera.js  lighting.js  street.js  bank.js  props.js
@@ -2564,6 +3347,8 @@ src/
 build.mjs              esbuild bundle, index.html, standalone HTML
 qa/
   shoot.mjs            viewports + console errors + named timestamps
+  inspection.test.mjs  helper state/identity/ownership and injected failure regressions
+  inspection-browser.mjs  synthetic contrast/depth/restoration fixture, three presets
   probe-*.mjs          one-off numeric probes (facing, anchors, NaN, spawn pose)
   audit.mjs            scene lint: halos, fades, camera/render scale, exits, FX
   portrait.mjs         isolated figure/framing shots through a debug camera
@@ -2640,8 +3425,7 @@ looks like.
 
 ## Skill Maintenance
 
-The skill is part of the deliverable. After every shipped diorama, do a ten-minute
-postmortem and write down what the user actually reported, not what you intended.
+Keep a project-local postmortem of what the user actually reported, not what you intended. Installed-skill changes require an explicit maintenance request and filesystem approval; the following rules apply only during authorized maintenance.
 
 1. **Add at most three rules per routine project.** A skill that grows by fifty
    small rules becomes unreadable and the next reader skips it; a deliberate
@@ -2797,6 +3581,87 @@ vertical arc so the feet leave the ground.
 
 ## Changelog
 
+- **5.7.0 — Remove Pixel Art V2.** Removes the V2 rendering contract and intake/design options at the user’s request. Classic Pixel Art is the recommended and explicitly delegated default; stroked-toon and pixel+stroke remain. V2 resources are archived, not active instructions. Regression: active intake/design expose exactly three presets, with no V2 dependency. Earlier changelog entries are historical only.
+
+- **5.6.0 — V2 cast and action language.** Adds dedicated rounded-character construction, cast-specific shading and articulated action guidance. Requires garment-attached patterns, actual foot/grip contacts and deterministic action-strip checks for imported or authored cast; existing rigs are starting points, not automatic style passes.
+
+- **5.5.0 — Terrain edge, not just ink.** Makes the irregular scattered-to-white ground perimeter a required V2 feature. Adds an independently authored terrain-only material coverage helper with shadow hooks, integration and edge-crop acceptance notes. Existing projects are not automatically modified; renderer verification remains per build.
+
+- **5.4.2 — Standalone Pixel Art V2.** Removes external reference materials and adapted styles. Retains an independently specified edged/dithered rendering option and the two-step look/sourcing intake. No external implementation is bundled.
+
+
+- **5.4.0 — Two-step commission intake.** Adds selectable Pixel Art V2 versus Classic Pixel, then separate hybrid / internet-throughout / fully agent-modeled sourcing choices. Explicit precedence replaces old automatic internet-first and three-option prompts. V2 requires its own renderer and rendered checks; the classic post template is not falsely advertised as V2. Updates design receipt and sourcing evidence. v5.3.0 preserved.
+
+
+- **5.2.0 — Pose-aware clearance.** Adds actor/animal/building space reservation, seat frames/occupancy and action-path checks to both profiles. Ships sphere/capsule/OBB nearby-pair sampled audits with exact time-window contact rules and independent proxy inventory, plus live CPU skin/morph pose bounds. Regressions cover limbs/tails, seats/backrests, buildings, temporal crossings and missing/invalid coverage. Proxy/sample limits remain explicit; full guide, model-first sourcing and narrative no-education-UI preserved.
+
+- **5.1.0 — Model-first by default.** Requires finding, acquiring and using fitting commercially modifiable/redistributable internet assets for major roles, not merely logging a search. Retains Polyfork-first narrative sourcing and educational accuracy gates; verifies actual import/style/motion and final-scene inclusion. Free-first; paid assets require approval. Hand-building is a justified gap/fallback, not the default. Preserves the full long guide and narrative no-education-UI boundary.
+
+- **5.0.0 — Long-form restoration.** Restores the complete 3.18 guide and detailed design sheet after compact-profile educational UI leaked into ordinary scenes. Narrative by default; no educational card/dock/lessons/callouts without explicit explanatory intent. Keeps Polyfork sourcing, commercial/adaptation/redistribution checks, actual-subject representation and tested construction helpers. Profile-consumer tests are bounded evidence, not a rendered amusement-park benchmark.
+
+- **3.18.0** — Consolidates educational UI/selection/lesson rules into one V8-exact
+  authority with crossrefs; resolves placement, focus, preset-intro, ghost-shell
+  and reciprocal scale contradictions. Three quartz-watch evidence/test contracts:
+  all repeated mating interfaces from shared anchors/axes with real holes and
+  noncoplanar ends; assembly/piece inspection with class-safe reversible state;
+  non-vacuous actual-geometry QA and fresh build identity. Ships rigid inspection
+  and shared-interface helpers with class/ownership/empty-fixture failures and a
+  three-preset rendered contrast/depth/restoration regression; preserves context
+  and authorizes internal occluder removal explicitly. These tests are bounded
+  helper evidence, not full mechanism/UI certification.
+  Missing straps/back remain the existing 3.17 completeness gates, not new rules.
+  Full 3.17.0 preserved as `SKILL.md.bak-v3.17.0`.
+
+- **3.17.0** — Three whole-object completeness gates prompted by the user-reported quartz watch missing straps and back: whole silhouette/scope, exterior/rear attachment construction, and a reconciled completeness matrix with proof and negative checks. Extends the Detail Bar and design template across profiles/presets; preserves prior UI, mechanics and style contracts. Per-scene checks remain required; no model certification is claimed.
+
+- **3.16.0** — Code-defined V8 educational UI contract and copy-in `education-v8.css`: exact neutral tokens, reserved 360px right column/mobile dock, DOM/control hierarchy and measured regression gates. Records grandfather-clock beige/glass/detached-title drift; supersedes ambiguous default-placement wording without changing render presets or mechanics.
+
+- **3.15.0** — LEAP-1B repair checklist: retained preset provenance, closed exterior/explicit Inside/reset lifecycle, UI-safe complete-assembly fit with correct camera-axis sign, and reference-first white compact educational UI. Adds design fields and scoped white-stage CSS. Tests remain per-scene; geometry sampling does not imply full collision certification. v3.14.1 preserved as backup.
+
+- **3.14.1** — Documents the calibrated V8 soft-glow/holographic inspection implementation: isolated material variants, ghost-shell depth policy, selective live-transform feature edges, multi-material restoration, ownership/disposal, and rigid-versus-deformed limitations. Adds matching design/QA acceptance fields; no renderer preset or scene behaviour changed. v3.14.0 preserved as `SKILL.md.bak-v3.14.0`.
+
+- **3.14.0** — Three evidence-backed regression rules: mating interfaces/local axes/shared anchors with bore/bevel/axial budgets and connected ports/supports; full-assembly swept-clearance coverage with surface-scoped intended-contact policy and explicit sampled-proof limits; compact neutral sans educational UI with progressive causal steps bound to frozen scene state. Adds dependency-free mechanism-contract and education-dock templates, scalar/contact-policy and browser helper regressions, design/QA sheets. V8 rod repair and the incomplete earlier 12/12 report are the evidence, not a guarantee of future bug-free construction. v3.13.0 preserved as `SKILL.md.bak-v3.13.0`.
+
+- **3.13.0** — Mandatory `Render Preset Gate`: the agent asks once, at project
+  start, which of the three looks to build in (pixel default, stroked-toon,
+  pixel + stroke hybrid), instead of asking only once it had already decided to
+  try the optional look. An explicit style in the request counts as the answer;
+  naming a look in a reference, or the word "toon" on its own, does not; silence
+  resolves to pixel and is recorded as a delegated default. The grey blockout and
+  the research lookups continue while the answer is pending and only the
+  presentation pass waits. Updates the frontmatter description, the intro,
+  `One Prompt, One Build`, `Step 0`, both preset sections, the pipeline and
+  `templates/DESIGN.md`. v3.12.0 preserved as `SKILL.md.bak-v3.12.0`.
+
+- **3.12.0** — Motion graphics hardened by a full-cycle, frame-by-frame audit of
+  the four-stroke engine: effects are derived from the moving free volume instead
+  of a spline that pierced the valve; the direction-dependent cone extent is
+  fitted rather than only the centre; anchors, length normalization, single-row
+  chevrons and flame-coupled fade are specified; ignition flash is capped; and
+  every Y constant is declared in one local space. Adds the 720° vertex
+  containment sweep, the adjacent-degree no-teleport bound and the 15°-step
+  contact-sheet gate, plus nine new recorded failure modes. v3.11.0 preserved as
+  backup.
+
+- **3.11.0** — Motion-graphics primitives recorded as first-class geometry:
+  forward-axis/tip convention tests, no arrows inside opaque bodies and no
+  depth-test x-ray, minimum legible effect scale, free-volume sizing with a
+  sign check, compact ignition kernels, one-idea arrows, un-outlined FX,
+  phase-bound deterministic lifetimes, connected hollow outlets, real bores
+  through crossed flanges, and reversible selection glow/dim/focus. Adds the
+  ten recorded failure modes from the four-stroke engine. v3.10.0 preserved as
+  backup.
+
+- **3.10.0** — Mandatory user orbit for every preset with deterministic hero reset, no auto-spin; first-class educational mechanism profile, single accessible dock and one live part explanation; component manifest and ratio/kinematic/contact acceptance; optional confirmed low-resolution pixel+stroke helper with one selective outline pipeline. v3.9.0 preserved exclusively as backup.
+
+- **3.9.0** — Optional subject-independent `stroked-toon` illustrated-miniature
+  preset, calibrated from the coffee-rig repairs: explicit ask-and-wait gate,
+  native antialiasing, four-step toon ramp, selective warm ink outlines, bevelled
+  assemblies, sound cavity/contact construction and related prop clusters.
+  Pixel remains the default. Documents overrides to conflicting pixel-only
+  camera/post/empty-paper rules, adds `templates/stroked-toon.js` and design-sheet
+  consent/preset fields. Checks: material/ramp tests, module bundle, unrelated-
+  subject spec review; renderer appearance still needs per-project visual QA.
 - **3.8.0** — `qa/frames.mjs`: a per-entity frame recorder. Samples one dense
   series per entity across a window, isolates it (branch, siblings or full
   scene), fits one camera to its swept bounds so travel stays visible, and scores

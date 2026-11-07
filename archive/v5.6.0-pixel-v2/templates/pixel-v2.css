@@ -1,0 +1,43 @@
+/* Pixel Art V2: optional narrative scene shell. */
+body.pixel-v2 {
+  margin: 0;
+  color: #292731;
+  background-color: white;
+  font: 0.8125rem/1.4 ui-monospace, monospace;
+}
+.pixel-v2 .v2-stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  overflow: clip;
+}
+.pixel-v2 canvas {
+  display: block;
+  image-rendering: pixelated;
+  touch-action: none;
+  cursor: grab;
+}
+.pixel-v2 canvas:active { cursor: grabbing; }
+.pixel-v2 .v2-controls {
+  position: fixed;
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 0.75rem;
+  z-index: 2;
+}
+.pixel-v2 button {
+  font: inherit;
+  padding: 0.65rem;
+  color: #77717b;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.pixel-v2 button:hover { color: #292731; }
+.pixel-v2 :is(button, canvas):focus-visible {
+  outline: 2px solid #746783;
+  outline-offset: 3px;
+}

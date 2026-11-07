@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 
 /**
- * Locked three-quarter camera. Distance is solved against a set of fit points
- * (slab corners plus the tops of tall props) so the play keeps its white
- * margin at every aspect ratio. Nothing here orbits or drifts.
+ * Reset hero three-quarter camera. Distance is solved against fit points
+ * (slab corners plus tall props) for a stable margin at each aspect ratio.
+ * REQUIRED: attach createDioramaOrbit from orbit.js after fitting in every preset.
+ * This module only solves the deterministic hero pose; it never auto-spins.
  */
 export const CAMERA = {
   fov: 20.5,

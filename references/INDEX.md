@@ -1,0 +1,52 @@
+# On-demand reference index
+
+Do not load all entries. Read the exact topic required for the next action. The restored full SKILL.md is primary. Supplemental references extend its approved sourcing/representation rules; narrative scenes skip educational UI and lesson requirements.
+
+- **People/animals/seats, routes and building clearance (5.2)** → `action-clearance.md`, `../templates/action-clearance.mjs`, `../templates/pose-bounds.mjs`
+- **Subject representation: actual thing vs physical aid vs explanatory abstraction (4.6)** → `representation.md`
+- **Educational models: free commercial modification/redistribution + accuracy gate (4.5)** → `educational-models.md`, `../templates/educational-asset-gate.mjs`
+- **Narrative sourcing: sweep the Polyfork CDN before modelling (4.4)** → `external-models.md`
+- **Working-space/contact/scope/live-anchor checks (4.2)** → `interfaces.md`, `../templates/interface-checks.js`
+- **Efficient milestone/QA loop (4.1)** → `build-loop.md`
+- **Ground/floor, proportions, Inside and material realism (4.1)** → `realism.md`
+- **Precision/repair adapter (optional deeper assurance)** → `reliability.md`
+- **Reusable explicit placement, real holes and solved perspective fit** → `../templates/construction-kit.js`
+
+- **Render Preset Gate (ask once, every project)** → `render-preset-gate-ask-once-every-project.md`
+- **When to Use** → `when-to-use.md`
+- **Research Before You Model** → `research-before-you-model.md`
+- **One Prompt, One Build** → `one-prompt-one-build.md`
+- **Starting A New Diorama** → `starting-a-new-diorama.md`
+- **Educational Mechanism Profile (first-class exception)** → `educational-mechanism-profile-first-class-exception.md`
+- **Canonical educational UI and inspection contract** → `education-ui.md + inspection.md`
+- **Repair acceptance: enclosure, fit and reference UI (3.15)** → `repair-acceptance-enclosure-fit-and-reference-ui-3-15.md`
+- **Construction regression gates** → `construction-regression-gates.md`
+- **Universal Inspection Controls** → `universal-inspection-controls.md`
+- **Optional Pixel + Stroke Hybrid** → `optional-pixel-stroke-hybrid.md`
+- **Optional Stroked-Toon Preset** → `optional-stroked-toon-preset.md`
+- **The Look Contract** → `the-look-contract.md`
+- **The Detail Bar** → `the-detail-bar.md`
+- **The Animation Bar** → `the-animation-bar.md`
+- **Numbers That Make It Read** → `numbers-that-make-it-read.md`
+- **Pipeline** → `pipeline.md`
+- **New Subject Intake** → `new-subject-intake.md`
+- **Palette And The Post Pass** → `palette-and-the-post-pass.md`
+- **Camera And Framing** → `camera-and-framing.md`
+- **Scene Furniture** → `scene-furniture.md`
+- **Detail Recipes** → `detail-recipes.md`
+- **The Cast** → `the-cast.md`
+- **Animation** → `animation.md`
+- **System And Combat Animation** → `system-and-combat-animation.md`
+- **Service And Queue** → `service-and-queue.md`
+- **Vehicles** → `vehicles.md`
+- **Effects** → `effects.md`
+- **Combat Readability (towers, bosses, deaths)** → `combat-readability-towers-bosses-deaths.md`
+- **Build And Ship** → `build-and-ship.md`
+- **Surface, Motion And Event FX** → `surface-motion-and-event-fx.md`
+- **Motion Graphics Primitives (arrows, flames, flow)** → `motion-graphics-primitives-arrows-flames-flow.md`
+- **Verification** → `verification.md`
+- **Pitfalls** → `pitfalls.md`
+- **Project Layout** → `project-layout.md`
+- **Skill Maintenance** → `skill-maintenance.md`
+- **Field Notes: Two-Creature Combat** → `field-notes-two-creature-combat.md`
+- **Changelog** → `changelog.md`

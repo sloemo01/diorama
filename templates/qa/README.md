@@ -108,7 +108,7 @@ only with a written reason in `DESIGN.md`.
 ## What "passing" looks like
 
 - `no console errors` at 1280×800, 1388×950 and 390×844, and the camera position
-  identical across all three samples of the same viewport (the angle is locked).
+  identical across all three samples of the same viewport (reset the hero pose before every sample).
 - `audit passed` with no `ERROR` lines. Warnings are allowed at the default
   strictness; `STRICT=1` makes them fail too. The margin limit is
   `MARGIN_RATIO=0.0002` (0.02% of the sampled margin).
@@ -168,7 +168,7 @@ FROM=4 TO=9 FPS=12 OUT=qa/frames STATIC=guard \
 - `ENTITIES` is a JS expression evaluated in the page, returning `{name: Object3D}`.
   The build should expose `window.__diorama.entities` so the default works.
 - `VIEW=portrait` (default) fits one camera to the entity's swept bounds, so the
-  whole move stays in frame and fills it. `VIEW=scene` keeps the locked camera and
+  whole move stays in frame and fills it. `VIEW=scene` keeps the reset hero camera and
   crops to the entity instead.
 - `ISOLATE=scene` hides every mesh that is not on the entity's branch, so the
   motion signature is about that actor alone. `siblings` hides only the other
@@ -181,3 +181,29 @@ Each entity gets `qa/frames/<name>/f###.png`, a contact sheet, and a row in
 on any flag, so a build can gate on it. Read the sheets; the numbers only say
 which sheet to open first.
 
+
+
+## 3.14 interface and educational UI regression helpers
+
+`mechanism-contract.test.mjs` imports `../mechanism-contract.mjs`; it has no dependencies. Run `node templates/qa/mechanism-contract.test.mjs` from the skill root. `templates/mechanism-contract.mjs` exposes `createMountAnchors`, `checkRepeatedInterfaces`, `assertCoverage` and `checkEndPlanes` for these scalar checks, not mesh certification. Check scalar bore/bevel/axial budgets, source-frame IDs, shaft/bore axes and shared anchors for every repeated mount (derive full geometry + tolerances, never separately guessed offsets), world-anchor residual, cap endplanes with anti-z-fighting separation, and strict surface-pair/window contact policy, including injected violations. Scalar helpers do NOT inspect meshes or certify swept collision safety. Supply project-specific transformed geometry/proxy tests, axis assertions, full-cycle/transition/refined sweeps and two-angle section crops. Assert nonempty fixtures/pairs and expected sample counts; inspect actual runtime geometry types, including a RoundedBox-labelled fixture whose geometry reports Box, rather than trusting helper names. Record pair coverage, exclusions, worst gap/phase, units, tolerance, geometry revision and method limitations. Vertex/triangle sampling is not exact continuous proof; unexplained omissions or unrun checks remain UNVERIFIED.
+
+`education-dock.test.mjs` imports `../education-dock.mjs` and its CSS and needs `playwright-core` plus Chromium. Run `CHROME=/absolute/path/to/chrome node templates/qa/education-dock.test.mjs`; optionally set `DIORAMA_TEST_PACKAGE=/absolute/path/to/project/package.json` for dependency resolution. It uses synthetic input/link/output data at desktop and narrow-phone sizes, keyboard disclosure/step, frozen phase/text/part sync, scrub, play, picker, reset, UI-event isolation, reduced-motion emulation and disposal. The dependency-free DOM template is a starting point, not a second timeline: call `dock.sync(evaluatedState)` after the real scene evaluates; step `freeze(phase)` must synchronously evaluate it. Mount outside canvas; wire `selectPart` to the scene's tested reversible selection/highlight without automatically focusing the camera on lesson steps; reserve camera focus for a deliberate Inspect action, `setPlaying` to its clock and `resetView` to orbit reset. Initialize with evaluated state; dispose on teardown.
+
+Per-scene UI acceptance still requires desktop/phone and 200% zoom captures, mechanism not covered by the dock, actual geometry selection/hidden picker, material restoration, camera interruption, rapid reselection/steps, pause+orbit, keyboard-only full task, contrast and focus review. Template helpers do not prove scene accessibility, real ports/supports, axis orientation or exact collision absence. Neither helper requires React, Tailwind or shadcn.
+
+## Soft glow and holographic inspection regression
+
+Follow the single authoritative recipe under Canonical educational UI and inspection contract in the skill. `templates/inspection.js` exposes `createInspection(THREE, ...)`, `.select({ partId, mesh })`, `.clear()`, `.refresh()`, `.dispose()` and `.piecePickerEntries()`. Author `resolveVisibility` with `hiddenPartIds`/`hiddenMeshes` + `description`: hidden owners require `shell: true`, or `inspectionOccluder: true` with an active explained selection-only cutaway. Optional `ghostPartIds`/`ghostMeshes` apply strictly to `shell: true`. Context meshes never dim/hide/ghost; selected scope cannot self-hide. Never ghost the whole mechanism.
+
+Run from the skill root, resolving existing `three`, `esbuild` and `playwright-core` from the consumer project; no install step is required:
+
+```bash
+DIORAMA_TEST_PROJECT=/absolute/consumer/project node templates/qa/inspection.test.mjs
+DIORAMA_TEST_PROJECT=/absolute/consumer/project DIORAMA_QA_OUT=/absolute/output node templates/qa/inspection-browser.mjs
+```
+
+`CHROME_PATH` overrides the default macOS Chrome executable. The browser fixture checks synthetic rendered pixel contrast, depth/occlusion and restoration across three presets. Its Home/End keyboard adapter is fixture-only, not consumer keyboard certification. Record actual command exit outcomes; availability of these helpers is not a test-pass claim. All per-scene acceptance below must be rerun on the consumer build.
+
+Per-scene checks: stable assembly versus mesh-piece IDs/mapping and keyboard picker coverage; shared/multi-material clone isolation and exact restoration of material identities/array slots, visibility and cast/receive shadows; MeshBasicMaterial must acquire no added emissive properties. Use an authored warm or cool highlight with demonstrably visible contrast and retained form rather than bloom or a white blob; tune colour/emission for the active preset, not a fixed universal intensity. Use explicit shell-only ghosting and an authorized blocker/reveal plan per hidden target. Selected feature edges exclude decals, keep depth testing on/depth writes off and raycasting disabled. Verify two frozen phases plus moving source transforms, opaque-occluder rejection, Inside state independent of selection clear, and repeated selection/reset/teardown without stale edges or resource growth. Test flat/toon and the active pixel/native/hybrid pipeline, desktop/phone and non-colour cues. Generic EdgesGeometry supports rigid geometry, not automatic skin/morph/instance deformation. Every selectable part needs before/selected/restored screenshots and a reviewed contrast/occlusion verdict; emissive > 0 is not evidence of a visible highlight.
+
+Gate release on nonempty fixtures and asserted expected/actual sample counts, with negative injections for invisible/occluded highlights, wrong picker granularity, decal edges, blocker-plan omissions and restoration failures. Tie each QA manifest to the final build hash and tested geometry/artifact revision, exact commands and exit outcomes, proof paths and injected failures. Rebuilds invalidate stale evidence; missing commands, screenshots or coverage remain UNVERIFIED, never a pass.

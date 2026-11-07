@@ -1,0 +1,18 @@
+/* Match renderer clear/scene/ground separately; CSS cannot recolour an opaque canvas. */
+.education-stage { background: #fff; }
+.education-dock { position: fixed; inset: auto 1rem 1rem; margin-inline: auto; width: min(38rem, calc(100% - 2rem)); box-sizing: border-box; max-height: 45dvh; overflow: auto; padding: .85rem; background: #fafafa; color: #18181b; border: 1px solid #d4d4d8; border-radius: .75rem; box-shadow: 0 4px 16px #0000000d; font: 14px/1.45 ui-sans-serif, system-ui, sans-serif; }
+.education-dock h1 { margin: 0; font-size: 1rem; font-weight: 600; }
+.education-dock p { margin: .4rem 0; }
+.education-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .65rem; }
+.education-controls label { display: inline-flex; align-items: center; gap: .4rem; max-width: 100%; }
+.education-dock button, .education-dock select { font: inherit; color: inherit; background: #fff; border: 1px solid #a1a1aa; border-radius: .4rem; padding: .4rem .6rem; min-height: 44px; max-width: 100%; }
+.education-dock button { cursor: pointer; }
+.education-dock input[type=range] { width: 8rem; min-height: 44px; accent-color: #3f3f46; }
+.education-dock :focus-visible { outline: 2px solid #18181b; outline-offset: 3px; }
+.education-dock summary { cursor: pointer; min-height: 44px; display: list-item; align-content: center; }
+.education-dock [aria-current=step] { background: #18181b; color: #fafafa; }
+.education-dock output { display: block; font-variant-numeric: tabular-nums; }
+.education-dock ol { margin: .3rem 0; padding-left: 1.5rem; }
+.education-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 480px) { .education-dock { inset: auto .5rem .5rem; width: calc(100% - 1rem); padding: .65rem; font-size: 14px; } }
+@media (prefers-reduced-motion: reduce) { .education-dock *, .education-dock { scroll-behavior: auto; transition: none; animation: none; } }

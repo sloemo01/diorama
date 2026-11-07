@@ -1,3 +1,6 @@
+// CLASSIC PIXEL ONLY (renderPreset: 'pixel'). Not Pixel Art V2.
+// V2 ('pixel-v2') requires a separate low-resolution depth-edge renderer;
+// see SKILL.md's Pixel Art V2 contract and references/pixel-v2.md.
 import * as THREE from 'three';
 import { PALETTE_RGB } from './palette.js';
 

@@ -2,13 +2,13 @@
 
 # Diorama
 
-**A playbook and code kit for building small pixel-art dioramas in Three.js.**
+**A playbook and code kit for detailed Three.js dioramas. It asks two questions before the first mesh: which of three looks to build in, and whether the models come from libraries or from your own geometry.**
 
 [![Stars](https://img.shields.io/github/stars/sloemo01/diorama?style=flat-square&color=1d1d1f&logo=github&label=stars)](https://github.com/sloemo01/diorama/stargazers)
 [![Forks](https://img.shields.io/github/forks/sloemo01/diorama?style=flat-square&color=1d1d1f&label=forks)](https://github.com/sloemo01/diorama/forks)
 [![Watchers](https://img.shields.io/github/watchers/sloemo01/diorama?style=flat-square&color=1d1d1f&label=watchers)](https://github.com/sloemo01/diorama/watchers)
 [![License](https://img.shields.io/github/license/sloemo01/diorama?style=flat-square&color=1d1d1f)](LICENSE)
-[![Skill](https://img.shields.io/badge/skill-v3.8.0-1d1d1f?style=flat-square)](SKILL.md)
+[![Skill](https://img.shields.io/badge/skill-v5.7.0-1d1d1f?style=flat-square)](SKILL.md)
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 
 <p>
@@ -26,19 +26,85 @@
 
 </div>
 
-A diorama here is a tiny staged scene on a slab: a locked three-quarter camera, a
+A diorama here is a tiny staged scene on a slab: a resettable three-quarter hero camera with free user orbit, a
 flat cut-out against white paper, a 64 colour palette with ordered dither and an
 inked contour, and toy-scale people with real joint animation. The subject changes
 (pool, night market, bank job, arena battle); the slab, the cast and the
-presentation stay.
+presentation stay for the default pixel preset.
+
+**Optional stroked toon / illustrated miniature:** fine charcoal contours,
+four-step shaded solid parts, small bevels, coherent attachments and detailed
+subject-specific prop clusters. It works across subjects, not just machinery.
+**Choosing the look:** the agent asks one question at the start of every project —
+pixel art (default), stroked toon, or pixel + stroke hybrid — and builds in the
+answer. An explicit style in the request is the answer; a reference image or the
+word "toon" is not; silence resolves to pixel and is recorded as a delegated
+default, with no later switch. The implementation is in
+`templates/stroked-toon.js`, with consent and rendering fields in
+`templates/DESIGN.md`. This is a Three.js
+rendering recipe, not reused Anatomy CSS or SVG. Free orbit is mandatory in every preset; figure-frame UI remains optional outside educational mode; see the preset section in `SKILL.md`.
+
+**Choosing the sources:** the second question is how models get made. Hybrid is the
+default: search for fitting commercially usable assets, download and use them, then
+hand-build the missing or scene-specific pieces. The alternatives are internet models
+throughout, and fully agent-modelled geometry. Either way the licence must permit
+commercial use, modification and redistribution inside the delivered scene, so NC, ND,
+editorial and unstated terms are rejected. Every role's decision and its licence
+evidence land in `refs/SOURCES.md` and `CREDITS.md`.
 
 Everything is deterministic. The scene is a pure function of `t`, so any frame can
 be frozen, screenshotted and compared. A screenshot is evidence, not a lucky
 capture.
 
-`SKILL.md` is the whole playbook: it carries a research-first workflow, the look
-and animation bars, the pipeline, the recipes, the QA harness and the pitfalls,
-in one self-contained file. Everything else here is copy-in code that supports it.
+`SKILL.md` is the playbook: research-first workflow, the look and animation bars,
+the pipeline, the recipes, the QA harness and the pitfalls. It stays the source of
+truth. `references/` holds the same material split into on-demand topic files for
+long sessions, and everything else here is copy-in code that supports it.
+
+## Educational scenes and inspection (5.7)
+
+Educational mode is a first-class exception to narrative cast/ritual/system quotas:
+one accurately built mechanism, one causal sequence and clean off-white (`#f7f7f5`).
+The default surface is one opaque white card in a reserved 360px right column, which
+becomes a bottom dock below 880px; an explicitly requested placement keeps those tokens
+and controls. Narrative scenes get none of it: no card, lesson steps, part picker,
+dashboard or floating labels unless an explanation was asked for. Click a real part for
+one short explanation, and the same labelled picker supports keyboard selection,
+including pieces hidden inside the housing. Selection lifts the chosen material while
+the rest dims, from reversible overrides that restore the exact original materials, and
+feature edges are built from `EdgesGeometry` on the live meshes rather than a wireframe
+pass. Selecting a part triggers one short camera and target transition, cancelled
+immediately by user orbit or keyboard navigation; Back restores the previous view and
+Reset keeps the hero pose. Component manifests, real through-bores and
+ratio/kinematic/contact tests stop simplification from quietly deleting working parts.
+Delivery needs frozen-frame, motion, orbit, mobile and accessibility evidence, not a
+promise that an agent complied.
+
+All presets rotate by default, with no separate orbit consent. `templates/orbit.js` supplies reset, keyboard orbit and drag-versus-click handling. `pixel-stroke` is chosen through that same one-question gate; `templates/pixel-stroke.js` renders toon materials and selective geometry contours into an explicit low-res target then nearest upscales once. No PixelPost/Sobel double edges; DOM UI stays native resolution. Stroke thickness must be checked in target pixels and after screen upscale.
+
+## Motion graphics
+
+Arrows, flames and flow are geometry, not texture. The v3.12.0 four-stroke work hardened them with a
+full-cycle, frame-by-frame pass: a spline through the
+cutaway speared the valve disc, only the arrow *centre* was clamped so heads
+poked through the crown, two stacked rows read as double-headed chevrons, scales
+ran past 1.0 and defeated the legibility gate, the force arrow outlived its
+flame, and the ignition flash blew the head to white. The rules are: derive each
+effect from the current free volume (never a port centreline), fit the
+direction-dependent cone extent, anchor to the real valve/crown surface, use one
+arrow per stroke, normalize the authored length, couple the effect to its source,
+declare every Y constant in one local space, cap the flash, and accept only after
+a 15°-step contact sheet plus a 720° vertex containment sweep. Earlier findings
+still apply: tested +Z axis, no `depthTest:false`, no sub-pixel specks,
+free-band sizing, compact flames, un-outlined FX and phase-bound lifetimes.
+`templates/flow-primitives.js` is the copy-in helper: tested +Z arrows, a
+free-band fitter and a legibility gate. See "Motion Graphics Primitives" in
+`SKILL.md` and the effects block in `templates/DESIGN.md`.
+
+<p align="center">
+<img src="media/education-ui-right.png" width="62%" alt="Educational mechanism with one right-side dock">
+<img src="media/education-selection-focus.png" width="34%" alt="Selected part glowing while the rest dims">
+</p>
 
 ## The scenes
 
@@ -84,7 +150,7 @@ Repo: https://github.com/sloemo01/diorama
        https://github.com/sloemo01/diorama/archive/main.tar.gz
      tar xzf diorama.tar.gz && mv diorama-main "<target>"
 3. Prove the install before describing it: SKILL.md, README.md,
-   templates/, verify/ and LICENSE at the root, and print the
+   references/, templates/, verify/ and LICENSE at the root, and print the
    commit hash (git -C "<target>" rev-parse --short HEAD) or the
    archive date. If you have no shell or no network, say so and
    stop. If the download failed or a file is missing, say so and
@@ -92,7 +158,7 @@ Repo: https://github.com/sloemo01/diorama
 4. If you have a skills directory or plugin folder, install it
    there so you can load it by name in later sessions; otherwise
    treat "<target>" as the folder.
-5. Read before you build: all of SKILL.md, then
+5. Read before you build: all of SKILL.md, references/INDEX.md, then
    templates/DESIGN.md, templates/SOURCES.md, templates/CREDITS.md,
    templates/qa/README.md, the header comment of every file in
    templates/, and the worked examples under verify/. SKILL.md is
@@ -123,11 +189,14 @@ and can be deleted after the clone.
 | --- | --- |
 | `SKILL.md` | The whole playbook: research gate, look contract, detail and animation bars, pipeline, recipes, QA, pitfalls. Start here. |
 | `templates/` | Copy-in modules: palette, post pass, camera, lighting, geometry, props, rig, poses, vehicle transfer, paths, combat, creature, water, effects, build script. |
+| `templates/flow-primitives.js` | Tested +Z arrow primitive, free-band fitter and legibility gate for motion graphics. |
 | `templates/DESIGN.md` | The design sheet you fill before modelling. |
 | `templates/SOURCES.md` | The research log you fill before modelling: query, what was found, decision. |
 | `templates/CREDITS.md` | The licence ledger for every imported model, clip or texture. |
 | `templates/creature.js` | Rigged-actor combat: stage-local aiming, bone-space effect anchors, upright billboards, hit severities, send-out geometry. |
-| `templates/qa/` | Eight verification scripts that check a build against frozen frames and printed numbers, including a per-entity frame recorder. |
+| `references/` | The playbook split by topic, indexed in `references/INDEX.md`: sourcing, representation, inspection, construction gates, service, vehicles, effects, verification. |
+| `templates/qa/` | Eight verification scripts that check a build against frozen frames and printed numbers, including a per-entity frame recorder, plus unit and browser regressions for the inspection and mechanism helpers. |
+| `archive/` | Retired material kept for reference: the removed Pixel Art V2 renderer and its supporting parts. |
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
 | `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
@@ -145,7 +214,7 @@ and can be deleted after the clone.
    as a verb, cast, systems, five beats with timestamps, detail budget.
 4. Copy the modules you need into `src/core/` and `src/scene/`, then a `config.js`
    that holds the scene's numbers. `verify/water/src/` is the reference layout.
-5. Block out in grey at the locked camera before any production pass, then run the
+5. Block out in grey at the reset hero camera before any production pass, then run the
    pipeline: palette, materials, detail, animation, effects, post.
 6. Verify with `templates/qa/` before calling it done, and check the research gate
    in `Build And Ship` (reference sheets, `SOURCES.md`, `CREDITS.md`, per-beat
@@ -158,7 +227,7 @@ nothing is the most common way a commission fails:
 
 - **Shape.** Pull the real thing on video, step it into contact sheets at 8 to 12
   fps, read them, and write the grammar down before touching geometry.
-- **Assets.** Check the user's disk, then the CC0 and CC-BY libraries (Quaternius,
+- **Assets.** Check the user's disk, then the Polyfork catalogue, then the CC0 and CC-BY libraries (Quaternius,
   KayKit, Poly Pizza, Kenney, Sketchfab with the downloadable plus CC0 filter,
   Smithsonian, Poly Haven, ambientCG, Mixamo and the Quaternius animation
   library). A rigged download beats four hundred lines of primitives at close
@@ -176,7 +245,7 @@ them.
 ## How it works
 
 - **One camera solve.** The camera is fitted to the slab's bounding box once, at a
-  fixed three-quarter azimuth, with a `subjectScale` margin. No orbit controls.
+  fixed three-quarter azimuth, with a `subjectScale` margin. Free orbit controls and reset in every preset; no auto-spin.
 - **Two passes, one look.** The render is drawn into a small buffer, then gamma,
   grade, a 64 entry palette snap, ordered dither, an ink contour and a nearest
   neighbour upscale happen in that fixed order.
@@ -230,9 +299,9 @@ defects the harness found and the numbers after the fix.
 ## Using it as a skill
 
 `SKILL.md` carries skill frontmatter (`name`, `description`, `version`), so a
-skill-capable coding agent can load it as-is. It is self-contained: no external
-reference documents, everything needed to build a diorama is in the file plus
-`templates/`.
+skill-capable coding agent can load it as-is. It reads on its own; `references/`
+carries the same guidance split by topic for long sessions, and `templates/` carries
+the copy-in code.
 
 If you just want to read it, start at `Research Before You Model`, then
 `One Prompt, One Build` and `The Look Contract`.

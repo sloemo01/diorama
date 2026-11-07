@@ -1,0 +1,88 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { createInspection } from '../inspection.js';
+// Uses the consuming project's installed THREE; never installs or fetches one.
+const require = createRequire(path.resolve(process.env.DIORAMA_TEST_PROJECT || process.cwd(), 'package.json'));
+const THREE = await import(pathToFileURL(require.resolve('three')).href);
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const ramp = new THREE.DataTexture(new Uint8Array([68,122,184,246]),4,1,THREE.RedFormat);
+const shared = new THREE.MeshToonMaterial({ color: 0x997755, gradientMap: ramp });
+shared.userData.outlineParameters = { visible:true, alpha:.7, thickness:.003 };
+const basic = new THREE.MeshBasicMaterial({ color: 0x284d60 });
+const glass = new THREE.MeshPhysicalMaterial({ color: 0xbbccdd, transparent:true, opacity:.2, depthWrite:false });
+const a = new THREE.Mesh(geometry, shared), sibling = new THREE.Mesh(geometry, shared);
+a.name='shaft';sibling.name='seat';a.castShadow=true;sibling.receiveShadow=true;
+const b = new THREE.Mesh(geometry, basic), multi = new THREE.Mesh(geometry, [shared,basic]);
+const transparent = new THREE.Mesh(geometry, glass), decal = new THREE.Mesh(geometry, basic);
+decal.userData.inspectionEdge=false;
+const scene = new THREE.Scene();scene.add(a,sibling,b,multi,transparent,decal);
+const floor = new THREE.Mesh(geometry,basic); floor.castShadow=true; scene.add(floor);
+const parts = new Map([['mount',{ meshes:[a,sibling] }],['signal',{meshes:[b]}],['multi',{meshes:[multi]}],['glass',{meshes:[transparent],shell:true}],['decal',{meshes:[decal]}]]);
+const originals = new Map([...parts.values()].flatMap(p=>p.meshes).map(m=>[m,{material:m.material,visible:m.visible,castShadow:m.castShadow,receiveShadow:m.receiveShadow}]));
+const source = { shared:shared.color.getHex(),basic:basic.color.getHex(),outline:{...shared.userData.outlineParameters} };
+let inside=false,ghostMode=false;
+const inspect=createInspection(THREE,{parts,contextMeshes:[floor],resolveVisibility:()=>ghostMode?{ghostPartIds:['glass'],description:'Authored shell-only transparency'}:inside?{hiddenPartIds:['glass'],description:'Authored cover removal'}:{}});
+assert.throws(()=>inspect.select({partId:'missing'}),/unknown/);
+assert.throws(()=>inspect.select({partId:'mount',mesh:b}),/member/);
+inspect.select({partId:'mount',mesh:a});
+assert.notEqual(a.material,shared);assert.equal(a.material.gradientMap,ramp);
+assert.equal(floor.material,basic);assert.equal(floor.visible,true);assert.equal(floor.castShadow,true);
+assert.notEqual(a.material.userData.outlineParameters,shared.userData.outlineParameters);
+assert.equal(a.material.userData.outlineParameters.visible,false);
+assert(a.material.emissiveIntensity>.5);assert(sibling.material.color.r<shared.color.r);
+assert.equal(inspect.stats.overlays,1);assert.equal(a.children[0].material.depthTest,true);
+assert.equal(a.children[0].userData.inspectionOverlay,true);
+const before=new THREE.Vector3();a.children[0].getWorldPosition(before);a.position.x=2;scene.updateMatrixWorld(true);
+const after=new THREE.Vector3();a.children[0].getWorldPosition(after);assert.equal(after.x-before.x,2);
+inspect.select({partId:'mount'});assert.equal(inspect.stats.overlays,2);
+inspect.select({partId:'signal'});assert.equal(b.material.isMeshBasicMaterial,true);
+assert.equal('emissive' in b.material,false); // regression for uniform.value crashes
+inspect.select({partId:'multi'});assert(Array.isArray(multi.material));assert.equal('emissive' in multi.material[1],false);
+inspect.select({partId:'glass'});assert.equal(inspect.stats.overlays,0);assert.equal(transparent.material.opacity,.2);assert.equal(transparent.material.depthTest,true);
+inspect.select({partId:'decal'});assert.equal(inspect.stats.overlays,0);
+inside=true;inspect.refresh();assert.equal(transparent.visible,false);inside=false;inspect.clear();
+ghostMode=true;inspect.refresh();assert.equal(transparent.material.opacity,.105);assert.equal(transparent.material.depthTest,true);assert.equal(transparent.material.depthWrite,false);
+assert.throws(()=>inspect.select({partId:'glass'}),/solid/);assert.equal(inspect.selection,null);assert.equal(transparent.material,glass);
+ghostMode=false;inspect.clear();
+for(let i=0;i<80;i++){inspect.select({partId:i%2?'multi':'mount'});inspect.clear();}
+const warmed=inspect.stats.variants;
+for(let i=0;i<80;i++){inspect.select({partId:i%2?'multi':'mount'});inspect.clear();}
+assert.equal(inspect.stats.variants,warmed);assert.equal(inspect.stats.overlays,0);
+for(const [mesh,saved]of originals){assert.equal(mesh.material,saved.material);assert.equal(mesh.visible,saved.visible);assert.equal(mesh.castShadow,saved.castShadow);assert.equal(mesh.receiveShadow,saved.receiveShadow);}
+assert.equal(shared.color.getHex(),source.shared);assert.equal(basic.color.getHex(),source.basic);assert.deepEqual(shared.userData.outlineParameters,source.outline);
+assert.equal(inspect.piecePickerEntries('mount').length,2);a.visible=false;assert.equal(inspect.piecePickerEntries('mount',{visibleOnly:true}).length,1);inspect.clear();
+let sourceDisposed=false,rampDisposed=false;shared.addEventListener('dispose',()=>sourceDisposed=true);ramp.addEventListener('dispose',()=>rampDisposed=true);
+inspect.select({partId:'mount'});inspect.dispose();inspect.dispose();assert.equal(inspect.stats.variants,0);assert.equal(inspect.stats.overlays,0);assert.equal(sourceDisposed,false);assert.equal(rampDisposed,false);
+assert.equal(a.material,shared);assert.throws(()=>inspect.clear(),/disposed/);
+assert.throws(()=>createInspection(THREE,{parts:new Map()}),/nonempty/);
+assert.throws(()=>createInspection(THREE,{parts:{empty:{meshes:[]}}}),/nonempty/);
+assert.throws(()=>createInspection(THREE,{parts:{empty:{meshes:[new THREE.Mesh(new THREE.BufferGeometry(),basic)]}}}),/nonempty/);
+assert.throws(()=>createInspection(THREE,{parts:{a:{meshes:[a]},b:{meshes:[a]}}}),/twice/);
+assert.throws(()=>createInspection(THREE,{parts:{a:{meshes:[a]}},style:{dimFactor:NaN}}),/invalid/);
+assert.throws(()=>createInspection(THREE,{parts:{skin:{meshes:[new THREE.SkinnedMesh(geometry,shared)]}}}),/rigid/);
+assert.throws(()=>createInspection(THREE,{parts:{shader:{meshes:[new THREE.Mesh(geometry,new THREE.ShaderMaterial())]}}}),/adapter/);
+const badGhost=createInspection(THREE,{parts,resolveVisibility:()=>({ghostPartIds:['mount']})});
+assert.throws(()=>badGhost.select({partId:'signal'}),/manifest shell/);assert.equal(badGhost.selection,null);assert.equal(a.material,shared);badGhost.dispose();
+let plan={}; const guarded=createInspection(THREE,{parts,contextMeshes:[floor],resolveVisibility:()=>plan});
+for(const next of [{hiddenPartIds:['mount']},{hiddenMeshes:[b]},{hiddenMeshes:[floor]},{ghostMeshes:[floor]}]) {
+  plan=next;assert.throws(()=>guarded.select({partId:'signal'}),/hiding|context|shell/);
+  assert.equal(guarded.selection,null);assert.equal(a.material,shared);assert.equal(floor.material,basic);assert.equal(floor.visible,true);assert.equal(floor.castShadow,true);
+}
+parts.get('mount').inspectionOccluder=true;
+plan={hiddenMeshes:[a],description:'Authored upper bracket removal'};
+assert.throws(()=>guarded.select({partId:'mount'}),/selected/);
+plan={hiddenMeshes:[sibling],description:'Authored sibling removal for the shaft'};
+guarded.select({partId:'mount',mesh:a});assert.equal(sibling.visible,false);assert.equal(a.visible,true);assert.equal(floor.material,basic);
+plan={};guarded.clear();assert.equal(sibling.visible,true);guarded.dispose();delete parts.get('mount').inspectionOccluder;
+const { RoundedBoxGeometry }=await import(pathToFileURL(require.resolve('three/addons/geometries/RoundedBoxGeometry.js')).href);
+const { assertCoverage }=await import('../mechanism-contract.mjs');
+const rounded=new RoundedBoxGeometry(1,1,1,2,.1);assert.equal(rounded.type,'BoxGeometry');
+const fixture=[{id:'north',geometry:rounded},{id:'south',geometry:rounded}];
+const wrongFilter=fixture.filter(m=>m.geometry.type==='RoundedBoxGeometry');
+assert.throws(()=>assertCoverage({id:'runtime-magnets',expectedIds:['north','south'],observedIds:wrongFilter.map(m=>m.id),expectedSamples:2,actualSamples:wrongFilter.length}),/coverage/);
+assert.equal(assertCoverage({id:'runtime-magnets',expectedIds:['north','south'],observedIds:fixture.map(m=>m.id),expectedSamples:2,actualSamples:2}).subjects,2);
+rounded.dispose();geometry.dispose();shared.dispose();basic.dispose();glass.dispose();ramp.dispose();
+console.log('PASS: real THREE basic/toon/physical/multi-slot selection; exact identity/flags; live edges; no decal edges; bounded caches; shell-only ghost/fail-closed restoration; disposal; invalid/empty/unsupported fixtures and actual RoundedBox runtime-type false-pass rejected.');
+console.log('LIMIT: unit state checks do not prove rendered visibility, contrast, camera focus, a scene UI or mechanical clearance. Run inspection-browser.mjs and per-scene QA.');
