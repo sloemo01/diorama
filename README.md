@@ -22,7 +22,7 @@
 
 <sub>Four scenes built with this playbook. Click any tile for the full capture.</sub>
 
-[**Install it in one prompt**](#install-it) &nbsp;·&nbsp; [**Update it**](#update-it) &nbsp;·&nbsp; [What is in here](#what-is-in-here) &nbsp;·&nbsp; [Start a diorama](#start-a-diorama) &nbsp;·&nbsp; [Verification](#verification)
+[**Install it in one prompt**](#install-it) &nbsp;·&nbsp; [**Update it in one prompt**](#update-it) &nbsp;·&nbsp; [What is in here](#what-is-in-here) &nbsp;·&nbsp; [Start a diorama](#start-a-diorama) &nbsp;·&nbsp; [Verification](#verification)
 
 </div>
 
@@ -100,10 +100,10 @@ If two parts of SKILL.md contradict each other, list them before
 you build. A successful clone is not an install: 5 and 6 are it.
 ```
 
-### Update it in one prompt
+### Update it
 
-For a copy that is already installed. It saves your local patch, pulls the newest
-`main`, and reports what changed before any project is touched.
+One prompt, for a copy that is already installed. It saves your local patch, pulls
+the newest `main`, and reports what changed before any project is touched.
 
 ```text
 Update my Diorama install, then report what changed.
