@@ -32,25 +32,14 @@ inked contour, and toy-scale people with real joint animation. The subject chang
 (pool, night market, bank job, arena battle); the slab, the cast and the
 presentation stay for the default pixel preset.
 
-**Optional stroked toon / illustrated miniature:** fine charcoal contours,
-four-step shaded solid parts, small bevels, coherent attachments and detailed
-subject-specific prop clusters. It works across subjects, not just machinery.
-**Choosing the look:** the agent asks one question at the start of every project —
-pixel art (default), stroked toon, or pixel + stroke hybrid — and builds in the
-answer. An explicit style in the request is the answer; a reference image or the
-word "toon" is not; silence resolves to pixel and is recorded as a delegated
-default, with no later switch. The implementation is in
-`templates/stroked-toon.js`, with consent and rendering fields in
-`templates/DESIGN.md`. This is a Three.js
-rendering recipe, not reused Anatomy CSS or SVG. Free orbit is mandatory in every preset; figure-frame UI remains optional outside educational mode; see the preset section in `SKILL.md`.
+**Three looks:** classic pixel (default), stroked toon (fine contours, four-step
+shading, bevelled parts) and pixel + stroke. The agent asks once per project and
+builds in the answer; silence means pixel, and every preset keeps free orbit.
 
-**Choosing the sources:** the second question is how models get made. Hybrid is the
-default: search for fitting commercially usable assets, download and use them, then
-hand-build the missing or scene-specific pieces. The alternatives are internet models
-throughout, and fully agent-modelled geometry. Either way the licence must permit
-commercial use, modification and redistribution inside the delivered scene, so NC, ND,
-editorial and unstated terms are rejected. Every role's decision and its licence
-evidence land in `refs/SOURCES.md` and `CREDITS.md`.
+**Sourcing:** the second question covers models: hybrid (default; use fitting licensed
+assets, build the gaps), internet throughout, or agent-modelled. Assets must permit
+commercial use, modification and redistribution, with decisions and licence evidence
+in `refs/SOURCES.md` and `CREDITS.md`.
 
 Everything is deterministic. The scene is a pure function of `t`, so any frame can
 be frozen, screenshotted and compared. A screenshot is evidence, not a lucky
