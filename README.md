@@ -22,7 +22,7 @@
 
 <sub>Four scenes built with this playbook. Click any tile for the full capture.</sub>
 
-[**Install it in one prompt**](#install-it) &nbsp;·&nbsp; [What is in here](#what-is-in-here) &nbsp;·&nbsp; [Start a diorama](#start-a-diorama) &nbsp;·&nbsp; [Verification](#verification)
+[**Install it in one prompt**](#install-it) &nbsp;·&nbsp; [**Update it**](#update-it) &nbsp;·&nbsp; [What is in here](#what-is-in-here) &nbsp;·&nbsp; [Start a diorama](#start-a-diorama) &nbsp;·&nbsp; [Verification](#verification)
 
 </div>
 
@@ -100,9 +100,44 @@ If two parts of SKILL.md contradict each other, list them before
 you build. A successful clone is not an install: 5 and 6 are it.
 ```
 
-Needs `git`, or `curl` and `tar` for the fallback. The QA scripts need Node with
-`three`, `esbuild` and `playwright-core`. The `media/` previews are about 20 MB
-and can be deleted after the clone.
+### Update it in one prompt
+
+For a copy that is already installed. It saves your local patch, pulls the newest
+`main`, and reports what changed before any project is touched.
+
+```text
+Update my Diorama install, then report what changed.
+
+Repo: https://github.com/sloemo01/diorama
+
+1. Ask me for the folder before touching anything, and wait.
+   Propose ~/skills/diorama as the default.
+2. Print the current commit, then make the update reversible:
+     git -C "<target>" rev-parse --short HEAD
+     git -C "<target>" diff > my-changes.patch
+     cp -R "<target>" "<target>.bak"
+   The copy works without git. Keep both until I say the update is good.
+3. Pull the latest main:
+     git -C "<target>" fetch origin
+     git -C "<target>" reset --hard origin/main
+   Without git: download main.tar.gz, unpack it, and copy the
+   contents over the old folder.
+4. Prove it before describing it: print the old and new commit, the
+   version line from SKILL.md frontmatter, and confirm SKILL.md,
+   README.md, references/, templates/, verify/ and LICENSE are
+   present. If the pull failed, say so and stop.
+5. Report the difference in this order: version jump, new or removed
+   folders and templates, rules that changed, and whether my saved
+   patch still applies. Re-apply it only when it does, and say so when
+   it does not.
+6. If one of my dioramas is mid-build, read SKILL.md and
+   references/INDEX.md again and list the rules that now affect that
+   project. Do not rewrite the scene without asking me.
+```
+
+Both prompts need `git`, or `curl` and `tar` for the fallback. The QA scripts need
+Node with `three`, `esbuild` and `playwright-core`. The `media/` previews are about
+20 MB and can be deleted after the clone.
 
 ## Educational scenes and inspection (5.7)
 
