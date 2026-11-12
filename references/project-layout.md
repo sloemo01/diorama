@@ -110,3 +110,12 @@ exposes `window.__diorama` with `freeze(t)`; `verify/water/` is a worked example
 that exercises the three water modules and shows what the acceptance output
 looks like.
 
+A procedural build copies `templates/procedural/` to `src/procedural/`: the pure
+planner (`generate.js` facade, `layout.js`, `grammar.js`, `cast.js`, `ambient.js`,
+`themes.js`, `palette.js`, `rng.js`, `boxes.js`, `clearance.js`, `vary.js`) and the
+THREE side (`mesher.js`, `figure.js`, `build3d.js`). It keeps `printMap` output,
+the clearance audit and `shots/report.json` as evidence. `verify/procedural/` is
+the worked harness: `test.mjs`, `audit.mjs`, `shots.mjs`, `gif.mjs`, the demo
+(`src/demo.js`, `build-demo.mjs`) and a hand-made scene with variation rules
+(`src/authored.js`).
+

@@ -1,0 +1,24 @@
+{
+  "seed": "studio",
+  "theme": "harbour",
+  "time": "cycle",
+  "weather": "auto",
+  "lots": [
+    { "id": "atlas", "label": "Atlas", "group": "tools", "size": 84, "stock": 46, "alerts": 1, "progress": 0.72, "active": true, "lit": true },
+    { "id": "kite", "label": "Kite", "group": "tools", "size": 14, "stock": 6, "progress": 0.35, "active": true },
+    { "id": "lantern", "label": "Lantern", "group": "tools", "size": 3, "stock": 0 },
+    { "id": "reef", "label": "Reef", "group": "research", "size": 38, "stock": 12, "alerts": 4, "progress": 0.4, "active": true },
+    { "id": "tide", "label": "Tide", "group": "research", "size": 22, "stock": 9, "progress": 0.9 },
+    { "id": "drift", "label": "Drift", "group": "research", "size": 6, "stock": 2 },
+    { "id": "buoy", "label": "Buoy", "group": "ops", "size": 28, "stock": 18, "progress": 0.55, "active": true },
+    { "id": "anchor", "label": "Anchor", "group": "ops", "size": 61, "stock": 30, "alerts": 2, "progress": 0.6 },
+    { "id": "gull", "label": "Gull", "group": "ops", "size": 9, "stock": 4, "style": "stall" }
+  ],
+  "events": [
+    { "actor": "ana", "home": "atlas", "verb": "deliver", "target": "reef" },
+    { "actor": "ben", "home": "anchor", "verb": "deliver", "target": "buoy" },
+    { "actor": "cleo", "home": "tide", "verb": "visit", "target": "drift" },
+    { "actor": "cleo", "home": "tide", "verb": "deliver", "target": "gull" },
+    { "actor": "courier", "verb": "deliver", "target": "anchor" }
+  ]
+}
