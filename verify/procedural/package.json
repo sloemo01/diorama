@@ -1,0 +1,20 @@
+{
+  "name": "diorama-procedural-harness",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test.mjs",
+    "shots": "node shots.mjs",
+    "gif": "node gif.mjs",
+    "demo": "node build-demo.mjs",
+    "audit": "node audit.mjs",
+    "sweep": "node sweep.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "playwright-core": "^1.48.0",
+    "three": "~0.170.0",
+    "gifenc": "^1.0.3"
+  }
+}

@@ -8,7 +8,7 @@
 [![Forks](https://img.shields.io/github/forks/sloemo01/diorama?style=flat-square&color=1d1d1f&label=forks)](https://github.com/sloemo01/diorama/forks)
 [![Watchers](https://img.shields.io/github/watchers/sloemo01/diorama?style=flat-square&color=1d1d1f&label=watchers)](https://github.com/sloemo01/diorama/watchers)
 [![License](https://img.shields.io/github/license/sloemo01/diorama?style=flat-square&color=1d1d1f)](LICENSE)
-[![Skill](https://img.shields.io/badge/skill-v5.7.0-1d1d1f?style=flat-square)](SKILL.md)
+[![Skill](https://img.shields.io/badge/skill-v5.8.0-1d1d1f?style=flat-square)](SKILL.md)
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 
 <p>
@@ -184,6 +184,33 @@ free-band fitter and a legibility gate. See "Motion Graphics Primitives" in
 <img src="media/education-selection-focus.png" width="34%" alt="Selected part glowing while the rest dims">
 </p>
 
+## Procedural dioramas (5.8)
+
+<p align="center"><img src="media/procedural-harbour.gif" width="70%" alt="A procedurally generated harbour diorama through one day-night loop in the rain"></p>
+
+<sub>Harbour, seed 3: one loop as a time-lapse. Nothing in it was placed by hand.</sub>
+
+`templates/procedural/` turns a seed, or a list of records and events, into a
+whole diorama: terraced terrain with a river, coast, pond or lake, a square with a
+landmark, buildings from a shape grammar, roads with stairs and bridges, dressing,
+a cast that delivers crates, knocks on doors, browses a cart and meets on the
+square, and ambient life (a day-night cycle with lit windows, weather, birds,
+smoke, ducks, boats, windmill sails, a lighthouse beam, a fountain, a campfire).
+Four themes; every frame a pure function of `t`; occupied space reserved and
+checked with the kit's own clearance audit (160 of 160 swept plans clear, seeded and
+data-driven; sampled evidence, so audit the specs you ship). `vary.js` remixes the
+details of a hand-made scene by seed, within bounds the author sets, without
+touching its composition. Verified with the classic pixel preset; one loop stages
+roughly three to six errands from data and reports the rest.
+
+```bash
+cd verify/procedural && npm install && npm test && npm run demo
+# open procedural-demo.html: themes, seeds, time of day, weather, data, variations, free orbit
+```
+
+See `references/procedural.md`, `templates/procedural/README.md` and
+[`verify/procedural/shots/sheet.png`](verify/procedural/shots/sheet.png).
+
 ## The scenes
 
 **Pikachu vs Charizard** is the fight at the top of this page: Leon throws a ball,
@@ -222,6 +249,8 @@ again.
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
 | `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
+| `templates/procedural/` | The procedural generator (seed or data in; terrain, lots, roads, buildings, cast, errands and ambient life out), the clearance audit and `vary.js` for seeded variations of hand-made scenes. |
+| `verify/procedural/` | Its harness: node tests (clearance gate included), gated captures, a GIF renderer and an interactive demo. |
 | `media/` | The preview GIFs and source captures shown above. |
 
 ## Start a diorama

@@ -11,6 +11,7 @@ Do not load all entries. Read the exact topic required for the next action. The 
 - **Ground/floor, proportions, Inside and material realism (4.1)** → `realism.md`
 - **Precision/repair adapter (optional deeper assurance)** → `reliability.md`
 - **Reusable explicit placement, real holes and solved perspective fit** → `../templates/construction-kit.js`
+- **Procedural dioramas: seeds, data, variation of hand-made scenes (5.8)** → `procedural.md`, `../templates/procedural/README.md`, `../verify/procedural/`
 
 - **Render Preset Gate (ask once, every project)** → `render-preset-gate-ask-once-every-project.md`
 - **When to Use** → `when-to-use.md`

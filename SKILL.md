@@ -1,7 +1,7 @@
 ---
 name: diorama
 description: "Full long-form guide for detailed rotatable Three.js dioramas. Narrative scenes are scene-first with no educational UI unless requested. Classic pixel, stroked-toon and pixel+stroke are rendering choices, not educational modes. Explanatory commissions use the separate educational contract. Includes composition, cast, animation, craft, sourcing and construction."
-version: 5.7.0
+version: 5.8.0
 author: Nehal Kanak (sloemo)
 license: MIT
 platforms: [linux, macos, windows]
@@ -148,6 +148,7 @@ This is a separate question after style, not a hidden assumption or a confused �
 | station, airport, hotel, transit | Service And Queue → Vehicles → Crowd Variation → Verification |
 | stage, festival, parade | Cast → Secondary Motion → Crowd Variation → System Grammar → Verification |
 | farm, garden, nature | Creature Anatomy → Ambient Loops → Effects → Verification |
+| a seed, many variations, a scene built from data, or "remix this scene's details" | `references/procedural.md` → `templates/procedural/README.md` → Verification |
 
 The narrative shape is place + repeated ritual + interruption + consequence.
 Educational scenes instead use mechanism + causal sequence + observable result;
@@ -3580,6 +3581,8 @@ mid-body so the actor rocks rather than hinging at the feet, and add a small
 vertical arc so the feet leave the ground.
 
 ## Changelog
+
+- **5.8.0 — Procedural dioramas.** Adds `templates/procedural/`, a seeded, data-drivable generator (terrain, square and landmark, parcels, roads, a shape grammar of ten building styles, a cast running errands one at a time, and ambient life as closed forms in `t`), with occupied space reserved by construction and accepted by `action-clearance.mjs` (`clearance.js auditPlan`); anything that cannot be staged cleanly is reported in `plan.leftOut`. `vary.js` remixes a hand-made scene's details by seed within per-object bounds; `generate({ vary })` rerolls a generated scene's details on the same layout. `PixelPost` takes an optional 64-entry palette (default unchanged). Harness: `verify/procedural/`. Routed reference: `references/procedural.md`.
 
 - **5.7.0 — Remove Pixel Art V2.** Removes the V2 rendering contract and intake/design options at the user’s request. Classic Pixel Art is the recommended and explicitly delegated default; stroked-toon and pixel+stroke remain. V2 resources are archived, not active instructions. Regression: active intake/design expose exactly three presets, with no V2 dependency. Earlier changelog entries are historical only.
 

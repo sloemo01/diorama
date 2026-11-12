@@ -125,7 +125,12 @@ void main() {
 `;
 
 export class PixelPost {
-  constructor(renderer, maxDim = 1600, renderScale = 1) {
+  /**
+   * `palette` is optional: any 64-entry [r, g, b] list (0..1 sRGB) replaces the
+   * default, e.g. the named palette of templates/procedural/palette.js.
+   */
+  constructor(renderer, maxDim = 1600, renderScale = 1, palette = PALETTE_RGB) {
+    if (palette.length !== 64) throw new Error('PixelPost: the shader declares vec3[64], palette has ' + palette.length);
     this.renderer = renderer;
     this.maxDim = maxDim;
     this.renderScale = renderScale;
@@ -145,7 +150,7 @@ export class PixelPost {
     this.uniforms = {
       tScene: { value: this.rt.texture },
       uResolution: { value: new THREE.Vector2(2, 2) },
-      uPalette: { value: PALETTE_RGB.map((c) => new THREE.Vector3(c[0], c[1], c[2])) },
+      uPalette: { value: palette.map((c) => new THREE.Vector3(c[0], c[1], c[2])) },
       uDither: { value: 1.0 },
     };
 
