@@ -83,18 +83,22 @@ Repo: https://github.com/sloemo01/diorama
 1. Ask me where the folder should go before downloading anything,
    and wait for my answer. Propose ~/skills/diorama as the default.
    Do not pick a path silently.
-2. Download the whole repository, not just SKILL.md:
+2. Install the published playbook, not just SKILL.md:
+     npx @sloemo/diorama "<target>"
+   (alias: npx create-diorama "<target>")
+   Without node, get the same files from the repository:
      git clone https://github.com/sloemo01/diorama.git "<target>"
-   Without git:
+   or:
      curl -L -o diorama.tar.gz \
        https://github.com/sloemo01/diorama/archive/main.tar.gz
      tar xzf diorama.tar.gz && mv diorama-main "<target>"
 3. Prove the install before describing it: SKILL.md, README.md,
-   references/, templates/, verify/ and LICENSE at the root, and print the
-   commit hash (git -C "<target>" rev-parse --short HEAD) or the
-   archive date. If you have no shell or no network, say so and
-   stop. If the download failed or a file is missing, say so and
-   stop. Never describe this playbook from memory.
+   references/, templates/, verify/ and LICENSE at the root, the version
+   line from SKILL.md frontmatter, and the package version
+   (npm view @sloemo/diorama version) or the commit hash if you cloned
+   (git -C "<target>" rev-parse --short HEAD). If you have no shell or no
+   network, say so and stop. If the install failed or a file is missing,
+   say so and stop. Never describe this playbook from memory.
 4. If you have a skills directory or plugin folder, install it
    there so you can load it by name in later sessions; otherwise
    treat "<target>" as the folder.
@@ -141,20 +145,23 @@ Repo: https://github.com/sloemo01/diorama
 
 1. Ask me for the folder before touching anything, and wait.
    Propose ~/skills/diorama as the default.
-2. Print the current commit, then make the update reversible:
-     git -C "<target>" rev-parse --short HEAD
-     git -C "<target>" diff > my-changes.patch
+2. Print the current version and make the update reversible:
+     grep '^version:' "<target>/SKILL.md"
      cp -R "<target>" "<target>.bak"
-   The copy works without git. Keep both until I say the update is good.
-3. Pull the latest main:
+   If the copy is a git checkout, also save its patch:
+     git -C "<target>" diff > my-changes.patch
+   Keep both until I say the update is good.
+3. Refresh in place from the published package:
+     npx @sloemo/diorama "<target>" --force
+   Without node, if it is a git checkout:
      git -C "<target>" fetch origin
      git -C "<target>" reset --hard origin/main
-   Without git: download main.tar.gz, unpack it, and copy the
-   contents over the old folder.
-4. Prove it before describing it: print the old and new commit, the
-   version line from SKILL.md frontmatter, and confirm SKILL.md,
-   README.md, references/, templates/, verify/ and LICENSE are
-   present. If the pull failed, say so and stop.
+   otherwise download main.tar.gz, unpack it, and copy the contents over
+   the old folder.
+4. Prove it before describing it: print the old and new version from
+   SKILL.md frontmatter, and confirm SKILL.md, README.md, references/,
+   templates/, verify/ and LICENSE are present. If the refresh failed,
+   say so and stop.
 5. Report the difference in this order: version jump, new or removed
    folders and templates, rules that changed, and whether my saved
    patch still applies. Re-apply it only when it does, and say so when
