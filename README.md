@@ -69,30 +69,30 @@ Package: https://www.npmjs.com/package/@sloemo/diorama
 1. Ask me where the folder should go before installing anything,
    and wait for my answer. Propose ~/skills/diorama as the default.
    Do not pick a path silently.
-2. Install the published package, not just SKILL.md:
-     npm i @sloemo/diorama
-     npx diorama "<target>"
-   One-off without adding a dependency:
-     npx @sloemo/diorama "<target>"
+2. Install the published package. Run it from a scratch directory or
+   from the parent of <target>, not inside an unrelated project:
+     npm i @sloemo/diorama && npx diorama "<target>"
+   Without touching package.json:
+     npx --yes @sloemo/diorama "<target>"
    --list previews the copy, --force overwrites an existing install,
-   --no-verify skips the worked examples.
+   --no-verify skips the worked examples. If <target> already has files,
+   ask me before using --force.
    Install from the registry only. Do not clone the GitHub repository or
    unpack an archive instead: the npm download count is how this project
-   tells whether anyone uses it. If npm or node 18+ is missing, say so and
-   stop.
-3. Prove the install before describing it: SKILL.md, README.md,
-   references/, templates/, verify/ and LICENSE at the root, the version
-   line from SKILL.md frontmatter, and the installed package version
-   (npm view @sloemo/diorama version). If you have no shell or no
-   network, say so and stop. If the install failed or a file is missing,
-   say so and stop. Never describe this playbook from memory.
+   tells whether anyone uses it. If npm or node 18+ is missing, say so
+   and stop.
+3. Prove the install before describing it, and print what you ran:
+     npx diorama --version          # package and playbook version
+     ls "<target>"                  # SKILL.md README.md LICENSE references templates verify
+   153 files, 1.3 MB. If a check fails, say so and stop. Never describe
+   this playbook from memory.
 4. If you have a skills directory or plugin folder, install it
    there so you can load it by name in later sessions; otherwise
    treat "<target>" as the folder.
 5. Read before you build: all of SKILL.md, references/INDEX.md, then
    templates/DESIGN.md, templates/SOURCES.md, templates/CREDITS.md,
-   templates/qa/README.md, the header comment of every file in
-   templates/, and the worked examples under verify/. SKILL.md is
+   templates/qa/README.md, the header comment of every template you
+   intend to copy, and the worked examples under verify/. SKILL.md is
    the source of truth; the README is only a summary.
 6. Report back in this order: install path and version, the Look
    Contract in one paragraph, the Pipeline as ordered steps, the
@@ -112,10 +112,9 @@ you build. A successful npx is not an install: 5 and 6 are it.
 
 ## Update it
 
-Paste this into an agent for a copy that is already installed. It saves your local
-patch, updates the command with `npm i @sloemo/diorama@latest`, refreshes the folder
-with `npx diorama <target> --force`, and reports what changed before any project is
-touched.
+Paste this into an agent for a copy that is already installed. It backs the folder up,
+updates the command with `npm i @sloemo/diorama@latest`, refreshes the folder with
+`npx diorama <target> --force`, and reports what changed before any project is touched.
 
 ```text
 Update my Diorama install, then report what changed.
@@ -125,25 +124,22 @@ Package: https://www.npmjs.com/package/@sloemo/diorama
 1. Ask me for the folder before touching anything, and wait.
    Propose ~/skills/diorama as the default.
 2. Print the current version and make the update reversible:
-     grep '^version:' "<target>/SKILL.md"
+     npx diorama --version
      cp -R "<target>" "<target>.bak"
    Keep the copy until I say the update is good.
-3. Update the command, then refresh in place:
-     npm i @sloemo/diorama@latest
-     npx diorama "<target>" --force
-   One-off without touching the project's dependencies:
-     npx @sloemo/diorama "<target>" --force
-   Update from the registry only — no git pull, no archive — so the npm
-   download count keeps tracking real installs. If node 18+ or npm is
-   missing, say so and stop.
+3. Refresh in place from the registry:
+     npm i @sloemo/diorama@latest && npx diorama "<target>" --force
+   Without touching package.json:
+     npx --yes @sloemo/diorama@latest "<target>" --force
+   No git pull, no archive: the npm download count is how this project
+   tracks real installs. If node 18+ or npm is missing, say so and stop.
 4. Prove it before describing it: print the old and new version from
-   SKILL.md frontmatter, and confirm SKILL.md, README.md, references/,
-   templates/, verify/ and LICENSE are present. If the refresh failed,
-   say so and stop.
+   SKILL.md frontmatter, confirm the same six paths still exist, and
+   confirm the file count is 153. If the refresh failed, say so and stop.
 5. Report the difference in this order: version jump, new or removed
-   folders and templates, rules that changed, and whether my saved
-   patch still applies. Re-apply it only when it does, and say so when
-   it does not.
+   folders and templates, rules that changed, and which of my own files
+   inside <target> differ from the new ones. Re-apply my edits only when
+   the difference is clean, and say so when it is not.
 6. If one of my dioramas is mid-build, read SKILL.md and
    references/INDEX.md again and list the rules that now affect that
    project. Do not rewrite the scene without asking me.

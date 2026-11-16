@@ -17,6 +17,7 @@ options:
   --force          write over an existing install
   --no-verify      skip verify/ (the worked examples and QA harness)
   --list           print what would be copied, then exit
+  -v, --version    package and playbook version
   -h, --help       this message
 
 The folder is the playbook: SKILL.md is the source of truth, references/ holds the
@@ -52,10 +53,11 @@ function walk(entry, base, out) {
 
 function main() {
   const argv = process.argv.slice(2);
-  const opts = { target: null, force: false, verify: true, list: false };
+  const opts = { target: null, force: false, verify: true, list: false, version: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-h' || a === '--help') { console.log(HELP); return; }
+    else if (a === '-v' || a === '--version') opts.version = true;
     else if (a === '--force') opts.force = true;
     else if (a === '--no-verify') opts.verify = false;
     else if (a === '--list') opts.list = true;
@@ -65,9 +67,15 @@ function main() {
     else fail(`unexpected argument ${a}`);
   }
 
-  if (!opts.target) opts.target = 'diorama';
-
   const root = __dirname;
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+
+  if (opts.version) {
+    console.log(`${pkg.version} (playbook ${skillVersion(root)})`);
+    return;
+  }
+
+  if (!opts.target) opts.target = 'diorama';
   const items = PLAYBOOK.filter((p) => opts.verify || p !== 'verify');
   for (const item of items) if (!fs.existsSync(path.join(root, item))) fail(`package is missing ${item}`);
 
