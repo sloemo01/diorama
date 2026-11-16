@@ -52,7 +52,7 @@ long sessions, and everything else here is copy-in code that supports it.
 ## Install it
 
 Paste this into an agent that can run shell commands. It asks where the folder should
-go, installs the published playbook with `npm i @sloemo/diorama` and `npx diorama`,
+go, installs the published package with `npm i @sloemo/diorama` and `npx diorama`,
 reads it, and reports what it learned before it builds anything. That is 153 files,
 1.3 MB — `SKILL.md`, `references/`, `templates/`, `verify/` and the licence. Nothing is
 installed globally and nothing runs after the copy.
@@ -64,30 +64,26 @@ thing; `--list` previews the copy, `--force` writes over an existing install,
 ```text
 Install the Diorama playbook here, then use it to build scenes.
 
-Repo: https://github.com/sloemo01/diorama
 Package: https://www.npmjs.com/package/@sloemo/diorama
 
 1. Ask me where the folder should go before installing anything,
    and wait for my answer. Propose ~/skills/diorama as the default.
    Do not pick a path silently.
-2. Install the published playbook, not just SKILL.md:
+2. Install the published package, not just SKILL.md:
      npm i @sloemo/diorama
      npx diorama "<target>"
    One-off without adding a dependency:
      npx @sloemo/diorama "<target>"
    --list previews the copy, --force overwrites an existing install,
    --no-verify skips the worked examples.
-   Without node 18+, get the same files from the repository:
-     git clone https://github.com/sloemo01/diorama.git "<target>"
-   or:
-     curl -L -o diorama.tar.gz \
-       https://github.com/sloemo01/diorama/archive/main.tar.gz
-     tar xzf diorama.tar.gz && mv diorama-main "<target>"
+   Install from the registry only. Do not clone the GitHub repository or
+   unpack an archive instead: the npm download count is how this project
+   tells whether anyone uses it. If npm or node 18+ is missing, say so and
+   stop.
 3. Prove the install before describing it: SKILL.md, README.md,
    references/, templates/, verify/ and LICENSE at the root, the version
    line from SKILL.md frontmatter, and the installed package version
-   (npm view @sloemo/diorama version) or the commit hash if you cloned
-   (git -C "<target>" rev-parse --short HEAD). If you have no shell or no
+   (npm view @sloemo/diorama version). If you have no shell or no
    network, say so and stop. If the install failed or a file is missing,
    say so and stop. Never describe this playbook from memory.
 4. If you have a skills directory or plugin folder, install it
@@ -124,26 +120,22 @@ touched.
 ```text
 Update my Diorama install, then report what changed.
 
-Repo: https://github.com/sloemo01/diorama
+Package: https://www.npmjs.com/package/@sloemo/diorama
 
 1. Ask me for the folder before touching anything, and wait.
    Propose ~/skills/diorama as the default.
 2. Print the current version and make the update reversible:
      grep '^version:' "<target>/SKILL.md"
      cp -R "<target>" "<target>.bak"
-   If the copy is a git checkout, also save its patch:
-     git -C "<target>" diff > my-changes.patch
-   Keep both until I say the update is good.
+   Keep the copy until I say the update is good.
 3. Update the command, then refresh in place:
      npm i @sloemo/diorama@latest
      npx diorama "<target>" --force
    One-off without touching the project's dependencies:
      npx @sloemo/diorama "<target>" --force
-   Without node, if it is a git checkout:
-     git -C "<target>" fetch origin
-     git -C "<target>" reset --hard origin/main
-   otherwise download main.tar.gz, unpack it, and copy the contents over
-   the old folder.
+   Update from the registry only — no git pull, no archive — so the npm
+   download count keeps tracking real installs. If node 18+ or npm is
+   missing, say so and stop.
 4. Prove it before describing it: print the old and new version from
    SKILL.md frontmatter, and confirm SKILL.md, README.md, references/,
    templates/, verify/ and LICENSE are present. If the refresh failed,
