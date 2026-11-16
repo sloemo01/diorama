@@ -147,6 +147,9 @@ async function main() {
     fs.cpSync(path.join(root, item), path.join(dest, item), { recursive: true });
   }
 
+  const mb = (files.reduce((n, f) => n + fs.statSync(path.join(root, f)).size, 0) / 1048576).toFixed(1);
+  console.log(`diorama playbook v${version} -> ${dest}  (${files.length} files, ${mb} MB)`);
+
   if (opts.media) {
     const specs = pkg.diorama || {};
     if (!specs.mediaPackage) fail('this build has no media package configured');
@@ -154,8 +157,6 @@ async function main() {
     console.log(`media: ${n} files from ${specs.mediaPackage}@${specs.mediaVersion}`);
   }
 
-  const mb = (files.reduce((n, f) => n + fs.statSync(path.join(root, f)).size, 0) / 1048576).toFixed(1);
-  console.log(`diorama playbook v${version} -> ${dest}  (${files.length} files, ${mb} MB)`);
   console.log('');
   console.log('read SKILL.md first — it is the source of truth; references/INDEX.md routes the topics.');
   console.log('templates/ is copy-in code, verify/ is the worked examples and QA harness.');
