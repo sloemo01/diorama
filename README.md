@@ -54,16 +54,25 @@ long sessions, and everything else here is copy-in code that supports it.
 ### One command
 
 ```bash
-npx @sloemo/diorama                   # into ./diorama
-npx @sloemo/diorama ~/skills/diorama  # somewhere specific
+npm i @sloemo/diorama          # installs the `diorama` command in this project
+npx diorama ./diorama          # copies the playbook into ./diorama
 ```
 
-`npx create-diorama` is the same package under a friendlier name — either works.
+`npx diorama` resolves to the copy you just installed. For a one-off without adding a
+dependency, `npx @sloemo/diorama ./diorama` does the same thing; `npx create-diorama`
+is the same package under a friendlier name.
 
-That copies the playbook — `SKILL.md`, `references/`, `templates/`, `verify/` and the
-licence, 153 files, 1.3 MB — into the folder. `--list` prints what would be copied,
-`--force` writes over an existing install, `--no-verify` skips the worked examples.
-Nothing is installed globally and nothing runs after the copy.
+Then the extra steps, in order:
+
+1. Read `SKILL.md` — it is the source of truth; `references/INDEX.md` routes the
+   topic files for long sessions.
+2. Copy the modules you need out of `templates/` into your project instead of
+   editing the installed copy.
+3. Run the QA scripts in `verify/` before showing anyone a frame.
+
+That installs the playbook — `SKILL.md`, `references/`, `templates/`, `verify/` and
+the licence, 153 files, 1.3 MB. `--list` prints what would be copied, `--force` writes
+over an existing install, `--no-verify` skips the worked examples.
 
 The published packages are mirrors of this repository: [@sloemo/diorama](https://www.npmjs.com/package/@sloemo/diorama) and [create-diorama](https://www.npmjs.com/package/create-diorama).
 
@@ -130,12 +139,16 @@ you build. A successful npx is not an install: 5 and 6 are it.
 Refresh in place when you already have a copy:
 
 ```bash
-npx @sloemo/diorama <target> --force
+npm i @sloemo/diorama@latest   # updates the `diorama` command
+npx diorama <target> --force   # writes the new playbook over the old one
 ```
 
-That writes the current release over the old one. It does not merge and it does not
-touch anything you added outside the playbook — commit your own edits first if the
-copy is a git checkout.
+Then re-read `SKILL.md` — the version line in its frontmatter is what changed — and
+diff `templates/` against the copy you pulled into your project. The write does not
+merge and it does not touch anything you added outside the playbook; commit your own
+edits first if the copy is a git checkout.
+
+The one-off form is `npx @sloemo/diorama <target> --force`.
 
 Or, one prompt, for a copy that is already installed. It saves your local patch,
 refreshes from the published package, and reports what changed before any project is

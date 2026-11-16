@@ -20,14 +20,14 @@ trap 'mv -f package.json.bak package.json; rm -f "${cfg:-/nonexistent}"' EXIT
 
 node -e "
 const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));
-p.name='@sloemo/diorama';p.bin={diorama:'bin.js'};
+p.name='@sloemo/diorama';p.bin={diorama:'bin.js','create-diorama':'bin.js'};
 fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');
 "
 npm publish --access public
 
 node -e "
 const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));
-p.name='create-diorama';p.bin={'create-diorama':'bin.js'};
+p.name='create-diorama';p.bin={diorama:'bin.js','create-diorama':'bin.js'};
 fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');
 "
 npm publish --access public

@@ -1,8 +1,9 @@
 {
   "name": "create-diorama",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Install the Diorama playbook into a folder: a long-form guide and code kit for detailed, rotatable Three.js dioramas.",
   "bin": {
+    "diorama": "bin.js",
     "create-diorama": "bin.js"
   },
   "files": [
