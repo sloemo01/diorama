@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Publish the playbook under both npm names in one go.
-#   @sloemo/diorama   (primary, scoped)
-#   create-diorama    (friendly alias)
+# Publish the playbook to npm.
+#   @sloemo/diorama
 # Requires an npm token with publish rights; run from the repo root.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -20,16 +19,9 @@ trap 'mv -f package.json.bak package.json; rm -f "${cfg:-/nonexistent}"' EXIT
 
 node -e "
 const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));
-p.name='@sloemo/diorama';p.bin={diorama:'bin.js','create-diorama':'bin.js'};
+p.name='@sloemo/diorama';p.bin={diorama:'bin.js'};
 fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');
 "
 npm publish --access public
 
-node -e "
-const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));
-p.name='create-diorama';p.bin={diorama:'bin.js','create-diorama':'bin.js'};
-fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');
-"
-npm publish --access public
-
-echo "published $version as @sloemo/diorama and create-diorama"
+echo "published $version as @sloemo/diorama"

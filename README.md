@@ -51,38 +51,15 @@ long sessions, and everything else here is copy-in code that supports it.
 
 ## Install it
 
-### One command
+Paste this into an agent that can run shell commands. It asks where the folder should
+go, installs the published playbook with `npm i @sloemo/diorama` and `npx diorama`,
+reads it, and reports what it learned before it builds anything. That is 153 files,
+1.3 MB — `SKILL.md`, `references/`, `templates/`, `verify/` and the licence. Nothing is
+installed globally and nothing runs after the copy.
 
-```bash
-npm i @sloemo/diorama          # installs the `diorama` command in this project
-npx diorama ./diorama          # copies the playbook into ./diorama
-```
-
-`npx diorama` resolves to the copy you just installed. For a one-off without adding a
-dependency, `npx @sloemo/diorama ./diorama` does the same thing; `npx create-diorama`
-is the same package under a friendlier name.
-
-Then the extra steps, in order:
-
-1. Read `SKILL.md` — it is the source of truth; `references/INDEX.md` routes the
-   topic files for long sessions.
-2. Copy the modules you need out of `templates/` into your project instead of
-   editing the installed copy.
-3. Run the QA scripts in `verify/` before showing anyone a frame.
-
-That installs the playbook — `SKILL.md`, `references/`, `templates/`, `verify/` and
-the licence, 153 files, 1.3 MB. `--list` prints what would be copied, `--force` writes
-over an existing install, `--no-verify` skips the worked examples.
-
-The published packages are mirrors of this repository: [@sloemo/diorama](https://www.npmjs.com/package/@sloemo/diorama) and [create-diorama](https://www.npmjs.com/package/create-diorama).
-
-### One prompt
-
-Paste this into an agent that can run shell commands. It asks where to put the
-folder, downloads the whole repository (playbook, templates, QA harness and every
-worked example), reads them, and reports what it learned before it builds
-anything. `SKILL.md` carries skill frontmatter (`name`, `description`, `version`),
-so an agent with a skills directory can load it by name later.
+For a one-off without adding a dependency, `npx @sloemo/diorama <target>` does the same
+thing; `--list` previews the copy, `--force` writes over an existing install,
+`--no-verify` skips the worked examples.
 
 ```text
 Install the Diorama playbook here, then use it to build scenes.
@@ -94,9 +71,12 @@ Package: https://www.npmjs.com/package/@sloemo/diorama
    and wait for my answer. Propose ~/skills/diorama as the default.
    Do not pick a path silently.
 2. Install the published playbook, not just SKILL.md:
+     npm i @sloemo/diorama
+     npx diorama "<target>"
+   One-off without adding a dependency:
      npx @sloemo/diorama "<target>"
-   (alias: npx create-diorama "<target>"; --list previews the copy,
-   --no-verify skips verify/, --force overwrites an existing install)
+   --list previews the copy, --force overwrites an existing install,
+   --no-verify skips the worked examples.
    Without node 18+, get the same files from the repository:
      git clone https://github.com/sloemo01/diorama.git "<target>"
    or:
@@ -134,24 +114,11 @@ If two parts of SKILL.md contradict each other, list them before
 you build. A successful npx is not an install: 5 and 6 are it.
 ```
 
-### Update it
+## Update it
 
-Refresh in place when you already have a copy:
-
-```bash
-npm i @sloemo/diorama@latest   # updates the `diorama` command
-npx diorama <target> --force   # writes the new playbook over the old one
-```
-
-Then re-read `SKILL.md` — the version line in its frontmatter is what changed — and
-diff `templates/` against the copy you pulled into your project. The write does not
-merge and it does not touch anything you added outside the playbook; commit your own
-edits first if the copy is a git checkout.
-
-The one-off form is `npx @sloemo/diorama <target> --force`.
-
-Or, one prompt, for a copy that is already installed. It saves your local patch,
-refreshes from the published package, and reports what changed before any project is
+Paste this into an agent for a copy that is already installed. It saves your local
+patch, updates the command with `npm i @sloemo/diorama@latest`, refreshes the folder
+with `npx diorama <target> --force`, and reports what changed before any project is
 touched.
 
 ```text
@@ -167,7 +134,10 @@ Repo: https://github.com/sloemo01/diorama
    If the copy is a git checkout, also save its patch:
      git -C "<target>" diff > my-changes.patch
    Keep both until I say the update is good.
-3. Refresh in place from the published package:
+3. Update the command, then refresh in place:
+     npm i @sloemo/diorama@latest
+     npx diorama "<target>" --force
+   One-off without touching the project's dependencies:
      npx @sloemo/diorama "<target>" --force
    Without node, if it is a git checkout:
      git -C "<target>" fetch origin
@@ -186,10 +156,6 @@ Repo: https://github.com/sloemo01/diorama
    references/INDEX.md again and list the rules that now affect that
    project. Do not rewrite the scene without asking me.
 ```
-
-Both prompts need `git`, or `curl` and `tar` for the fallback. The QA scripts need
-Node with `three`, `esbuild` and `playwright-core`. The `media/` previews are about
-20 MB and can be deleted after the clone.
 
 ## Educational scenes and inspection (5.7)
 

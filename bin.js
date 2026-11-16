@@ -7,10 +7,10 @@ const path = require('node:path');
 const PLAYBOOK = ['SKILL.md', 'references', 'templates', 'verify', 'LICENSE', 'README.md'];
 
 const HELP = `
-create-diorama — install the Diorama playbook (three.js dioramas) into a folder.
+diorama — install the Diorama playbook (three.js dioramas) into a folder.
 
 usage:
-  npx create-diorama [dir] [options]
+  npx @sloemo/diorama [dir] [options]
 
 options:
   --dir <path>     where to install (default: ./diorama, or the first argument)
@@ -25,7 +25,7 @@ Nothing is installed globally and nothing runs after the copy.
 `.trim();
 
 function fail(msg) {
-  console.error(`create-diorama: ${msg}`);
+  console.error(`diorama: ${msg}`);
   process.exit(1);
 }
 
