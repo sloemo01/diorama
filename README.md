@@ -62,6 +62,10 @@ For a one-off without adding a dependency, `npx @sloemo/diorama <target>` does t
 thing; `--list` previews the copy, `--force` writes over an existing install,
 `--no-verify` skips the worked examples.
 
+`--media` adds the four demo scenes as GIF and MP4 — 20 MB, from
+[`@sloemo/diorama-media`](https://www.npmjs.com/package/@sloemo/diorama-media) — for when
+you are rebuilding one of them and want the reference footage in hand.
+
 ```text
 Install the Diorama playbook here, then use it to build scenes.
 
@@ -75,6 +79,8 @@ Package: https://www.npmjs.com/package/@sloemo/diorama
      npm i @sloemo/diorama && npx diorama "<target>"
    Without touching package.json:
      npx --yes @sloemo/diorama "<target>"
+   Add --media only if I want the four demo clips as reference footage
+   (20 MB, from @sloemo/diorama-media). The playbook does not need it.
    --list previews the copy, --force overwrites an existing install,
    --no-verify skips the worked examples. If <target> already has files,
    ask me before using --force.
@@ -134,7 +140,9 @@ Package: https://www.npmjs.com/package/@sloemo/diorama
    Without touching package.json:
      npx --yes @sloemo/diorama@latest "<target>" --force
    No git pull, no archive: the npm download count is how this project
-   tracks real installs. If node 18+ or npm is missing, say so and stop.
+   tracks real installs. Add --media if <target>/media already holds the
+   demo clips, so the reference footage moves with the playbook.
+   If node 18+ or npm is missing, say so and stop.
 4. Prove it before describing it: print the old and new version from
    SKILL.md frontmatter, confirm the same six paths still exist, and
    confirm the file count matches what the installer printed. If the
@@ -231,7 +239,7 @@ again.
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
 | `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
-| `media/` | The preview GIFs and source captures shown above. The two `education-ui-*.png` screenshots ship with the npm package; the showcase clips stay in the repository. |
+| `media/` | The preview GIFs and source captures shown above. The two `education-ui-*.png` screenshots ship with the npm package; the four demo clips live in [`@sloemo/diorama-media`](https://www.npmjs.com/package/@sloemo/diorama-media) and arrive with `--media`. |
 
 ## Start a diorama
 

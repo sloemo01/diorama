@@ -2,7 +2,9 @@
 'use strict';
 
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const PLAYBOOK = [
   'SKILL.md',
@@ -26,6 +28,7 @@ options:
   --dir <path>     where to install (default: ./diorama, or the first argument)
   --force          write over an existing install
   --no-verify      skip verify/ (the worked examples and QA harness)
+  --media          also fetch the showcase clips (20 MB, @sloemo/diorama-media)
   --list           print what would be copied, then exit
   -v, --version    package and playbook version
   -h, --help       this message
@@ -61,15 +64,48 @@ function walk(entry, base, out) {
   return out;
 }
 
-function main() {
+async function fetchMedia(dest, specs) {
+  const spec = `${specs.mediaPackage}@${specs.mediaVersion}`;
+  const metaUrl = `https://registry.npmjs.org/${encodeURIComponent(specs.mediaPackage)}`;
+  let meta;
+  try {
+    meta = await fetch(metaUrl).then((r) => r.json());
+  } catch {
+    fail(`could not reach the registry for ${specs.mediaPackage}. Retry, or skip --media.`);
+  }
+  const entry = meta.versions && meta.versions[specs.mediaVersion];
+  if (!entry) fail(`${spec} is not on the registry. Skip --media, or bump mediaVersion.`);
+
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'diorama-media-'));
+  const tgz = path.join(tmp, 'media.tgz');
+  try {
+    const res = await fetch(entry.dist.tarball);
+    if (!res.ok) fail(`${spec}: registry returned ${res.status}. Retry, or skip --media.`);
+    fs.writeFileSync(tgz, Buffer.from(await res.arrayBuffer()));
+    try {
+      execFileSync('tar', ['xzf', tgz, '-C', tmp], { stdio: ['ignore', 'ignore', 'pipe'] });
+    } catch {
+      fail('could not extract the media tarball (is `tar` on PATH?). Skip --media.');
+    }
+    const src = path.join(tmp, 'package', 'media');
+    if (!fs.existsSync(src)) fail(`${spec} has no media/ folder`);
+    fs.cpSync(src, path.join(dest, 'media'), { recursive: true });
+    return fs.readdirSync(path.join(dest, 'media')).length;
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+async function main() {
   const argv = process.argv.slice(2);
-  const opts = { target: null, force: false, verify: true, list: false, version: false };
+  const opts = { target: null, force: false, verify: true, list: false, version: false, media: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-h' || a === '--help') { console.log(HELP); return; }
     else if (a === '-v' || a === '--version') opts.version = true;
     else if (a === '--force') opts.force = true;
     else if (a === '--no-verify') opts.verify = false;
+    else if (a === '--media') opts.media = true;
     else if (a === '--list') opts.list = true;
     else if (a === '--dir') { opts.target = argv[++i]; if (!opts.target) fail('--dir needs a path'); }
     else if (a.startsWith('-')) fail(`unknown option ${a} (try --help)`);
@@ -111,6 +147,13 @@ function main() {
     fs.cpSync(path.join(root, item), path.join(dest, item), { recursive: true });
   }
 
+  if (opts.media) {
+    const specs = pkg.diorama || {};
+    if (!specs.mediaPackage) fail('this build has no media package configured');
+    const n = await fetchMedia(dest, specs);
+    console.log(`media: ${n} files from ${specs.mediaPackage}@${specs.mediaVersion}`);
+  }
+
   const mb = (files.reduce((n, f) => n + fs.statSync(path.join(root, f)).size, 0) / 1048576).toFixed(1);
   console.log(`diorama playbook v${version} -> ${dest}  (${files.length} files, ${mb} MB)`);
   console.log('');
@@ -119,4 +162,7 @@ function main() {
   console.log(`start here: ${path.join(dest, 'SKILL.md')}`);
 }
 
-main();
+main().catch((err) => {
+  console.error(`diorama: ${err && err.message ? err.message : err}`);
+  process.exit(1);
+});
