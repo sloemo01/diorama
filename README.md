@@ -53,9 +53,10 @@ long sessions, and everything else here is copy-in code that supports it.
 
 Paste this into an agent that can run shell commands. It asks where the folder should
 go, installs the published package with `npm i @sloemo/diorama` and `npx diorama`,
-reads it, and reports what it learned before it builds anything. That is about 150
-files and 1.3 MB — `SKILL.md`, `references/`, `templates/`, `verify/` and the licence.
-Nothing is installed globally and nothing runs after the copy.
+reads it, and reports what it learned before it builds anything. That is about 155
+files and 1.6 MB — `SKILL.md`, `references/`, `templates/`, `verify/`, the licence and
+the two educational screenshots. Nothing is installed globally and nothing runs after
+the copy.
 
 For a one-off without adding a dependency, `npx @sloemo/diorama <target>` does the same
 thing; `--list` previews the copy, `--force` writes over an existing install,
@@ -230,7 +231,7 @@ again.
 | `verify/water/` | A worked scene that exercises the water modules, with the screenshots the QA loop produced. |
 | `verify/climb/` | A unit test for the vehicle transfer maths. |
 | `verify/creature-battle/` | What a two-actor fight build proved: aiming, effect anchoring, send-out and hit numbers. |
-| `media/` | The preview GIFs and source captures shown above. |
+| `media/` | The preview GIFs and source captures shown above. The two `education-ui-*.png` screenshots ship with the npm package; the showcase clips stay in the repository. |
 
 ## Start a diorama
 

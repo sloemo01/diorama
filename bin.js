@@ -4,7 +4,17 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const PLAYBOOK = ['SKILL.md', 'references', 'templates', 'verify', 'LICENSE', 'README.md'];
+const PLAYBOOK = [
+  'SKILL.md',
+  'references',
+  'templates',
+  'verify',
+  'LICENSE',
+  'README.md',
+  // the two spec screenshots travel with the playbook; the showcase clips stay out
+  'media/education-ui-right.png',
+  'media/education-ui-desktop.png',
+];
 
 const HELP = `
 diorama — install the Diorama playbook (three.js dioramas) into a folder.

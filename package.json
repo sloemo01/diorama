@@ -1,6 +1,6 @@
 {
   "name": "@sloemo/diorama",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "Install the Diorama playbook into a folder: a long-form guide and code kit for detailed, rotatable Three.js dioramas.",
   "bin": {
     "diorama": "bin.js"
@@ -12,7 +12,9 @@
     "templates",
     "verify",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "media/education-ui-right.png",
+    "media/education-ui-desktop.png"
   ],
   "engines": {
     "node": ">=18"
