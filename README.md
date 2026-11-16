@@ -79,14 +79,16 @@ so an agent with a skills directory can load it by name later.
 Install the Diorama playbook here, then use it to build scenes.
 
 Repo: https://github.com/sloemo01/diorama
+Package: https://www.npmjs.com/package/@sloemo/diorama
 
-1. Ask me where the folder should go before downloading anything,
+1. Ask me where the folder should go before installing anything,
    and wait for my answer. Propose ~/skills/diorama as the default.
    Do not pick a path silently.
 2. Install the published playbook, not just SKILL.md:
      npx @sloemo/diorama "<target>"
-   (alias: npx create-diorama "<target>")
-   Without node, get the same files from the repository:
+   (alias: npx create-diorama "<target>"; --list previews the copy,
+   --no-verify skips verify/, --force overwrites an existing install)
+   Without node 18+, get the same files from the repository:
      git clone https://github.com/sloemo01/diorama.git "<target>"
    or:
      curl -L -o diorama.tar.gz \
@@ -94,7 +96,7 @@ Repo: https://github.com/sloemo01/diorama
      tar xzf diorama.tar.gz && mv diorama-main "<target>"
 3. Prove the install before describing it: SKILL.md, README.md,
    references/, templates/, verify/ and LICENSE at the root, the version
-   line from SKILL.md frontmatter, and the package version
+   line from SKILL.md frontmatter, and the installed package version
    (npm view @sloemo/diorama version) or the commit hash if you cloned
    (git -C "<target>" rev-parse --short HEAD). If you have no shell or no
    network, say so and stop. If the install failed or a file is missing,
@@ -107,7 +109,7 @@ Repo: https://github.com/sloemo01/diorama
    templates/qa/README.md, the header comment of every file in
    templates/, and the worked examples under verify/. SKILL.md is
    the source of truth; the README is only a summary.
-6. Report back in this order: install path and commit, the Look
+6. Report back in this order: install path and version, the Look
    Contract in one paragraph, the Pipeline as ordered steps, the
    QA scripts and what each one checks, and three rules from
    SKILL.md with the section each came from.
@@ -120,7 +122,7 @@ Repo: https://github.com/sloemo01/diorama
    of the frames you kept and what each one proves.
 
 If two parts of SKILL.md contradict each other, list them before
-you build. A successful clone is not an install: 5 and 6 are it.
+you build. A successful npx is not an install: 5 and 6 are it.
 ```
 
 ### Update it
@@ -135,8 +137,9 @@ That writes the current release over the old one. It does not merge and it does 
 touch anything you added outside the playbook — commit your own edits first if the
 copy is a git checkout.
 
-Or, one prompt, for a copy that is already installed. It saves your local patch, pulls
-the newest `main`, and reports what changed before any project is touched.
+Or, one prompt, for a copy that is already installed. It saves your local patch,
+refreshes from the published package, and reports what changed before any project is
+touched.
 
 ```text
 Update my Diorama install, then report what changed.
