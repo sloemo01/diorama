@@ -1,0 +1,14 @@
+{
+  "name": "create-diorama",
+  "version": "1.0.0",
+  "description": "Install the Diorama playbook into a folder: a long-form guide and code kit for detailed, rotatable Three.js dioramas.",
+  "bin": { "create-diorama": "bin.js" },
+  "files": ["bin.js", "SKILL.md", "references", "templates", "verify", "LICENSE", "README.md"],
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "author": "Nehal Kanak (sloemo)",
+  "repository": { "type": "git", "url": "git+https://github.com/sloemo01/diorama.git" },
+  "homepage": "https://github.com/sloemo01/diorama#readme",
+  "bugs": { "url": "https://github.com/sloemo01/diorama/issues" },
+  "keywords": ["diorama", "three.js", "threejs", "webgl", "pixel-art", "playbook", "skill", "agent", "3d"]
+}

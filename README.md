@@ -12,10 +12,10 @@
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 
 <p>
-<a href="media/pikachu-vs-charizard.mp4"><img src="media/pikachu-vs-charizard.gif" width="24%" alt="Pikachu vs Charizard battle diorama, looping"></a>
-<a href="media/dust-kings.mp4"><img src="media/dust-kings.gif" width="24%" alt="Dust Kings arena show diorama, looping"></a>
-<a href="media/pool.mp4"><img src="media/pool.gif" width="24%" alt="Swimming pool diorama, looping"></a>
-<a href="media/bank-job.mp4"><img src="media/bank-job.gif" width="24%" alt="Bank job diorama, looping"></a>
+<a href="https://raw.githubusercontent.com/sloemo01/diorama/main/media/pikachu-vs-charizard.mp4"><img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/pikachu-vs-charizard.gif" width="24%" alt="Pikachu vs Charizard battle diorama, looping"></a>
+<a href="https://raw.githubusercontent.com/sloemo01/diorama/main/media/dust-kings.mp4"><img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/dust-kings.gif" width="24%" alt="Dust Kings arena show diorama, looping"></a>
+<a href="https://raw.githubusercontent.com/sloemo01/diorama/main/media/pool.mp4"><img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/pool.gif" width="24%" alt="Swimming pool diorama, looping"></a>
+<a href="https://raw.githubusercontent.com/sloemo01/diorama/main/media/bank-job.mp4"><img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/bank-job.gif" width="24%" alt="Bank job diorama, looping"></a>
 </p>
 
 <sub><b>Pikachu vs Charizard</b>, 45 s &nbsp;·&nbsp; <b>Dust Kings</b>, 38 s &nbsp;·&nbsp; <b>Pool</b>, 26 s &nbsp;·&nbsp; <b>Bank job</b>, 48 s</sub>
@@ -49,6 +49,22 @@ truth. `references/` holds the same material split into on-demand topic files fo
 long sessions, and everything else here is copy-in code that supports it.
 
 ## Install it
+
+### One command
+
+```bash
+npx create-diorama                    # into ./diorama
+npx create-diorama ~/skills/diorama   # somewhere specific
+```
+
+That copies the playbook — `SKILL.md`, `references/`, `templates/`, `verify/` and the
+licence, 153 files, 1.3 MB — into the folder. `--list` prints what would be copied,
+`--force` writes over an existing install, `--no-verify` skips the worked examples.
+Nothing is installed globally and nothing runs after the copy.
+
+The published package is a mirror of this repository, [create-diorama on npm](https://www.npmjs.com/package/create-diorama).
+
+### One prompt
 
 Paste this into an agent that can run shell commands. It asks where to put the
 folder, downloads the whole repository (playbook, templates, QA harness and every
@@ -102,7 +118,17 @@ you build. A successful clone is not an install: 5 and 6 are it.
 
 ### Update it
 
-One prompt, for a copy that is already installed. It saves your local patch, pulls
+Refresh in place when you already have a copy:
+
+```bash
+npx create-diorama <target> --force
+```
+
+That writes the current release over the old one. It does not merge and it does not
+touch anything you added outside the playbook — commit your own edits first if the
+copy is a git checkout.
+
+Or, one prompt, for a copy that is already installed. It saves your local patch, pulls
 the newest `main`, and reports what changed before any project is touched.
 
 ```text
@@ -180,8 +206,8 @@ free-band fitter and a legibility gate. See "Motion Graphics Primitives" in
 `SKILL.md` and the effects block in `templates/DESIGN.md`.
 
 <p align="center">
-<img src="media/education-ui-right.png" width="62%" alt="Educational mechanism with one right-side dock">
-<img src="media/education-selection-focus.png" width="34%" alt="Selected part glowing while the rest dims">
+<img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/education-ui-right.png" width="62%" alt="Educational mechanism with one right-side dock">
+<img src="https://raw.githubusercontent.com/sloemo01/diorama/main/media/education-selection-focus.png" width="34%" alt="Selected part glowing while the rest dims">
 </p>
 
 ## The scenes
