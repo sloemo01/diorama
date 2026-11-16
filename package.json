@@ -1,6 +1,6 @@
 {
   "name": "@sloemo/diorama",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Install the Diorama playbook into a folder: a long-form guide and code kit for detailed, rotatable Three.js dioramas.",
   "bin": {
     "diorama": "bin.js"
