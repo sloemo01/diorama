@@ -6,9 +6,17 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+if [ -n "${NPM_TOKEN:-}" ]; then
+  cfg=$(mktemp)
+  printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$cfg"
+  chmod 600 "$cfg"
+  export npm_config_userconfig="$cfg"
+  trap 'rm -f "$cfg"' EXIT
+fi
+
 version=$(node -p "require('./package.json').version")
 cp package.json package.json.bak
-trap 'mv -f package.json.bak package.json' EXIT
+trap 'mv -f package.json.bak package.json; rm -f "${cfg:-/nonexistent}"' EXIT
 
 node -e "
 const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));
