@@ -8,6 +8,7 @@
 [![Forks](https://img.shields.io/github/forks/sloemo01/diorama?style=flat-square&color=1d1d1f&label=forks)](https://github.com/sloemo01/diorama/forks)
 [![Watchers](https://img.shields.io/github/watchers/sloemo01/diorama?style=flat-square&color=1d1d1f&label=watchers)](https://github.com/sloemo01/diorama/watchers)
 [![License](https://img.shields.io/github/license/sloemo01/diorama?style=flat-square&color=1d1d1f)](LICENSE)
+[![npm](https://img.shields.io/npm/v/create-diorama?style=flat-square&color=1d1d1f&logo=npm&logoColor=white)](https://www.npmjs.com/package/create-diorama)
 [![Skill](https://img.shields.io/badge/skill-v5.7.0-1d1d1f?style=flat-square)](SKILL.md)
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 
