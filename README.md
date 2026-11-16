@@ -8,7 +8,7 @@
 [![Forks](https://img.shields.io/github/forks/sloemo01/diorama?style=flat-square&color=1d1d1f&label=forks)](https://github.com/sloemo01/diorama/forks)
 [![Watchers](https://img.shields.io/github/watchers/sloemo01/diorama?style=flat-square&color=1d1d1f&label=watchers)](https://github.com/sloemo01/diorama/watchers)
 [![License](https://img.shields.io/github/license/sloemo01/diorama?style=flat-square&color=1d1d1f)](LICENSE)
-[![npm](https://img.shields.io/npm/v/create-diorama?style=flat-square&color=1d1d1f&logo=npm&logoColor=white)](https://www.npmjs.com/package/create-diorama)
+[![npm](https://img.shields.io/npm/v/@sloemo/diorama?style=flat-square&color=1d1d1f&logo=npm&logoColor=white)](https://www.npmjs.com/package/@sloemo/diorama)
 [![Skill](https://img.shields.io/badge/skill-v5.7.0-1d1d1f?style=flat-square)](SKILL.md)
 [![three.js](https://img.shields.io/badge/three.js-r170-1d1d1f?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 
@@ -54,16 +54,18 @@ long sessions, and everything else here is copy-in code that supports it.
 ### One command
 
 ```bash
-npx create-diorama                    # into ./diorama
-npx create-diorama ~/skills/diorama   # somewhere specific
+npx @sloemo/diorama                   # into ./diorama
+npx @sloemo/diorama ~/skills/diorama  # somewhere specific
 ```
+
+`npx create-diorama` is the same package under a friendlier name — either works.
 
 That copies the playbook — `SKILL.md`, `references/`, `templates/`, `verify/` and the
 licence, 153 files, 1.3 MB — into the folder. `--list` prints what would be copied,
 `--force` writes over an existing install, `--no-verify` skips the worked examples.
 Nothing is installed globally and nothing runs after the copy.
 
-The published package is a mirror of this repository, [create-diorama on npm](https://www.npmjs.com/package/create-diorama).
+The published packages are mirrors of this repository: [@sloemo/diorama](https://www.npmjs.com/package/@sloemo/diorama) and [create-diorama](https://www.npmjs.com/package/create-diorama).
 
 ### One prompt
 
@@ -122,7 +124,7 @@ you build. A successful clone is not an install: 5 and 6 are it.
 Refresh in place when you already have a copy:
 
 ```bash
-npx create-diorama <target> --force
+npx @sloemo/diorama <target> --force
 ```
 
 That writes the current release over the old one. It does not merge and it does not
